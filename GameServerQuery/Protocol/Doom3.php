@@ -58,7 +58,6 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
      */
     protected function _getinfo()
     {    
-        hexdump($this->_response);
         // Header
         if (!$this->_match("\xff\xffinfoResponse")) {
             return false;
@@ -67,8 +66,7 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
         // Two integers probably, look at this later
         if ($this->_match("(.{4})(.{4})\\x00")) {
             print_r(unpack("Va", $this->_result[2]));
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -85,7 +83,7 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
         // Players (ping and score in here somehwere)
         while ($this->_match("(.)(.{6})([^\\x00]+)\\x00")) {
             $this->_addVar('playerid', $this->_convert->toInt($this->_result[1], 8));
-            $this->_addVar('playername', $this->_result[3]));
+            $this->_addVar('playername', $this->_result[3]);
         }
 
         return $this->_output;
