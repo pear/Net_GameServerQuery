@@ -90,6 +90,13 @@ class Net_GameServerQuery
      */
     private $_processlist;
 
+    /**
+     * Hold an array of runtime options
+     *
+     * @var         array
+     */
+    private $_options;
+
 
     /**
      * Constructor
@@ -101,6 +108,7 @@ class Net_GameServerQuery
         // Initialise counter
         $this->_counter = -1;
         $this->_socketcount = -1;
+        $this->_options = array('timeout' => 300);
 
         // Load the config class
         $this->_config = new Net_GameServerQuery_Config;
@@ -112,14 +120,47 @@ class Net_GameServerQuery
         $this->_process = new Net_GameServerQuery_Process;
     }
 
+
     /**
      * Set an option
      *
-     * 
+     * @param    string     $option       The option to set
+     * @param    string     $value        The value
      */
-    public function setOption()
+    public function setOption($option, $value)
     {
-        return;
+        switch ($option):
+            case 'timeout':
+            case 'normalise':
+                $this->_options[$option] = $value;
+                break;
+            
+            default:
+                throw new Exception ('Invalid option');
+                break;
+
+        endswitch;
+    }
+
+
+    /**
+     * Get an option
+     *
+     * @param    string     $option       The option to get
+     */
+    public function getOption($option)
+    {
+        switch ($option):
+            case 'timeout':
+            case 'normalise':
+                return $this->_options[$option];
+                break;
+            
+            default:
+                throw new Exception ('Invalid option');
+                break;
+
+        endswitch;
     }
 
 
@@ -208,7 +249,7 @@ class Net_GameServerQuery
      * @param     int        $timeout        The timeout in milliseconds
      * @return    array      An array of server information
      */
-    public function execute($timeout = 100)
+    public function execute()
     {
         // Check we have something to do
         if ($this->_counter === -1) {
@@ -216,7 +257,7 @@ class Net_GameServerQuery
         }
 
         // Timeout in millseconds
-        $timeout = $timeout * 1000;
+        $timeout = $this->getOption('timeout') * 1000;
 
         // Communicate with the servers
         // We now have an array of unprocessed server data
