@@ -92,7 +92,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         }
 
         // Variable / value pairs
-        while ($this->_match("\\([^\\]+)\\([^\\\x00]*)")) {
+        while ($this->_match("\\([^\\]+)\\([^\x00]*)")) {
             $this->_add($this->_result[1], $this->_result[2]);
         }
 
@@ -113,7 +113,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
      */
     protected function _ping()
     {
-        if ($this->_match("\xFF\xFF\xFF\xFF\x6a")) {
+        if ($this->_match("\xFF\xFF\xFF\xFF\n")) {
             return $this->_output;
         } else {
             return false;

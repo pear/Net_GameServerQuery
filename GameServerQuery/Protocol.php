@@ -122,9 +122,11 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         $this->_result = array();
 
         // Replace "\" with "\\"
-        $expr = str_replace('\\', '\\\\', $expr);
+        $expr = str_replace(array('\\', "\x00"), array('\\\\', "\\\\x00"), $expr);
         // Format regular expression
         $expr = sprintf('#^%s#s', $expr);
+
+        echo "match called: $expr", "\n";
 
         // Match pattern
         if (preg_match($expr, $this->_response, $this->_result) == false) {
