@@ -20,6 +20,19 @@
 
 
 /**
+ * Define a limited subset of "normalised" data
+ */
+$normals[0]                 = array('hostname', 'numplayers', 'maxplayers', 'passworded', 'mod', 'ip', 'port');
+$normals['Doom3']           = array();
+$normals['FarCry']          = array();
+$normals['GameSpy']         = array();
+$normals['GameSpy04']       = array();
+$normals['HalfLife']        = array();
+$normals['Unreal2']         = array();
+$normals['QuakeWorld']      = array();
+
+
+/**
  * Define packets for each protocol
  */
 $packets['Doom3']['players']        = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
@@ -49,6 +62,7 @@ $packets['Unreal2']['status']       = array('status',       "\x78\x00\x00\x00\x0
 $packets['QuakeWorld']['players']   = array('players',      "\xFF\xFF\xFF\xFFplayers\x00");
 $packets['QuakeWorld']['rules']     = array('rules',        "\xFF\xFF\xFF\xFFrules\x00");
 $packets['QuakeWorld']['status']    = array('status',       "\xFF\xFF\xFF\xFFstatus\x00");
+
 
 /**
  * Define games and associated protocols

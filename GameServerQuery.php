@@ -21,8 +21,6 @@
 
 require_once 'GameServerQuery\Config.php';
 require_once 'GameServerQuery\Communicate.php';
-require_once 'GameServerQuery\Process.php';
-require_once 'GameServerQuery\Convert.php';
 require_once 'GameServerQuery\Protocol.php';
 require_once 'GameServerQuery\Normalise.php';
 
@@ -113,6 +111,16 @@ class Net_GameServerQuery
 
         // Load the processing class
         $this->_process = new Net_GameServerQuery_Process;
+    }
+
+    /**
+     * Set an option
+     *
+     * 
+     */
+    public function setOption()
+    {
+        return;
     }
 
 
