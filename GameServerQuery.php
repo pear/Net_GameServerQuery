@@ -228,9 +228,7 @@ class Net_GameServerQuery
 
             // Check if we missed out on any packets
             if (!isset($results[$key])) {
-                // If we missed packets, replace with something
-                // Not sure what we should do here
-                $results[$key] = false;
+                throw new Exception ('Server did not reply to request');
             }
 
             $this->_processlist[$key]['packet'] = $results[$key];
