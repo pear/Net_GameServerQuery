@@ -89,4 +89,16 @@ class InvalidServerException extends Exception
     }
 }
 
+
+/**
+ * InvalidOptionException
+ */
+class InvalidOptionException extends Exception
+{
+    public function __construct($option)
+    {
+        parent::__construct('The option ' . $option . 'does not exist');
+    }
+}
+
 ?>
