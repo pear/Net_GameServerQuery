@@ -40,9 +40,6 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
      * @var        resource
      */
     private $_convert;
-    private $_map;
-    private $_packets;
-    private $_to;
 
 
     /**
@@ -53,7 +50,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     public function __construct()
     {
         // Initialize conversion class
-        $this->_to = new Net_GameServerQuery_Convert;
+        $this->_convert = new Net_GameServerQuery_Convert;
 
         // Define packets
         $this->_packets = array(
@@ -84,10 +81,12 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     {
         // Map packets to those used by the protocol
         if (isset($this->_map[$packet])) {
+            
             $name = $this->_map[$packet];
-            $rpacket['packetname'] = $name;
-            $rpacket['packet']     = $this->_packets[$name];
-            return $rpacket;
+            $result['packetname'] = $name;
+            $result['packet']     = $this->_packets[$name];
+            return $result;
+
         } else {
             return false;
         }
@@ -144,10 +143,10 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     /**
      * Infostring packet
      *
-     * @access     private
+     * @access     protected
      * @return     array     Array containing formatted server response
      */
-    private function _infostring()
+    protected function _infostring()
     {
         // Header
         if (!$this->_match("\xff\xff\xff\xffinfostringresponse\\x00")) {
@@ -155,8 +154,13 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         }
 
         // Variable / value pairs
-        while ($this->_match("([^\\x00]*)\\x00([^\\x00]*)\\x00")) {
+        while ($this->_match("\\\\([^\\\\]*)\\\\([^\\x00\\\\]*)")) {
             $this->_addVar($this->_result[1], $this->_result[2]);
+        }
+
+        // Terminating character
+        if (!$this->_match("\\x00")) {
+            return false;
         }
 
         return $this->_output;
@@ -166,10 +170,10 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     /**
      * Ping packet
      *
-     * @access     private
+     * @access     protected
      * @return     array     Array containing formatted server response
      */
-    private function _ping()
+    protected function _ping()
     {
         if ($this->_match("\xff\xff\xff\xff\x6a")) {
             return $this->_output;
@@ -183,14 +187,16 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     /**
      * Players packet
      *
-     * @access     private
+     * @access     protected
      * @return     array     Array containing formatted server response
      */
-    private function _players()
+    protected function _players()
     {
         // Header
-        if ($this->_match("\xff\xff\xff\xffx6d(.)")) {
-            $this->_addVar('playercount', ord($this->_result[1]));
+        if ($this->_match("\xff\xff\xff\xff\x44(.)")) {
+
+                $this->_addVar('playercount', $this->_convert->toInt($this->_result[1]));
+
         }
         else {
             return false;
@@ -212,14 +218,14 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     /**
      * Rules packet
      *
-     * @access     private
+     * @access     protected
      * @return     array     Array containing formatted server response
      */
-    private function _rules()
+    protected function _rules()
     {
         // Remove the header of the possible second packet
-        str_replace("\xfe\xff\xff\xff", '', $this->_response);
-        
+        $this->_response = preg_replace("/\xfe\xff\xff\xff.{5}/", '', $this->_response);
+
         // Get header, rulecount
         if ($this->_match("\xff\xff\xff\xff\x45(.{2})")) {
             $this->_addVar('rulecount', $this->_convert->toInt($this->_result[1], 16));
