@@ -111,8 +111,6 @@ class Net_GameServerQuery_Process
             $classname = self::factory($result['protocol']);
             $this->_protocols[$result['protocol']] = new $classname;
         }
-
-        return $result;
         
         // Parse the response
         $protocol = $this->_protocols[$result['protocol']];
