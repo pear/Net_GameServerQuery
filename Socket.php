@@ -31,10 +31,12 @@ class Net_GameServerQuery_Socket
      */
 	public function open ($servers)
 	{
+        $sockets = array ();
+        $sockets_list = array ();
+
         foreach ($servers as $key => $server)
         {
-
-			// Open each socket
+            // Open each socket
 			$socket = @fsockopen("udp://" . $server['ip'], $server['port'], $errno, $errstr, 1);
 			if ($socket !== false)
 			{
