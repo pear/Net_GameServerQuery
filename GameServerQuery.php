@@ -165,9 +165,9 @@ class Net_GameServerQuery
 
     
     /**
-     * document me
+     * Validate and process the query list
      *
-     *
+     * FIXME
      */
     private function _getQueryList($query)
     {
@@ -188,9 +188,9 @@ class Net_GameServerQuery
 
     
     /**
+     * Map data to the master, communication and processing arrays
      *
-     *
-     *
+     * FIXME
      */
     private function _mapArray ($querylist, $protocol, $game, $addr, $port)
     {
