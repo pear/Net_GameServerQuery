@@ -99,7 +99,7 @@ class Net_GameServerQuery
     public function __construct()
     {
         // Set default option values
-        $this->_options = array('timeout' => 300);
+        $this->_options = array('normalise' => true, 'showmeta' => true);
 
         // Load classes
         $this->_config      = new Net_GameServerQuery_Config;
@@ -116,17 +116,15 @@ class Net_GameServerQuery
      */
     public function setOption($option, $value)
     {
-        switch ($option):
-            case 'timeout':
+        switch ($option) {
             case 'normalise':
+            case 'showmeta':
                 $this->_options[$option] = $value;
                 break;
             
             default:
-                throw new Exception ('Invalid option');
-                break;
-
-        endswitch;
+                return false;
+        }
     }
 
 
@@ -137,17 +135,16 @@ class Net_GameServerQuery
      */
     public function getOption($option)
     {
-        switch ($option):
-            case 'timeout':
+        switch ($option) {
             case 'normalise':
+            case 'showmeta':
                 return $this->_options[$option];
                 break;
             
             default:
-                throw new Exception ('Invalid option');
-                break;
+                return false;
 
-        endswitch;
+        }
     }
 
         
@@ -199,20 +196,12 @@ class Net_GameServerQuery
      * @param     int        $timeout        The timeout in milliseconds
      * @return    array      An array of server information
      */
-    public function execute($timeout = null)
+    public function execute($timeout = 100)
     {
-        // Check we have something to do
+        // Ensure there are servers
         if ($this->_servercount === -1) {
             return false;
         }
-
-        // Set the timeout
-        if (!is_null($timeout)) {
-            $this->setOption('timeout', $timeout);
-        }
-
-        // Timeout in millseconds
-        $timeout = $this->getOption('timeout') * 1000;
 
         // Communicate with the servers
         // Contains an array of unprocessed server data
