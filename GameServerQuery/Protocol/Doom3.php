@@ -63,10 +63,8 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
             return false;
         }
 
-        // Two integers probably, look at this later
-        if ($this->_match("(.{4})(.{4})\\x00")) {
-            print_r(unpack("Va", $this->_result[2]));
-        } else {
+        // Probably a (protocol) version number
+        if (!$this->_match("(.{8})\\x00")) {
             return false;
         }
 
@@ -81,9 +79,19 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
         }
 
         // Players (ping and score in here somehwere)
-        while ($this->_match("(.)(.{6})([^\\x00]+)\\x00")) {
+        while ($this->_match("(.)(..)(.)(.)(..)([^\\x00]+)\\x00")) {
+            
             $this->_addVar('playerid', $this->_convert->toInt($this->_result[1], 8));
-            $this->_addVar('playername', $this->_result[3]);
+            $this->_addVar('playerping', $this->_convert->toInt($this->_result[2], 16));
+            
+            // These are teamflags probably, either \x80\x3e or \x50\xc3,
+            // always \x80\x3e in deatmatch
+            $this->_addVar('tf0', $this->_convert->toInt($this->_result[3], 8));
+            $this->_addVar('tf1', $this->_convert->toInt($this->_result[4], 8));
+            
+            // Result[5] holds two bits, who always seem to be \x00\x00
+            
+            $this->_addVar('playername', $this->_result[6]);
         }
 
         return $this->_output;
