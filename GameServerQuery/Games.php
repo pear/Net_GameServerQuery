@@ -232,7 +232,7 @@ $games['halflife']['protocol']      = 'HalfLife';
 $games['halflife']['queryport']     = '27015';
 
 $games['halflife2']['title']        = 'Half-Life: Source';
-$games['halflife2']['protocol']     = 'HalfLife';
+$games['halflife2']['protocol']     = 'HalfLife2';
 $games['halflife2']['queryport']    = '27015';
 
 $games['homeworld2']['title']       = 'Homeworld 2';
