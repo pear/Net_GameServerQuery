@@ -24,7 +24,7 @@
  *
  * @category        Net
  * @package         Net_GameServerQuery
- * @author          Tom Buskins <ortega@php.net>
+ * @author          Tom Buskens <ortega@php.net>
  * @version         $Revision$
  */
 class Net_GameServerQuery_Process
@@ -81,12 +81,12 @@ class Net_GameServerQuery_Process
     private function _processString($rules, $depth = 0)
     {
         // Initialize variables
-        $ruleCount = count($rules);
-        $loopCount = 0;
+        $rule_count = count($rules);
+        $loop_count = 0;
 
         // Traverse tree
         while (true) {
-            for ($i = 0; $i != $ruleCount; $i++) {
+            for ($i = 0; $i != $rule_count; $i++) {
 
                 $rule = $rules[$i];
 
@@ -100,7 +100,7 @@ class Net_GameServerQuery_Process
                     if ($this->_applyRule($rule) === false)
                     {
                         // At the beginning of a loop
-                        if ($i === 0 && ($depth !== 0 || $loopCount !== 0))
+                        if ($i === 0 && ($depth !== 0 || $loop_count !== 0))
                         {
                             return true;
                         } 
@@ -117,7 +117,7 @@ class Net_GameServerQuery_Process
                 }
                 
             }
-            $loopCount++;
+            $loop_count++;
         }
     }
 
@@ -158,21 +158,21 @@ class Net_GameServerQuery_Process
      */
     private function _getRule($rule)
     {
-        $parsedRule = array();
+        $parsed_rule = array();
 
         // Split rule
         $pattern = "/ *\| */";
         $pieces  = preg_split($pattern, $rule);
 
         // Encapsulate pattern
-        $parsedRule['pattern'] = $this->_encapsulate($pieces[0], 'pattern');
+        $parsed_rule['pattern'] = $this->_encapsulate($pieces[0], 'pattern');
 
         // Encapsulate process
         if (isset($pieces[1])) {
-            $parsedRule['process'] = $this->_encapsulate($pieces[1], 'process');
+            $parsed_rule['process'] = $this->_encapsulate($pieces[1], 'process');
         }
 
-        return $parsedRule;        
+        return $parsed_rule;        
     }
 
 
@@ -354,9 +354,9 @@ class Net_GameServerQuery_Process_Encapsulate
 $rules  = array
 (
     '\xFE\xFD\\x00',
-    '.{4}           | addVar(\'stringHeader\');',
+    '.{4}           | addVar(\'string_header\');',
     '\\x00\xFF\xFF',
-    '.              | toByte(); $headerCount = $1; addVar(\'headerCount\'); $i = 0;',
+    '.              | toByte(); $header_count = $1; addVar(\'header_count\'); $i = 0;',
     array
     (
         '[^\\x00]+  | $headers[] = $1;',
@@ -365,7 +365,7 @@ $rules  = array
     '\\x00          | $i = 0;',
     array
     (
-        '[^\\x00]+  | addVar($headers[$i++]); $i = $i % $headerCount;',
+        '[^\\x00]+  | addVar($headers[$i++]); $i = $i % $header_count;',
         '\\x00'
     ),
     '\\x00'
