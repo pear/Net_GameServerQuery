@@ -129,7 +129,7 @@ class Net_GameServerQuery_Communicate
     {
         // If we have no sockets don't bother
         if (empty($sockets)) {
-            return array();
+            return false;
         }
 
         // Initialise enviroment
@@ -141,8 +141,8 @@ class Net_GameServerQuery_Communicate
 
         // Listen to sockets for any activity
         while (stream_select($r, $w = null, $e = null, 0,
-            $timeout - ((microtime(true) - $starttime) * 1000000)) !== 0)
-        {
+            ($timeout * 1000) - ((microtime(true) - $starttime) * 1000000)) !== 0) {
+
             // Make sure we don't repeat too many times
             if (++$loops > $maxloops) {
                 break;
