@@ -73,8 +73,14 @@ class Net_GameServerQuery_Communicate
 
         foreach ($servers as $key => $server)
         {
+            if (strspn($addr, '.0123456789') == strlen($server['addr'])) {
+                $addr = $addr;
+            } else {
+                $addr = gethostbyname($addr);
+            }
+
             // Open each socket
-            $socket = @fsockopen('udp://' . $server['ip'], $server['port'], $errno, $errstr, 1);
+            $socket = @fsockopen('udp://' . $addr, $server['port'], $errno, $errstr, 1);
             if ($socket !== false) {
                 stream_set_blocking($socket, false);
 
