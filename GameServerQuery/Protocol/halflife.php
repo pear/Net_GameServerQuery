@@ -47,7 +47,6 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     public function __construct()
     {
         // Initialize conversion class
-        require_once '../Convert.php';
         $this->_to = new Net_GameServerQuery_Convert;
 
         // Define packets
@@ -61,10 +60,10 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         
         // Define packet mapping array
         $this->_map = array(
-            'ping'    => array('ping'),
-            'players' => array('players'),
-            'rules'   => array('rules'),
-            'status'  => array('details', 'infostring')
+            'ping'    => 'ping',
+            'players' => 'players',
+            'rules'   => 'rules',
+            'status'  => 'infostring'
         );
     }
  
