@@ -19,7 +19,7 @@
 // $Id$
 
 
-require_once 'Net\GameServerQuery\Protocol.php';
+require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 
 
 /**
@@ -32,65 +32,50 @@ require_once 'Net\GameServerQuery\Protocol.php';
  */
 class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 {
-
-    /**
-     * Details packet
-     *
-     * @access    private
-     * @return    array      Array containing formatted server response
-     */
-    private function _details()
+    protected function details(&$response)
     {
         // Header
-        if (!$this->_match("\xFF\xFF\xFF\xFF\x6d")) {
-            throw new Exception('Parsing error');
+        if (!$response->_match("\xFF\xFF\xFF\xFF\x6d")) {
+            return false;
         }
 
         // Body regular expression
-        $body = "(([^\x00]+)\x00([^\x00]+)\x00([^\x00]+)\x00([^\x00]+)\x00"
+        $pattern = "(([^\x00]+)\x00([^\x00]+)\x00([^\x00]+)\x00([^\x00]+)\x00"
               . "([^\x00]+)\x00(.)(.)(.)(.)(.)(.)(.)";
 
         // Body variable names
-        $vars = array('serverip', 'servername', 'mapname', 'gamedir',
+        $keys = array('serverip', 'servername', 'mapname', 'gamedir',
                       'gamename', 'playercount', 'playermax',
                       'protocolversion', 'servertype', 'serveros',
                       'serverpassword', 'gamemod'
         );
 
         // Match body
-        if ($this->_match($body)) {
+        if ($response->match($pattern)) {
 
             // Process and save variables
-            for ($i = 0, $x = count($vars); $i != $x; $i++) {
+            for ($i = 0, $ii = count($vars); $i < $ii; $i++) {
                 switch ($i) {
                     case  5:
                     case  6:
                     case  7:
                     case 10:
                     case 11:
-                        $this->_result[$i+1] = $this->toInt($this->_result[$i+1]);
+                        $pattern->_result[$i+1] = $this->toInt($this->_result[$i+1]);
                     default:
                         $this->_add($vars[$i], $this->_result[$i+1]);
                         break;
                 }
             }
 
-        }
-        else {
-            throw new Exception('Parsing error');
+        } else {
+            return false;
         }
 
-        return $this->_output;
+        return $response->getResult();
     }
 
-
-    /**
-     * Infostring packet
-     *
-     * @access     protected
-     * @return     array     Array containing formatted server response
-     */
-    protected function _infostring()
+    protected function infostring(&$response)
     {
         // Header
         if (!$this->_match("\xFF\xFF\xFF\xFFinfostringresponse\x00")) {
@@ -110,30 +95,16 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         return $this->_output;
     }
 
-
-    /**
-     * Ping packet
-     *
-     * @access     protected
-     * @return     array     Array containing formatted server response
-     */
-    protected function _ping()
+    protected function ping(&$response)
     {
         if ($this->_match("\xFF\xFF\xFF\xFF\n")) {
             return $this->_output;
-        } else {
-            throw new Exception('Parsing error');
         }
+
+        throw new Exception('Parsing error');
     }
 
-
-    /**
-     * Players packet
-     *
-     * @access     protected
-     * @return     array     Array containing formatted server response
-     */
-    protected function _players()
+    protected function players(&$response)
     {
         // Header
         if ($this->_match("\xFF\xFF\xFF\xFF\x44(.)")) {
@@ -153,31 +124,37 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         return $this->_output;
     }
 
-
-    /**
-     * Rules packet
-     *
-     * @access     protected
-     * @return     array     Array containing formatted server response
-     */
-    protected function _rules()
+    protected function rules(&$response)
     {
-        // Remove the header of the possible second packet
-        $this->_response = preg_replace("/\xFE\xFF\xFF\xFF.{5}/", '', $this->_response);
+        // Convert multiple packets into a single response
+        // Extract the packet order from each packet and order by that
+        if (is_array($response->getResponse())) {
 
-        // Get header, rulecount
-        if ($this->_match("\xFF\xFF\xFF\xFF\x45(.{2})")) {
-            $this->_add('rulecount', $this->toInt($this->_result[1], 16));
+            $r = $response->getResponse();
+            $packets = array();
+            foreach ($r as $packet) {
+                $key = substr(bin2hex($packet{8}), 0, 1);
+                $packet = substr($packet, 9);
+                $packets[$key] = $packet;
+            }
+
+            $r = implode('', $packets);
+            $response->setResponse($r);
+        }
+
+        // Get header and rulecount
+        if ($response->match("\xFF\xFF\xFF\xFF\x45(.{2})")) {
+            $response->addMatch('__rulecount', $response->toInt($response->getMatch(1), 16));
         } else {
-            throw new Exception('Parsing error');
+            return false;
         }
 
         // Variable / value pairs
-        while ($this->_match("([^\x00]+)\x00([^\x00]*)\x00")) {
-            $this->_add($this->_result[1], $this->_result[2]);
+        while ($response->match("([^\x00]+)\x00([^\x00]*)\x00")) {
+            $response->addMatch($response->getMatch(1), $response->getMatch(2));
         }
 
-        return $this->_output;
+        return $response->getResult();
     }
 
 }
