@@ -58,7 +58,7 @@ class Net_GameServerQuery_Config
      */
     public function protocol($game)
     {
-        return $this->_games[$game];
+        return $this->_games[$game]['protocol'];
 
     }
 

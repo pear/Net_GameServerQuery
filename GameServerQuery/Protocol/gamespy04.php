@@ -75,7 +75,7 @@ class Net_GameServerQuery_Protocol_gamespy04 extends Net_GameServerQuery_Protoco
      * @access    private
      * @return    array      Array containing formatted server response
      */
-    private function _rules()
+    protected function _rules()
     {
         // Header
         if (!$this->_match("\\x00NGSQ")) {
@@ -108,4 +108,15 @@ class Net_GameServerQuery_Protocol_gamespy04 extends Net_GameServerQuery_Protoco
 
 }
 
+
+/**
+ * Normaliser class
+ */
+class Net_GameServerQuery_Protocol_Normaliser_gamespy04
+{
+    public function process($packetname, $data)
+    {
+        return $data;
+    }
+}
 ?>

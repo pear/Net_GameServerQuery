@@ -133,10 +133,13 @@ class Net_GameServerQuery
             $port = $this->_config->queryport($game);
         }
 
+        // What is the protocol?
+        $protocol = $this->_config->protocol($game);
+
         // Load the protocol class
-        require_once "GameServerQuery/Protocol/{$game}.php";
-        $protocolclass = "Net_GameServerQuery_Protocol_{$game}";
-        $normaliserclass = "Net_GameServerQuery_Protocol_Normaliser_{$game}";
+        require_once "GameServerQuery/Protocol/{$protocol}.php";
+        $protocolclass = "Net_GameServerQuery_Protocol_{$protocol}";
+        $normaliserclass = "Net_GameServerQuery_Protocol_Normaliser_{$protocol}";
         $protocol = new $protocolclass;
         $normaliser = new $normaliserclass;
 
