@@ -135,8 +135,10 @@ class Net_GameServerQuery
 
         // Load the protocol class
         require_once "GameServerQuery/Protocol/{$game}.php";
-        $classname = "Net_GameServerQuery_Protocol_{$game}";
-        $object = new $classname;
+        $protocolclass = "Net_GameServerQuery_Protocol_{$game}";
+        $normaliserclass = "Net_GameServerQuery_Protocol_{$game}_Normaliser";
+        $protocol = new $protocolclass;
+        $normaliser = new $normaliserclass;
 
         // Get list of queries to be sent
         $querylist = explode('|', $query);
@@ -152,7 +154,7 @@ class Net_GameServerQuery
             );
 
             // Data sent to communications class
-            $packet_info = $object->getpacket($query);
+            $packet_info = $protocol->getpacket($query);
             $this->_commlist[$this->_socketcount] = array(
                 'ip'            => $ip,
                 'port'          => $port,
@@ -164,7 +166,8 @@ class Net_GameServerQuery
                 'game'          => $game,
                 'query'         => $query,
                 'packetname'    => $packet_info['packetname'],
-                'object'        => $object
+                'protocol'      => $protocol,
+                'normaliser'    => $normaliser
             );
         }
 

@@ -196,4 +196,5 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         }
     }
 }
+
 ?>

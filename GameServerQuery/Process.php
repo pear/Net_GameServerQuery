@@ -50,7 +50,13 @@ class Net_GameServerQuery_Process
      */
     public function process_once ($result)
     {
-        return $result['object']->processResponse($result['packetname'], $result['packet']);
+        // Parse the response
+        $parsed = $result['protocol']->processResponse($result['packetname'], $result['packet']);
+
+        // Normalise the response
+        $result = $result['normaliser']->process($result['packetname'], $parsed);
+
+        return $result;
     }
 
 }
