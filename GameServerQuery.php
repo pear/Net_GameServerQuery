@@ -145,13 +145,21 @@ class Net_GameServerQuery
         $protocol = $this->_config->protocol($game);
 
         // Load the protocol class
-        require_once "GameServerQuery/Protocol/{$protocol}.php";
-        $protocol_classname = "Net_GameServerQuery_Protocol_{$protocol}";
-        $protocol_obj = new $protocol_classname;
+        if (@include_once "GameServerQuery/Protocol/{$protocol}.php") {
+            $protocol_classname = "Net_GameServerQuery_Protocol_{$protocol}";
+            $protocol_obj = new $protocol_classname;
+        } else {
+            throw new Exception ('Protocol file not found');
+        }
 
         // Load the normalise class
-        require_once "GameServerQuery/Normalise/{$protocol}.php";
-        $normaliser_classname = "Net_GameServerQuery_Normalise_{$protocol}";
+        if (@include_once "GameServerQuery/Normalise/{$protocol}.php") {
+            $normaliser_classname = "Net_GameServerQuery_Normalise_{$protocol}";
+        } else {
+            // Load the default normaliser
+            require_once "GameServerQuery/Normalise/Default.php";
+            $normaliser_classname = "Net_GameServerQuery_Normalise_Default";
+        }
         $normaliser_obj = new $normaliser_classname;
 
         // Get list of queries to be sent
