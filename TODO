@@ -1,4 +1,28 @@
-- Add setOption() function to main class, with neccesary code.
-- Add optional colourtag stripping for players.
-- Add optional playersorting.
-- Support more games.
+OTHER STUFF
+- Add optional colourtag stripping for players
+- Add optional playersorting
+- Add packet caching
+
+PROTOCOLS
+- Breed
+- Doom3
+- FarCry
+- Freelancer
+- GameSpy
+- GhostRecon
+- HalfLife
+- Hexen2
+- HomeWorld2
+- JediKnight
+- JediKnight2
+- MultiTheftAuto
+- QuakeWorld
+- Quake2
+- Quake3
+- RedFaction
+- RavenShield
+- Savage
+- Starsiege
+- Tribes
+- UnrealTournament03
+- Unreal2XMP
