@@ -19,12 +19,13 @@
 // $Id$
 
 
-require_once 'Config.php';
-require_once 'Socket.php';
+require_once 'GameServerQuery\Config.php';
+require_once 'GameServerQuery\Communicate.php';
+require_once 'GameServerQuery\Process.php';
 
 
 /**
- * A class to query and retrieve information from game servers
+ * Query and retrieve information from game servers
  *
  * @category        Net
  * @package         Net_GameServerQuery
@@ -55,11 +56,11 @@ class Net_GameServerQuery
     private $_config;
 
     /**
-     * An instance of the Net_GameServerQuery_Socket class
+     * An instance of the Net_GameServerQuery_Communicate class
      *
      * @var         object
      */
-    private $_socket;
+    private $_communicate;
 
 
     /**
@@ -73,19 +74,22 @@ class Net_GameServerQuery
         // Load the config class (this could probably be called something more specific)
         $this->_config = new Net_GameServerQuery_Config;
 
-        // Load the socket class (this needs a new name)
-        $this->_socket = new Net_GameServerQuery_Socket;
+        // Load the communicate class
+        $this->_communicate = new Net_GameServerQuery_Communicate;
+
+        // Load the processing class
+        $this->_process = new Net_GameServerQuery_Process;
     }
 
 
     /**
      * Add a server
      *
-     * @param    string    $game        The type of game
-     * @param    string    $ip            The IP to query
-     * @param    int        $port        The port to query
-     * @param    string    $status        A pipe delimited string of query types
-     * @return    int        The counter
+     * @param    string     $game         The type of game
+     * @param    string     $ip           The IP to query
+     * @param    int        $port         The port to query
+     * @param    string     $status       A pipe delimited string of query types
+     * @return   int        The number used to identify the server just added
      */
     public function addServer($game, $ip, $port = null, $query = 'status')
     {
@@ -95,13 +99,13 @@ class Net_GameServerQuery
         // Build the list of packets to be sent
         $querylist = explode('|', $query);
         foreach ($querylist as $query) {
-            $querypackets[$query] = $this->_config->getpacket($game, $query);
+            $querypackets[$query] = $this->_config->packet($game, $query);
         }
 
         // Default port
         if (is_null($port)) {
-            $protocol = $this->_config->getprotocol($game);
-            $port = $this->_config->getdefaultqueryport($protocol);
+            $protocol = $this->_config->protocol($game);
+            $port = $this->_config->queryport($protocol);
         }
 
         // Add information to our servers array
@@ -120,16 +124,15 @@ class Net_GameServerQuery
     /**
      * Execute the query
      *
-     * @param    int        $timeout        The timeout in milliseconds
-     * @return    array    An array of server information
+     * @param     int        $timeout        The timeout in milliseconds
+     * @return    array      An array of server information
      */
     public function execute($timeout = 60)
     {
         // Timeout in millseconds
         $timeout = $timeout * 1000;
-        
-        $result = $this->_socket->batchquery($this->_servers, $timeout);
-
+        $result = $this->_communicate->query($this->_servers, $timeout);
+        $result = $this->_process->process($result);
         return $result;
     }
 
