@@ -121,8 +121,11 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         // Clear any previous matches
         $this->_result = array();
 
+        // Replace "\" with "\\"
+        $expr = str_replace('\\', '\\\\', $expr);
+
         // Format regular expression
-        $expr = sprintf("#^%s#s", addslashes($expr));
+        $expr = sprintf('#^%s#s', $expr);
 
         // Match pattern
         if (preg_match($expr, $this->_response, $this->_result) == false) {
