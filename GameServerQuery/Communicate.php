@@ -20,7 +20,7 @@
 
 
 /**
- * Handles communication to and from servers
+ * Sends and recieves information from servers
  *
  * @category        Net
  * @package         Net_GameServerQuery
@@ -172,13 +172,34 @@ class Net_GameServerQuery_Communicate
 
     /**
      * Concatonate multiple packets
+     *
+     * @param       array       $packets        An array of packets
+     * @return      array       An array of joined packets
      */
-    public function concat($results)
+    public function concat($packets)
     {
         $newresults = array();
 
-        foreach ($results as $key => $result) {
-            $newresults[$key] = implode($result);
+        foreach ($packets as $key => $packet)
+        {
+            // Check if we got multiple packets back from the server
+            if (count($packet) > 1) {
+                
+                // The helper sorting function
+                function sort_bylength($a, $b)
+                {
+                    if ($a == $b) {
+                        return 0;
+                    }
+
+                    return (strlen($a) > strlen($b)) ? -1 : 1;
+                }
+
+                // We need to sort the array with the biggest packet first
+                usort($packet, 'sort_bylength');
+            }
+
+            $newresults[$key] = implode($packet);
         }
 
         return $newresults;
