@@ -53,7 +53,7 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
             $result = $this->_playersXmp(&$buffer, &$result);
         } else {
             // This is for anything else
-            $result = $this->_playersStd(&$buffer, &$result, $gameident);
+            $result = $this->_playersStd(&$buffer, &$result);
         }
         
         return $result->fetch();
@@ -63,16 +63,16 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
     /*
      * Players - Standard
      */
-    private function _playersStd(&$buffer, &$result, $gameident)
+    private function _playersStd(&$buffer, &$result)
     {
-        while ($buffer->getLength() !== 0) {
+        while ($buffer->getLength()) {
             $result->addPlayer('id',      $buffer->readInt32());
             $result->addPlayer('name',    $buffer->readPascalString(1));
             $result->addPlayer('ping',    $buffer->readInt32());
             $result->addPlayer('score',   $buffer->readInt32());
 
             // Stats and team info in UT2004
-            hexdump($gameident);
+            // Not sure how to interpret
             $buffer->skip(4);
         }
         
@@ -85,7 +85,7 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
      */
     private function _playersXmp(&$buffer, &$result)
     {
-        while ($buffer->getLength() > 0) {
+        while ($buffer->getLength()) {
             $buffer->skip(8); // XMP Bug (Two I32s of 0)
             $result->addPlayer('name',    $this->_readEncodedString($buffer));
             $result->addPlayer('ping',    $buffer->readInt32());
@@ -122,7 +122,7 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
 
         // Var / value strings
         $i = -1;
-        while ($buffer->getLength() !== 0) {
+        while ($buffer->getLength()) {
             $varname = $buffer->readPascalString(1);
 
             // Make sure mutators don't overwrite each other
