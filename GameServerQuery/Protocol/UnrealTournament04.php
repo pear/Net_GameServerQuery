@@ -70,8 +70,8 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         }
         
         // Body regular expression
-        $body = "([^\\x00+)\\x00([^\\x00+)\\x00([^\\x00+)\\x00([^\\x00+)\\x00"
-              . "([^\\x00+)\\x00(.)(.)(.)(.)(.)(.)(.)";
+        $body = "([^\\x00]+)\\x00([^\\x00]+)\\x00([^\\x00]+)\\x00([^\\x00]+)\\x00"
+              . "([^\\x00]+)\\x00(.)(.)(.)(.)(.)(.)(.)";
 
         // Body variable names
         $vars = array('serverip', 'servername', 'mapname', 'gamedir',
