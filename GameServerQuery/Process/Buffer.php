@@ -91,17 +91,13 @@ class Net_GameServerQuery_Process_Buffer
 
 
     /**
-     * Check if buffer is empty
+     * Returns the number of bytes in the buffer
      *
-     * @return  bool    TRUE if the buffer has data in it, FALSE if not
+     * @return  int  Length of the buffer
      */
-    public function is_empty()
+    public function getLength()
     {
-        if ($this->_length - $this->_index <= 0) {
-            return true;
-        }
-        
-        return false;
+        return ($this->_length - $this->_index);
     }
 
 
@@ -188,6 +184,20 @@ class Net_GameServerQuery_Process_Buffer
         ++$this->_index;
        
         return $string;
+    }
+
+
+    /**
+     * Reads a pascal string from the buffer
+     *
+     * @return  string  The data read
+     */
+    public function readPascalString($offset = 0)
+    {
+        // Get length of the string
+        $len = $this->readInt8();
+        $offset = max($len - $offset, 0);
+        return substr($this->read($len), 0, $offset);
     }
         
     
