@@ -23,6 +23,8 @@ require_once 'GameServerQuery\Config.php';
 require_once 'GameServerQuery\Communicate.php';
 require_once 'GameServerQuery\Process.php';
 require_once 'GameServerQuery\Convert.php';
+require_once 'GameServerQuery\Protocol.php';
+require_once 'GameServerQuery\Normalise.php';
 
 
 /**
@@ -138,13 +140,13 @@ class Net_GameServerQuery
 
         // Load the protocol class
         require_once "GameServerQuery/Protocol/{$protocol}.php";
-        $protocolclass = "Net_GameServerQuery_Protocol_{$protocol}";
-        $protocol = new $protocolclass;
+        $protocol_classname = "Net_GameServerQuery_Protocol_{$protocol}";
+        $protocol_obj = new $protocol_classname;
 
         // Load the normalise class
         require_once "GameServerQuery/Normalise/{$protocol}.php";
-        $normaliserclass = "Net_GameServerQuery_Normalise_{$protocol}";
-        $normaliser = new $normaliserclass;
+        $normaliser_classname = "Net_GameServerQuery_Normalise_{$protocol}";
+        $normaliser_obj = new $normaliser_classname;
 
         // Get list of queries to be sent
         $querylist = explode('|', $query);
@@ -163,7 +165,7 @@ class Net_GameServerQuery
             );
 
             // Data sent to communications class
-            $packet_info = $protocol->getpacket($query);
+            $packet_info = $protocol_obj->getpacket($query);
             $this->_commlist[$this->_socketcount] = array(
                 'ip'            => $ip,
                 'port'          => $port,
@@ -175,8 +177,8 @@ class Net_GameServerQuery
                 'game'          => $game,
                 'query'         => $query,
                 'packetname'    => $packet_info['packetname'],
-                'protocol'      => $protocol,
-                'normaliser'    => $normaliser
+                'protocol'      => $protocol_obj,
+                'normaliser'    => $normaliser_obj
             );
         }
 

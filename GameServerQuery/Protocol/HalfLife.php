@@ -19,9 +19,6 @@
 // $Id$
 
 
-require_once 'GameServerQuery\Protocol.php';
-
-
 /**
  * HalfLife Protocol
  *

@@ -35,7 +35,7 @@ interface Net_GameServerQuery_Protocol_Interface
 
 
 /**
- * Net_GameServerQuery_Protocol
+ * Abstract class which all protocol classes must inherit
  *
  * @category       Net
  * @package        Net_GameServerQuery
@@ -44,7 +44,6 @@ interface Net_GameServerQuery_Protocol_Interface
  */
 abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Protocol_Interface
 {
-
     /**
      * Server response
      *

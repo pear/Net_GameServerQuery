@@ -19,12 +19,9 @@
 // $Id$
 
 
-class Net_GameServerQuery_Normalise_HalfLife
+class Net_GameServerQuery_Normalise_HalfLife extends Net_GameServerQuery_Normalise
 {
-    public function process($packet_type, $data)
-    {
-        return $data;
-    }
+
 }
 
 ?>

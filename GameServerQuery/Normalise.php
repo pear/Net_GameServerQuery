@@ -33,4 +33,27 @@ interface Net_GameServerQuery_Normalise_Interface
     public function process($packetname, $response);
 }
 
+
+/**
+ * Abstract class which all normalise classes must inherit
+ *
+ * @category       Net
+ * @package        Net_GameServerQuery
+ * @author         Aidan Lister <aidan@php.net>
+ * @author         Tom Buskens <ortega@php.net>
+ * @version        $Revision$
+ */
+abstract class Net_GameServerQuery_Normalise implements Net_GameServerQuery_Normalise_Interface
+{
+
+    /**
+     * Batch process all the results
+     */
+    public function process($packetname, $response)
+    {
+        return $response;
+    }
+
+}
+
 ?>
