@@ -20,10 +20,10 @@
 
 
 /**
- * Processing class
+ * Process the server responses
  *
- * This class wraps around the processing methods.
- * Calls the normalise and protocol classes for each game.
+ * Loads the protocol drivers to parse packets, and runs
+ * the normalistion methods
  *
  * @category        Net
  * @package         Net_GameServerQuery
@@ -39,7 +39,7 @@ class Net_GameServerQuery_Process
      *
      * @var         object
      */
-    private $_config;
+    private $_gamedata;
 
     
     /**
@@ -53,9 +53,9 @@ class Net_GameServerQuery_Process
     /**
      * Constructor
      */
-    public function __construct($config)
+    public function __construct($gamedata)
     {
-        $this->_config    = $config;
+        $this->_gamedata  = $gamedata;
         $this->_protocols = array();
     }
  
@@ -73,7 +73,7 @@ class Net_GameServerQuery_Process
             return new $classname;
         }
 
-        throw new Exception('Protocol driver not found');
+        throw new DriverNotFoundException;
     }
 
     /**
@@ -113,8 +113,9 @@ class Net_GameServerQuery_Process
         }
         
         // Parse the response
-        $protocol = $this->_protocols[$result['protocol']];
-        $parsed = $protocol->parse($result['packetname'], $result['response']);
+        $protocol =& $this->_protocols[$result['protocol']];
+        $response = $result['response'];
+        $parsed = $protocol->parse($result['packetname'], $response);
 
         // Normalise the response
         $result = $this->normalise($result['protocol'], $result['flag'], $parsed);
@@ -138,10 +139,10 @@ class Net_GameServerQuery_Process
             return $data;
         }
 
-        $keys = $this->_config->normal();
-        $normals = $this->_config->normal($protocol);
+        $keys = $this->_gamedata->getProtocolNormals();
+        $normals = $this->_gamedata->getProtocolNormals($protocol);
 
-        // If no normal keys are set return 
+        // If no normal keys are set return all
         if (empty($normals)) { 
             return $data;
         }
