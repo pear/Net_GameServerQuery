@@ -1,0 +1,92 @@
+<games>
+	<game key="aarmy">
+		<name>America's Army: Operations</name>
+		<defaultport>1717</defaultport>
+		<protocol>gamespy</protocol>
+	</game>
+	<game key="avp2">
+		<name>Alien vs Predator 2</name>
+		<defaultport>27888</defaultport>
+		<protocol>gamespy</protocol>
+	</game>
+	<game key="bf1942">
+		<name>Battlefield 1942</name>
+		<defaultport>23000</defaultport>
+		<protocol>gamespy</protocol>
+	</game>
+	<game key="callofduty">
+		<name>Call of Duty</name>
+		<defaultport>28960</defaultport>
+		<protocol>quake3</protocol>
+	</game>
+	<game key="freelancer">
+		<name>Freelancer</name>
+		<defaultport>2302</defaultport>
+		<protocol>freelancer</protocol>
+	</game>
+	<game key="halflife">
+		<name>HalfLife</name>
+		<defaultport>27015</defaultport>
+		<protocol>halflife</protocol>
+	</game>
+	<game key="moh">
+		<name>Medal of Honor</name>
+		<defaultport>12300</defaultport>
+		<protocol>gamespy</protocol>
+	</game>
+	<game key="nwn">
+		<name>Neverwinter Nights</name>
+		<defaultport>5121</defaultport>
+		<protocol>gamespy</protocol>
+	</game>
+	<game key="quakeworld">
+		<name>QuakeWorld</name>
+		<defaultport>27500</defaultport>
+		<protocol>quakeworld</protocol>
+	</game>
+	<game key="quake2">
+		<name>Quake 2</name>
+		<defaultport>27910</defaultport>
+		<protocol>quakeworld</protocol>
+	</game>
+	<game key="quake3">
+		<name>Quake 3 Arena</name>
+		<defaultport>27960</defaultport>
+		<protocol>quake3</protocol>
+	</game>
+	<game key="rtcw">
+		<name>Return to Castle Wolfenstein</name>
+		<defaultport>27960</defaultport>
+		<protocol>quake3</protocol>
+	</game>
+	<game key="savage">
+		<name>Savage: The Battle For Newerth</name>
+		<defaultport>11235</defaultport>
+		<protocol>savage</protocol>
+	</game>
+	<game key="sof">
+		<name>Soldier of Fortune</name>
+		<defaultport>28910</defaultport>
+		<protocol>quake3</protocol>
+	</game>
+	<game key="sof2">
+		<name>Soldier of Fortune 2: Double Helix</name>
+		<defaultport>20100</defaultport>
+		<protocol>quake3</protocol>
+	</game>
+	<game key="ut2003">
+		<name>Unreal Tournament 2003</name>
+		<defaultport>7778</defaultport>
+		<protocol>ut2003</protocol>
+	</game>
+	<game key="ut2004">
+		<name>Unreal Tournament 2004</name>
+		<defaultport>7778</defaultport>
+		<protocol>ut2003</protocol>
+	</game>
+	<game key="vietcong">
+		<name>Vietcong</name>
+		<defaultport>15425</defaultport>
+		<protocol>gamespy</protocol>
+	</game>
+</games>
