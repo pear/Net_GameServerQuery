@@ -19,6 +19,9 @@
 // $Id$
 
 
+require_once 'GameServerQuery\Protocol.php';
+
+
 /**
  * Net_GameServerQuery_Protocol_HalfLife
  *

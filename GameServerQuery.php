@@ -22,6 +22,7 @@
 require_once 'GameServerQuery\Config.php';
 require_once 'GameServerQuery\Communicate.php';
 require_once 'GameServerQuery\Process.php';
+require_once 'GameServerQuery\Convert.php';
 
 
 /**
@@ -129,9 +130,13 @@ class Net_GameServerQuery
 
         // Find default port
         if (is_null($port)) {
-            $protocol = $this->_config->protocol($game);
-            $port = $this->_config->queryport($protocol);
+            $port = $this->_config->queryport($game);
         }
+
+        // Load the protocol class
+        require_once "GameServerQuery/Protocol/{$game}.php";
+        $classname = "Net_GameServerQuery_Protocol_{$game}";
+        $object = new $classname;
 
         // Get list of queries to be sent
         $querylist = explode('|', $query);
@@ -147,16 +152,19 @@ class Net_GameServerQuery
             );
 
             // Data sent to communications class
+            list ($packetname, $packet) = $object->getpacket($query);
             $this->_commlist[$this->_socketcount] = array(
-                'ip'        => $ip,
-                'port'      => $port,
-                'packet'    => $this->_config->packet($game, $query)
+                'ip'            => $ip,
+                'port'          => $port,
+                'packet'        => $packet
             );
 
             // Data sent the processing class
             $this->_processlist[$this->_socketcount] = array(
-                'game'      => $game,
-                'query'     => $query
+                'game'          => $game,
+                'query'         => $query,
+                'packetname'    => $packetname,
+                'object'        => $object
             );
         }
 

@@ -50,12 +50,7 @@ class Net_GameServerQuery_Process
      */
     public function process_once ($result)
     {
-        // Do some example useless processing
-        $len = strlen($result['packet']);
-        $game = $result['game'];
-        $query = $result['query'];
-        
-        return "Spoke to a ($game) server, asked for ($query) and got $len bytes: {$result['packet']}";
+        return $result['object']->processResponse($result['packetname'], $result['packet']);
     }
 
 }
