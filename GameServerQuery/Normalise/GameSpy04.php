@@ -24,7 +24,7 @@ class Net_GameServerQuery_Normalise_GameSpy04 extends Net_GameServerQuery_Normal
     public function process($query_type, $data)
     {
 
-
+    
     }
 
 }
