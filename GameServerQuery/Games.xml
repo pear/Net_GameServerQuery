@@ -34,6 +34,13 @@
 		</ports>
 		<protocol>freelancer</protocol>
 	</game>
+	<game key="ghostrecon">
+		<name>Ghost Recon</name>
+		<ports>
+			<query></query>
+		</ports>
+		<protocol>ghostrecon</protocol>
+	</game>
 	<game key="halflife">
 		<name>HalfLife</name>
 		<ports>
@@ -75,6 +82,13 @@
 			<query>27960</query>
 		</ports>
 		<protocol>quake3</protocol>
+	</game>
+	<game key="ravenshield">
+		<name>Raven Shield</name>
+		<ports>
+			<query></query>
+		</ports>
+		<protocol>ravenshield</protocol>
 	</game>
 	<game key="rtcw">
 		<name>Return to Castle Wolfenstein</name>
