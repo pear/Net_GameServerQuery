@@ -37,6 +37,24 @@ require_once 'GameServerQuery\Normalise.php';
  */
 class Net_GameServerQuery_Process
 {
+    
+    /**
+     * Hold an instance of the normaliser class
+     *
+     * @var         object
+     */
+    private $_normalise;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->_normalise = new Net_GameServerQuery_Normalise;
+    }
+
+
     /**
      * Array holding all the loaded protocol objects
      */
