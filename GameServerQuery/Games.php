@@ -24,7 +24,7 @@
  */
 $normals[0]                     = array('hostname',     'map',      'numplayers',   'maxplayers',       'password',     'mode');
 $normals['Breed']               = array();
-$normals['Doom3']               = array();
+$normals['Doom3']               = array('si_name',      'si_map',   'si_numplayers','si_maxplayers',    'si_usepass',   'si_gameType');
 $normals['FarCry']              = array();
 $normals['Freelancer']          = array();
 $normals['GameSpy']             = array('hostname',     'mapname',  'numplayers',   'maxplayers',       false,          'gametype');
@@ -57,7 +57,7 @@ $packets['Breed']['players']                = array();
 $packets['Breed']['rules']                  = array();
 $packets['Breed']['status']                 = array();
 
-$packets['Doom3']['players']                = array('getinfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['players']                = array('players',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
 $packets['Doom3']['rules']                  = array('getinfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
 $packets['Doom3']['status']                 = array('getinfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
 
