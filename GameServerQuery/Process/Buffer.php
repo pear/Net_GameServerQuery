@@ -86,7 +86,7 @@ class Net_GameServerQuery_Process_Buffer
      */
     public function getBuffer()
     {
-        return $this->_data;
+        return substr($this->_data, $this->_index);
     }
 
 
@@ -186,6 +186,38 @@ class Net_GameServerQuery_Process_Buffer
         // Read the string and remove the delimiter
         $string = $this->read($len - $this->_index);
         ++$this->_index;
+       
+        return $string;
+    }
+        
+    
+    /**
+     * Read from buffer until any of the delimiters is reached
+     *
+     * If not found, return everything
+     *
+     * @param   array           $delims      Read until these characters are reached
+     * @return  string          The data read
+     */
+    public function readStringMulti($delims, &$delimfound = null)
+    {
+        // Get position of delimiters
+        $pos = array();
+        foreach ($delims as $delim) {
+            if ($p = strpos($this->_data, $delim, $this->_index)) {
+                $pos[] = $p;
+            }
+        }
+        
+        // If none are found then return whole buffer
+        if (empty($pos)) {
+            return $this->read(strlen($this->_data) - $this->_index);
+        }
+
+        // Read the string and remove the delimiter
+        sort($pos);
+        $string = $this->read($pos[0] - $this->_index);
+        $delimfound = $this->read();
        
         return $string;
     }
