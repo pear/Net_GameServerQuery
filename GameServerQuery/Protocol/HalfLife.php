@@ -157,7 +157,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     protected function _rules()
     {
         // Remove the header of the possible second packet
-        $this->_response = preg_replace("/\xfe\xFF\xFF\xFF.{5}/", '', $this->_response);
+        $this->_response = preg_replace("/\xFE\xFF\xFF\xFF.{5}/", '', $this->_response);
 
         // Get header, rulecount
         if ($this->_match("\xFF\xFF\xFF\xFF\x45(.{2})")) {
