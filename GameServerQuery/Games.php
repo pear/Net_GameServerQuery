@@ -22,12 +22,12 @@
 /**
  * Define a limited subset of "normalised" data
  */
-$normals[0]                 = array('hostname', 'numplayers', 'maxplayers', 'passworded', 'mod', 'ip', 'port');
+$normals[0]                 = array('hostname', 'numplayers', 'maxplayers', 'password', 'mod', 'ip', 'port');
 $normals['Doom3']           = array();
 $normals['FarCry']          = array();
 $normals['GameSpy']         = array();
 $normals['GameSpy04']       = array();
-$normals['HalfLife']        = array();
+$normals['HalfLife']        = array('hostname', 'players', 'max', 'password', 0, 'address', 'address');
 $normals['Unreal2']         = array();
 $normals['QuakeWorld']      = array();
 

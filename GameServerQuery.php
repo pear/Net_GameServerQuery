@@ -117,7 +117,7 @@ class Net_GameServerQuery
         $this->_communicate = new Net_GameServerQuery_Communicate;
 
         // Load the processing class
-        $this->_process = new Net_GameServerQuery_Process;
+        $this->_process = new Net_GameServerQuery_Process ($this->_config);
     }
 
 
@@ -204,7 +204,7 @@ class Net_GameServerQuery
             );
 
             // Get packet info
-            list($packet_name, $packet) = $this->_config->getPacket($protocol, $query);
+            list($packet_name, $packet) = $this->_config->packet($protocol, $query);
 
             // Data sent to communications class
             $this->_commlist[$this->_socketcount] = array(

@@ -16,7 +16,7 @@ $gsq->addServer('halflife', '202.173.159.8', null, 'rules|status|players');
 //$gsq->addServer('quakeworld', '194.109.69.76', null, 'rules|status|players');
 
 // fire up
-$result = $gsq->execute(600);
+$result = $gsq->execute(100);
 
 // results
 $bm->stop();

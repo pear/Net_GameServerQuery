@@ -38,19 +38,19 @@ class Net_GameServerQuery_Process
 {
     
     /**
-     * Hold an instance of the normaliser class
+     * Hold an instance of the config class
      *
      * @var         object
      */
-    private $_normalise;
+    private $_config;
 
 
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($config)
     {
-        return;
+        $this->_config = $config;
     }
 
 
@@ -99,7 +99,7 @@ class Net_GameServerQuery_Process
         $parsed = $this->_protocols[$result['protocol']]->process($result['packetname'], $result['packet']);
 
         // Normalise the response
-        $result = $this->normalise($result['packetname'], $parsed);
+        $result = $this->normalise($result['protocol'], $result['packetname'], $parsed);
 
         return $result;
     }
@@ -108,9 +108,10 @@ class Net_GameServerQuery_Process
     /**
      * Normalise
      */
-    public function normalise($packetname, $array)
-    {
-        return $array;
+    public function normalise($protocol, $packetname, $data)
+    {    
+        //print_r($this->_config->normal($protocol));
+        return $data;
     }
 
 }

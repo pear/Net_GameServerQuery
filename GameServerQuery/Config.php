@@ -38,13 +38,19 @@ class Net_GameServerQuery_Config
      */
     private static $_games;
 
-
     /**
      * An array of all packet information
      *
      * @var        array
      */
      private static $_packets;
+
+    /**
+     * An array of all normal information
+     *
+     * @var        array
+     */
+     private static $_normals;
 
 
     /**
@@ -58,6 +64,7 @@ class Net_GameServerQuery_Config
         require 'Games.php';
         $this->_games   = $games;
         $this->_packets = $packets;
+        $this->_normals = $normals;
     }
 
 
@@ -96,7 +103,7 @@ class Net_GameServerQuery_Config
      * @param   string  $type            The packet type
      * @return  array   The packet used
      */
-    public function getPacket($protocol, $type)
+    public function packet($protocol, $type)
     {
         return $this->_packets[$protocol][$type];
     }
@@ -111,6 +118,17 @@ class Net_GameServerQuery_Config
     public function queryport($game)
     {
         return $this->_games[$game]['queryport'];
+    }
+    
+
+    /**
+     * Return normal keys
+     *
+     * FIXME
+     */
+    public function normal($protocol)
+    {
+        return $this->_normals[$protocol];
     }
 }
 
