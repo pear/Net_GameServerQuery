@@ -1,5 +1,5 @@
 <?php
-require_once ('Net/GameServerQuery/Objects/Protocol.php');
+require_once ('Net/GameServerQuery/Protocol.php');
 
 
 /**
@@ -100,8 +100,6 @@ class Net_GameServerQuery_Protocol_halflife extends Net_GameServerQuery_Protocol
     */
     public function ping ()
     {
-        $this->_socket->set_virtualbuff(false);
-
         $start = Net_GameServerQuery::microtime_str();
 
         $this->_socket->send($this->_buildpacket('ping'));

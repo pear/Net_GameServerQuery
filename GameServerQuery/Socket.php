@@ -64,7 +64,7 @@ class Net_GameServerQuery_Socket
     public function connect ($ip, $port)
     {
         // "Connect"
-        $fp = fsockopen('udp://' . $ip, $port, $errno, $errstr, $this->_timeout_connect);
+        $fp = @fsockopen('udp://' . $ip, $port, $errno, $errstr, $this->_timeout_connect);
 
         // Check if connection was successful
         if (false !== $fp)
@@ -158,6 +158,8 @@ class Net_GameServerQuery_Socket
     */
     public function read ($len = null)
     {
+		/*
+		// The below code reads data from the experimental buffer
         // If they havn't specified a length, return it all
         if ($len === null) {
             return $this-_buffer; }
@@ -171,6 +173,9 @@ class Net_GameServerQuery_Socket
         $this->_buffer = substr($this->_buffer, $len, strlen($this->_buffer) - $len);
 
         return $data;
+		*/
+
+		return fread($this->_socket, $len);
     }
 
 

@@ -65,7 +65,7 @@ class Net_GameServerQuery
             return $this->_throwerror(NET_GAMESERVERQUERY_ERROR_INVALIDGAME); }
 
         // Make a new connection object
-        require_once ('Net/GameServerQuery/Objects/Socket.php');
+        require_once ('Net/GameServerQuery/Socket.php');
         $socket = new Net_GameServerQuery_Socket;
 
         // If we fail to connect, return an error object
@@ -75,7 +75,7 @@ class Net_GameServerQuery
             return $this->_throwerror(NET_GAMESERVERQUERY_ERROR_COULDNOTCONNECT); }
 
         // Check the protocol file exists
-        $protocol_file = 'Net/GameServerQuery/Protocols/' . $protocol . '.php';
+        $protocol_file = 'Net/GameServerQuery/Protocol/' . $protocol . '.php';
         if (!$this->file_exists_incpath($protocol_file)) {
             return $this->_throwerror(NET_GAMESERVERQUERY_ERROR_PROTOCOLNOTFOUND); }
 
@@ -97,7 +97,7 @@ class Net_GameServerQuery
     */
     private function _throwerror ($errno)
     {
-        include_once 'Net/GameServerQuery/Objects/Error.php';
+        include_once 'Net/GameServerQuery/Error.php';
         return new Net_GameServerQuery_Error ($errno);
     }
 

@@ -1,5 +1,5 @@
 <?php
-require_once ('Net/GameServerQuery/Objects/Protocol.php');
+require_once ('Net/GameServerQuery/Protocol.php');
 
 
 /**
