@@ -21,8 +21,7 @@
 
 require_once 'GameServerQuery\Config.php';
 require_once 'GameServerQuery\Communicate.php';
-require_once 'GameServerQuery\Protocol.php';
-require_once 'GameServerQuery\Normalise.php';
+require_once 'GameServerQuery\Process.php';
 
 
 /**
@@ -145,30 +144,12 @@ class Net_GameServerQuery
         ++$this->_counter;
 
         // Find default port
-        if (is_null($port)) {
+        if ($port === null) {
             $port = $this->_config->queryport($game);
         }
 
         // Find the protocol
         $protocol = $this->_config->protocol($game);
-
-        // Load the protocol class
-        if (@include_once "GameServerQuery/Protocol/{$protocol}.php") {
-            $protocol_classname = "Net_GameServerQuery_Protocol_{$protocol}";
-            $protocol_obj = new $protocol_classname;
-        } else {
-            throw new Exception ('Protocol file not found');
-        }
-
-        // Load the normalise class
-        if (@include_once "GameServerQuery/Normalise/{$protocol}.php") {
-            $normaliser_classname = "Net_GameServerQuery_Normalise_{$protocol}";
-        } else {
-            // Load the default normaliser
-            require_once "GameServerQuery/Normalise/Default.php";
-            $normaliser_classname = "Net_GameServerQuery_Normalise_Default";
-        }
-        $normaliser_obj = new $normaliser_classname;
 
         // Get list of queries to be sent
         $querylist = explode('|', $query);
@@ -205,11 +186,10 @@ class Net_GameServerQuery
 
             // Data sent the processing class
             $this->_processlist[$this->_socketcount] = array(
+                'protocol'      => $protocol,
                 'game'          => $game,
                 'query'         => $query,
                 'packetname'    => $packet_name,
-                'protocol'      => $protocol_obj,
-                'normaliser'    => $normaliser_obj
             );
         }
 

@@ -19,6 +19,10 @@
 // $Id$
 
 
+require_once 'GameServerQuery\Protocol.php';
+require_once 'GameServerQuery\Normalise.php';
+
+
 /**
  * Processing class
  *
@@ -34,13 +38,34 @@
 class Net_GameServerQuery_Process
 {
     /**
+     * Array holding all the loaded protocol objects
+     */
+    private $_protocols = array();
+
+
+    /**
      * Batch process all the results
      */
     public function process($results)
     {
-        // Loop through each of the results
+        // Init
         $newresults = array();
+ 
+        // Process
         foreach ($results as $key => $result) {
+           
+            // Load the object if it is not loaded
+            if (!key_exists($result['protocol'], $this->_protocols)) {
+                
+                // Load the protocol class
+                if (include_once "GameServerQuery/Protocol/{$result['protocol']}.php") {
+                    $protocol_classname = "Net_GameServerQuery_Protocol_{$result['protocol']}";
+                    $this->_protocols[$result['protocol']] = new $protocol_classname;
+                } else {
+                    throw new Exception ('Protocol driver not found');
+                }
+            }
+            
             $newresults[$key] = $this->process_once($result);
         }
 
@@ -54,10 +79,10 @@ class Net_GameServerQuery_Process
     public function process_once($result)
     {
         // Parse the response
-        $parsed = $result['protocol']->process($result['packetname'], $result['packet']);
+        $parsed = $this->_protocols[$result['protocol']]->process($result['packetname'], $result['packet']);
 
         // Normalise the response
-        $result = $result['normaliser']->process($result['query'], $parsed);
+        $result = $parsed;
 
         return $result;
     }

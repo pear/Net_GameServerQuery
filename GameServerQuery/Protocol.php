@@ -70,14 +70,6 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     protected $_output;
 
     /**
-     * Hold an instance of the conversion class
-     *
-     * @access     protected
-     * @var        resource
-     */
-    protected $_convert;
-
-    /**
      * Highest player index
      *
      * @access     protected
@@ -91,9 +83,6 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      */
     public function __construct()
     {
-        // Initialise conversion class
-        $this->_convert = new Net_GameServerQuery_Convert;
-
         // Initialise variables
         $this->_player_index = 0;
     }
