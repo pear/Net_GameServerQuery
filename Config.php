@@ -51,6 +51,17 @@ class Net_GameServerQuery_Config
 		return $packet;
 	}
 
+    public function getprotocol($game)
+    {
+        return $this->_game[$game];
+
+    }
+
+    public function getdefaultport($protocol)
+    {
+        return $this->_protocol[$protocol]['queryport'];
+
+    }
 }
 
 ?>
