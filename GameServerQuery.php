@@ -163,67 +163,7 @@ class Net_GameServerQuery
         endswitch;
     }
 
-    
-    /**
-     * Validate and process the query list
-     *
-     * FIXME
-     */
-    private function _getQueryList($query)
-    {
-        $querylist = explode('|', $query);
-
-        // Validate each query
-        foreach ($querylist as $query) {
-            if ($query != 'status' &&
-                $query != 'players' &&
-                $query != 'rules') {
-
-                throw new Exception ('Invalid Query');
-            }
-        }
-
-        return $querylist;
-    }
-
-    
-    /**
-     * Map data to the master, communication and processing arrays
-     *
-     * FIXME
-     */
-    private function _mapArray ($querylist, $protocol, $game, $addr, $port)
-    {
-        foreach ($querylist as $query) {
-            ++$this->_socketcount;
-
-            // Master list
-            $this->_serverlist[$this->_socketcount] = array(
-                'servid'    => $this->_counter,
-                'query'     => $query
-            );
-
-            // Get packet info
-            list($packet_name, $packet) = $this->_config->packet($protocol, $query);
-
-            // Data sent to communications class
-            $this->_commlist[$this->_socketcount] = array(
-                'addr'          => $addr,
-                'port'          => $port,
-                'packet'        => $packet
-            );
-
-            // Data sent the processing class
-            $this->_processlist[$this->_socketcount] = array(
-                'protocol'      => $protocol,
-                'game'          => $game,
-                'query'         => $query,
-                'packetname'    => $packet_name,
-            );
-        }
-    }
-
-    
+        
     /**
      * Add a server
      *
@@ -253,7 +193,7 @@ class Net_GameServerQuery
         $protocol = $this->_config->protocol($game);
 
         // Get list of queries to be sent
-        $querylist = $this->_getQueryList($query);
+        $querylist = $this->_getQueryFlags($query);
 
         // Map arrays
         $this->_mapArray($querylist, $protocol, $game, $addr, $port);
@@ -316,6 +256,72 @@ class Net_GameServerQuery
 
         // Return
         return $newresult;
+    }
+
+
+    /**
+     * Validate and process the query flags
+     *
+     * @param   string      $query        A pipe delimited list of query flags
+     */
+    private function _getQueryFlags($query)
+    {
+        $queryflags = explode('|', $query);
+
+        // Validate each query
+        foreach ($queryflags as $flag) {
+            if ($flag != 'status' &&
+                $flag != 'players' &&
+                $flag != 'rules') {
+
+                throw new Exception ('Invalid Query Flag');
+            }
+        }
+
+        return $queryflags;
+    }
+
+    
+    /**
+     * Map data to the master, communication and processing arrays
+     *
+     * @param   string      $queryflags   Query flags  
+     * @param   string      $protocol     Protocol
+     * @param   string      $game         The game
+     * @param   string      $addr         The address
+     * @param   string      $port         The port
+     */
+    private function _mapArray ($queryflags, $protocol, $game, $addr, $port)
+    {
+        // We loop through each of the query flags
+        //   because each flag gets its own socket
+        foreach ($queryflags as $flag) {
+            ++$this->_socketcount;
+
+            // Master list
+            $this->_serverlist[$this->_socketcount] = array(
+                'servid'    => $this->_counter,
+                'query'     => $flag
+            );
+
+            // Get packet info
+            list($packet_name, $packet) = $this->_config->packet($protocol, $flag);
+
+            // Data sent to communications class
+            $this->_commlist[$this->_socketcount] = array(
+                'addr'          => $addr,
+                'port'          => $port,
+                'packet'        => $packet
+            );
+
+            // Data sent the processing class
+            $this->_processlist[$this->_socketcount] = array(
+                'protocol'      => $protocol,
+                'game'          => $game,
+                'query'         => $flag,
+                'packetname'    => $packet_name,
+            );
+        }
     }
 
 }
