@@ -127,6 +127,12 @@ class Net_GameServerQuery
      */
     public function addServer($game, $addr, $port = null, $query = 'status')
     {
+        // Check if it's a valid game
+        if (false === $this->_config->validgame($game)) {
+            throw new Exception ('Invalid Game');
+            return false;
+        }
+
         // Incriment the counter
         ++$this->_counter;
 
