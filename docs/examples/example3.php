@@ -1,13 +1,14 @@
 <html>
 <head>
-    <title>Net_GSQ Example 3: Accessing communication classes</title>
+    <title>Net_GameServerQuery Example 3: Accessing communication classes</title>
 </head>
 <body>
+<h1>Net_GameServerQuery Example 3: Accessing communication classes</h1>
 <p>This example shows how the communication class manually with Net_GameServerQuery.</p>
 <p>We ask a Half-Life server for its status.</p>
 <pre>
 <?php
-require 'Net/GameServerQuery.php';
+require_once 'Net/GameServerQuery.php';
 
 // Get the packet to send
 $cfg = new Net_GameServerQuery_Config;
