@@ -23,9 +23,9 @@
  */
 class ParsingException extends Exception
 {
-    public function __construct()
+    public function __construct($packetname)
     {
-        parent::__construct('Parsing Error');
+        parent::__construct('Unable to parse "' . $packetname . '" packet');
     }
 
 }
@@ -38,7 +38,7 @@ class InvalidFlagException extends Exception
 {
     public function __construct()
     {
-        parent::__construct('Invalid Query Flag Error');
+        parent::__construct('Invalid query flag');
     }
 
 }
