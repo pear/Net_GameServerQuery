@@ -48,8 +48,8 @@ $packets['GameSpy']['rules']        = array('status',       "\\status\\");
 $packets['GameSpy']['status']       = array('status',       "\\status\\");
 
 $packets['GameSpy04']['players']    = array('players',      "\xFE\xFD\x00NGSQ\x00\xFF\xFF");
-$packets['GameSpy04']['rules']      = array('status',       "\xFE\xFD\x00NGSQ\xFF\x00\x00");
-$packets['GameSpy04']['status']     = array('status',       "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+$packets['GameSpy04']['rules']      = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+$packets['GameSpy04']['status']     = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
 
 $packets['HalfLife']['players']     = array('players',      "\xFF\xFF\xFF\xFFplayers\x00");
 $packets['HalfLife']['rules']       = array('rules',        "\xFF\xFF\xFF\xFFrules\x00");
