@@ -19,7 +19,7 @@
 // $Id$
 
 
-require_once 'Net\GameServerQuery\Protocol.php';
+require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 
 
 /**
