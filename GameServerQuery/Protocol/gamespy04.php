@@ -55,9 +55,9 @@ class Net_GameServerQuery_Protocol_gamespy04 extends Net_GameServerQuery_Protoco
 
         // Define packets
         $this->_packets = array(
-            'rules'   => "\xfe\xfd\x02\\x00\\x00\\x00\\x00\\x00",
-            'players' => "\xfe\xfd\\x00NGSQ\\x00\xff\xff",
-            'team'    => "\xfe\xfd\\x00NGSQ\\x00\\x00\xff"
+            'rules'   => "\xfe\xfd\x00NGSQ\xff\x00\x00",
+            'players' => "\xfe\xfd\x00NGSQ\x00\xff\xff",
+            'team'    => "\xfe\xfd\x00NGSQ\x00\x00\xff"
         );
         
         // Define packet mapping array

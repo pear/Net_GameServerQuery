@@ -19,11 +19,15 @@
 // $Id$
 
 
-$games['halflife']['name']         = 'Half-Life';
-$games['halflife']['protocol']     = 'halflife';
-$games['halflife']['queryport']    = '27015';
+$games['halflife']['name']              = 'Half-Life';
+$games['halflife']['protocol']          = 'halflife';
+$games['halflife']['queryport']         = '27015';
 
-$games['painkiller']['name']       = 'Pain Killer';
-$games['painkiller']['protocol']   = 'gamespy04';
-$games['painkiller']['queryport']  = '3455';
+$games['painkiller']['name']            = 'Pain Killer';
+$games['painkiller']['protocol']        = 'gamespy04';
+$games['painkiller']['queryport']       = '3455';
+
+$games['bfvietnam']['name']             = 'BattleField: Vietnam';
+$games['bfvietnam']['protocol']         = 'gamespy04';
+$games['bfvietnam']['queryport']        = '23000';
 ?>

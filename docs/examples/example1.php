@@ -10,9 +10,8 @@ $bm = new Benchmark;
 $bm->start();
 
 // add servers
-$serv1 = $gsq->addServer('painkiller', '203.26.94.155', 3455, 'rules');
-//$serv2 = $gsq->addServer('halflife', '202.173.159.8', null, 'rules');
-//$serv3 = $gsq->addServer('halflife', '203.26.94.152', null, 'status|rules');
+$gsq->addServer('bfvietnam', '203.26.94.170', 23000, 'rules');
+$gsq->addServer('halflife', '202.173.159.8', null, 'rules|status|players|ping');
 
 // fire up
 $result = $gsq->execute(100);
