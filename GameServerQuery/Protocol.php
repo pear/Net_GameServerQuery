@@ -30,7 +30,6 @@
 interface Net_GameServerQuery_Protocol_Interface
 {
     public function process($packetname, $response);
-    public function getpacket($packetname);
 }
 
 
@@ -68,23 +67,8 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * @var        array
      * @access     protected
      */
-    protected $_output;    
- 
-    /**
-     * Packets to send to server
-     *
-     * @var        array
-     * @access     protected
-     */
-    protected $_packets;
-
-    /**
-     * Used to map abstract packets to those used by the specific protocol
-     *
-     * @var        array
-     * @access     protected
-     */
-    protected $_map;
+    protected $_output;   
+    
     
     /**
      * Hold an instance of the conversion class
@@ -116,36 +100,9 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         // Get packet data
         $this->_response = $response;
         
-        // Check if packet type exists, process packet
-        if (isset($this->_packets[$packetname])) {
-            $function = '_' . $packetname;
-            return $this->{$function}();
-        } else {
-            return false;
-        }
-    }
-
-
-    /**
-     * Translate abstract packet to one or more actual packets
-     *
-     * @access     public
-     * @param      string    $packet   Abstract packet
-     * @return     array     Packet and packet name
-     */
-    public function getpacket($packet)
-    {
-        // Map packets to those used by the protocol
-        if (isset($this->_map[$packet])) {
-            
-            $name = $this->_map[$packet];
-            $result['packetname'] = $name;
-            $result['packet']     = $this->_packets[$name];
-            return $result;
-
-        } else {
-            return false;
-        }
+        // Process packet
+        $function = '_' . $packetname;
+        return $this->{$function}();
     }
 
 
