@@ -29,7 +29,6 @@
  */
 class Net_GameServerQuery_Communicate
 {
-
     /**
      * Perform a batch query
      *
@@ -68,10 +67,8 @@ class Net_GameServerQuery_Communicate
         foreach ($servers as $key => $server)
         {
             // Open each socket
-            $ip = "udp://" . $server['ip'];
-            $socket = @fsockopen($ip, $server['port'], $errno, $errstr, 1);
-            if ($socket !== false)
-            {
+            $socket = @fsockopen('udp://' . $server['ip'], $server['port'], $errno, $errstr, 1);
+            if ($socket !== false) {
                 stream_set_blocking($socket, false);
 
                 $sockets[$key] = $socket;
@@ -114,14 +111,15 @@ class Net_GameServerQuery_Communicate
             return array();
         }
 
-        // Listen to sockets
+        // Initialise enviroment
         $loops = 0;
         $maxloops = 30;
         $result = array();
         $starttime = microtime(true);
         $r = $sockets;
+
+        // Listen to sockets for any activity
         while (stream_select($r, $w = null, $e = null, 0,
-            // Calculate a variable timeout to preserve the timeout
             $timeout - ((microtime(true) - $starttime) * 1000000)) !== 0) 
         {
             // Make sure we don't repeat too many times
@@ -132,8 +130,7 @@ class Net_GameServerQuery_Communicate
             // For each socket that had activity, read a single packet
             foreach ($r as $socket) {
                 $response = stream_socket_recvfrom($socket, 2048);
-                $sockid = (int)$socket;
-                $key = $sockets_list[$sockid];
+                $key = $sockets_list[(int) $socket];
                 $result[$key][] = $response;
             }
             
