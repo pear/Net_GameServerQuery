@@ -133,7 +133,7 @@ class Net_GameServerQuery
                 break;
             
             default:
-                return false;
+                throw new InvalidOptionException($option);
         }
     }
 
