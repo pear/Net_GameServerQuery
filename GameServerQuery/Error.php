@@ -57,4 +57,30 @@ class InvalidPacketException extends Exception
 }
 
 
+/**
+ * DriverNotFoundException
+ */
+class DriverNotFoundException extends Exception
+{
+    public function __construct()
+    {
+        parent::__construct('The driver required for this game is missing');
+    }
+
+}
+
+
+
+/**
+ * DriverNotFoundException
+ */
+class InvalidGameException extends Exception
+{
+    public function __construct()
+    {
+        parent::__construct('Invalid Game');
+    }
+
+}
+
 ?>
