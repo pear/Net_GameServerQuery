@@ -101,7 +101,7 @@ class Net_GameServerQuery
 		// Default port
 		if (is_null($port)) {
             $protocol = $this->_config->getprotocol($game);
-			$port = $this->_config->getdefaultport($protocol);
+			$port = $this->_config->getdefaultqueryport($protocol);
 		}
 
 		// Add information to our servers array

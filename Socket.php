@@ -1,18 +1,25 @@
 <?php
 /**
  * The socket class
+ *
+ * This needs a more relevant name too
+ *
+ * @category        Net
+ * @package         Net_GameServerQuery_Config
+ * @author			Aidan Lister <aidan@php.net>
+ * @version			$Revision$
  */
 class Net_GameServerQuery_Socket
 {
-    /**
-     * The sockets / list of sockets
-     */
-	private $_sockets;
-	private $_sockets_list;
-
 
     /**
-     * Do the whole lot
+     * Perform a batch query
+     *
+     * This runs open, write, listen and close sequentially
+     *
+     * @param       array   $servers    An array of server data
+     * @param       int     $timeout    A timeout in milliseconds  
+     * @return      array   An array of results
      */
     public function batchquery($servers, $timeout)
     {
@@ -25,7 +32,10 @@ class Net_GameServerQuery_Socket
 
 
 	/**
-     * Open
+     * Open the sockets
+     *
+     * @param       array       $servers     An array of server data  
+     * @return      array       An array of sockets and an array of corresponding keys
      */
 	public function open($servers)
 	{
@@ -56,7 +66,11 @@ class Net_GameServerQuery_Socket
 
 
 	/**
-	 * Write
+	 * Write a packet to a socket
+     *
+     * @param       resource    $socket     The socket
+     * @param       string      $packet     The packet
+     * @return      bool        True if the packet was written
 	 */
 	public function write($socket, $packet)
 	{
@@ -65,7 +79,12 @@ class Net_GameServerQuery_Socket
 
 
 	/**
-	 * Listen
+	 * Listen to an array of sockets
+     *
+     * @param       array       $sockets        An array of sockets
+     * @param       array       $sockets_list   An array of socket relationships
+     * @param       int         $timeout        The maximum time to listen for
+     * @return      array       An array of result data
 	 */
 	public function listen($sockets, $sockets_list, $timeout)
 	{
@@ -94,7 +113,10 @@ class Net_GameServerQuery_Socket
 
 
     /**
-     * Close
+     * Close each socket
+     *
+     * @param       string      $sockets        An array of sockets
+     * @return      void
      */
 	public function close($sockets)
 	{

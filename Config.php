@@ -85,8 +85,8 @@ class Net_GameServerQuery_Config
      */
     public function getdefaultqueryport($game)
     {
+        $protocol = $this->_game[$game];
         return $this->_protocol[$protocol]['queryport'];
-
     }
 }
 
