@@ -12,7 +12,8 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Author: Tom Buskens <ortega@php.net>                                 |
+// | Authors: Aidan Lister <aidan@php.net>                                |
+// |          Tom Buskens <ortega@php.net>                                |
 // +----------------------------------------------------------------------+
 //
 // $id$
@@ -53,15 +54,18 @@ class Net_GameServerQuery_Process
      * @access     public
      * @param      string    $string   Input string
      * @param      array     $rules    Processing rules
+     * @return     array     Processed string
      */
     public function process($string, $rules)
     {
+        // Initialize variables
         $this->_string = $string;
+        $this->_Encap  = new Net_GameServerQuery_Process_Encapsulate;
 
-        $this->_Encap = new Net_GameServerQuery_Process_Encapsulate;
-
+        // Process input
         $this->_processString($rules);
 
+        // Return processed input
         return $this->_Encap->getOutput();
     }
     
@@ -186,7 +190,7 @@ class Net_GameServerQuery_Process
 
              // Encapsulate variable and function names
              case 'process':
-                $string = preg_replace('/\$(\w+)(?!->)/', "\$this->_Encap->vars['\\1']", $string);
+                $string = preg_replace('/\$(\w+)/', "\$this->_Encap->vars['\\1']", $string);
                 $string = preg_replace('/([^ ]+)\(/', "\$this->_Encap->\\1(", $string);
              break;
                  
