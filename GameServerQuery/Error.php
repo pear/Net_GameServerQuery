@@ -51,7 +51,7 @@ class InvalidPacketException extends Exception
 {
     public function __construct()
     {
-        parent::__construct('Invalid Packet Error');
+        parent::__construct('Protocol does not support parsing of given packet');
     }
 
 }
