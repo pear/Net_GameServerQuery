@@ -73,10 +73,9 @@ class Net_GameServerQuery_Communicate
 
         foreach ($servers as $key => $server)
         {
-            if (strspn($addr, '.0123456789') == strlen($server['addr'])) {
-                $addr = $addr;
-            } else {
-                $addr = gethostbyname($addr);
+            $addr = $server['addr'];
+            if (strspn($addr, '.0123456789') !== strlen($server['addr'])) {
+                $addr = gethostbyname($server['addr']);
             }
 
             // Open each socket
