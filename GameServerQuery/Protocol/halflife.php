@@ -69,28 +69,6 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
             'status'  => 'infostring'
         );
     }
- 
-    /**
-     * Translate abstract packet to one or more actual packets
-     *
-     * @access     public
-     * @param      string    $packet   Abstract packet
-     * @return     array     Packet and packet name
-     */
-    public function getPacket($packet)
-    {
-        // Map packets to those used by the protocol
-        if (isset($this->_map[$packet])) {
-            
-            $name = $this->_map[$packet];
-            $result['packetname'] = $name;
-            $result['packet']     = $this->_packets[$name];
-            return $result;
-
-        } else {
-            return false;
-        }
-    }
 
     /**
      * Details packet
