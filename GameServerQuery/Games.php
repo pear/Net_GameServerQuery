@@ -51,17 +51,30 @@ $packets['GameSpy04']['players']    = array('players',      "\xFE\xFD\x00NGSQ\x0
 $packets['GameSpy04']['rules']      = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
 $packets['GameSpy04']['status']     = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
 
-$packets['HalfLife']['players']     = array('players',      "\xFF\xFF\xFF\xFFplayers\x00");
-$packets['HalfLife']['rules']       = array('rules',        "\xFF\xFF\xFF\xFFrules\x00");
-$packets['HalfLife']['status']      = array('infostring',   "\xFF\xFF\xFF\xFFinfostring\x00");
+$packets['HalfLife']['players']     = array('players',      "\xFF\xFF\xFF\xFFplayers");
+$packets['HalfLife']['rules']       = array('rules',        "\xFF\xFF\xFF\xFFrules");
+$packets['HalfLife']['status']      = array('infostring',   "\xFF\xFF\xFF\xFFinfostring");
+
+$packets['QuakeWorld']['players']   = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['QuakeWorld']['rules']     = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['QuakeWorld']['status']    = array('status',       "\xFF\xFF\xFF\xFFstatus");
+
+$packets['Quake2']['players']       = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['Quake2']['rules']         = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['Quake2']['status']        = array('info',         "\xFF\xFF\xFF\xFFinfo");
+
+$packets['Quake3']['players']       = array('status',       "\xFF\xFF\xFF\xFFgetstatus");
+$packets['Quake3']['rules']         = array('status',       "\xFF\xFF\xFF\xFFgetstatus");
+$packets['Quake3']['status']        = array('info',         "\xFF\xFF\xFF\xFFgetinfo");
+
+$packets['Source']['players']       = array('players',      "\xFF\xFF\xFF\xFFU");
+$packets['Source']['rules']         = array('rules',        "\xFF\xFF\xFF\xFFV");
+$packets['Source']['status']        = array('status',       "\xFF\xFF\xFF\xFFT");
 
 $packets['Unreal2']['players']      = array('players',      "\x78\x00\x00\x00\x02");
 $packets['Unreal2']['rules']        = array('rules',        "\x78\x00\x00\x00\x01");
 $packets['Unreal2']['status']       = array('status',       "\x78\x00\x00\x00\x00");
 
-$packets['QuakeWorld']['players']   = array('players',      "\xFF\xFF\xFF\xFFstatus\x00");
-$packets['QuakeWorld']['rules']     = array('rules',        "\xFF\xFF\xFF\xFFstatus\x00");
-$packets['QuakeWorld']['status']    = array('status',       "\xFF\xFF\xFF\xFFstatus\x00");
 
 
 /**
