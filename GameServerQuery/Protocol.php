@@ -120,7 +120,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         $this->_result = array();
 
         // Format regular expression
-        $expr = sprintf("/^%s/s", $expr);
+        $expr = sprintf("#^%s#s", addslashes($expr));
 
         // Match pattern
         if (preg_match($expr, $this->_response, $this->_result) == false) {
@@ -145,7 +145,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * @param      string    $name     Variable name
      * @param      string    $value    Variable value
      */
-    protected function _addVar($name, $value)
+    protected function _add($name, $value)
     {
         // Existing variable
         if (isset($this->_output[$name])) {
