@@ -1,0 +1,3 @@
+<?php
+$game['halflife']	= 'halflife';
+?>
