@@ -56,9 +56,9 @@ $packets['Breed']['players']                = array();
 $packets['Breed']['rules']                  = array();
 $packets['Breed']['status']                 = array();
 
-$packets['Doom3']['players']                = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
-$packets['Doom3']['rules']                  = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
-$packets['Doom3']['status']                 = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['players']                = array('getinfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['rules']                  = array('getinfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['status']                 = array('getinfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
 
 $packets['FarCry']['players']               = array('players',      "\x7F\xFF\xFF\xFFplayers");
 $packets['FarCry']['rules']                 = array('rules',        "\x7F\xFF\xFF\xFFrules");
