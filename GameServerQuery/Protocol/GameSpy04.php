@@ -30,31 +30,6 @@
 class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protocol
 {
     /**
-     * Constructor
-     *
-     * @access     public
-     */ 
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Define packets
-        $this->_packets = array(
-            'rules'   => "\xfe\xfd\x00NGSQ\xff\x00\x00",
-            'players' => "\xfe\xfd\x00NGSQ\x00\xff\xff",
-            'team'    => "\xfe\xfd\x00NGSQ\x00\x00\xff"
-        );
-        
-        // Define packet mapping array
-        $this->_map = array(
-            'ping'    => 'team',
-            'players' => 'players',
-            'rules'   => 'rules',
-        );
-    }
-
-
-    /**
      * Rules packet
      *
      * @access    protected

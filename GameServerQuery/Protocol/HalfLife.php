@@ -29,32 +29,6 @@
  */
 class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 {
-    /**
-     * Constructor
-     *
-     * @access     public
-     */ 
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Define packets
-        $this->_packets = array(
-            'details'    => "\xFF\xFF\xFF\xFFdetails",
-            'infostring' => "\xFF\xFF\xFF\xFFinfostring",
-            'ping'       => "\xFF\xFF\xFF\xFFping",
-            'players'    => "\xFF\xFF\xFF\xFFplayers",
-            'rules'      => "\xFF\xFF\xFF\xFFrules"
-        );
-        
-        // Define packet mapping array
-        $this->_map = array(
-            'ping'    => 'ping',
-            'players' => 'players',
-            'rules'   => 'rules',
-            'status'  => 'infostring'
-        );
-    }
 
     /**
      * Details packet
