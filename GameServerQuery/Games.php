@@ -19,6 +19,35 @@
 // $Id$
 
 
+// Packet settings
+
+$packets['Doom3']['players']        = array('getInfo', "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['rules']          = array('getInfo', "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['status']         = array('getInfo', "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+
+$packets['FarCry']['players']       = array('players', "\x7f\xff\xff\xffplayers");
+$packets['FarCry']['rules']         = array('rules',   "\x7f\xff\xff\xffrules");
+$packets['FarCry']['status']        = array('status',  "\x7f\xff\xff\xffstatus");
+
+$packets['GameSpy']['players']      = array('players', "\\players\\");
+$packets['GameSpy']['rules']        = array('status',  "\\status\\");
+$packets['GameSpy']['status']       = array('status',  "\\status\\");
+
+$packets['GameSpy04']['players']    = array('players', "\xFE\xFD\x00NGSQ\x00\xFF\xFF");
+$packets['GameSpy04']['rules']      = array('status',  "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+$packets['GameSpy04']['status']     = array('status',  "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+
+$packets['HalfLife']['players']     = array('players',    "\xFF\xFF\xFF\xFFplayers");
+$packets['HalfLife']['rules']       = array('rules',      "\xFF\xFF\xFF\xFFrules");
+$packets['HalfLife']['status']      = array('infostring', "\xFF\xFF\xFF\xFFinfostring");
+
+$packets['Unreal2']['players']      = array('players', "\x78\x00\x00\x00\x02");
+$packets['Unreal2']['rules']        = array('rules',   "\x78\x00\x00\x00\x01");
+$packets['Unreal2']['status']       = array('status',  "\x78\x00\x00\x00\x00");
+
+
+// Game settings
+
 $games['aa']['name']                = 'America\'s Army: Operations';
 $games['aa']['protocol']            = 'GameSpy';
 $games['aa']['queryport']           = '1717';
@@ -223,13 +252,13 @@ $games['sof']['name']               = 'Soldier of Fortune';
 $games['sof']['protocol']           = 'q3';
 $games['sof']['queryport']          = '28910';
 
-$games['GameSpy']['name']               = 'Soldier of Fortune 2: Double Helix';
-$games['GameSpy']['protocol']           = 'q3';
-$games['GameSpy']['queryport']          = '20100';
+$games['GameSpy']['name']           = 'Soldier of Fortune 2: Double Helix';
+$games['GameSpy']['protocol']       = 'q3';
+$games['GameSpy']['queryport']      = '20100';
 
-$games['GameSpy']['name']               = 'Generic Gamespy Server';
-$games['GameSpy']['protocol']           = 'GameSpy';
-$games['GameSpy']['queryport']          = '99999';
+$games['GameSpy']['name']           = 'Generic Gamespy Server';
+$games['GameSpy']['protocol']       = 'GameSpy';
+$games['GameSpy']['queryport']      = '99999';
 
 $games['ss']['name']                = 'Serious Sam';
 $games['ss']['protocol']            = 'GameSpy';
