@@ -19,5 +19,8 @@
 // $Id$
 
 
-$game['halflife']	= 'halflife';
+$games['halflife']['name']       = 'Half-Life';
+$games['halflife']['protocol']   = 'halflife';
+$games['halflife']['queryport']  = '27015';
+
 ?>
