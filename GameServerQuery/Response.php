@@ -97,7 +97,7 @@ class Net_GameServerQuery_Response
      *
      * @return  bool    TRUE if the buffer has data in it, FALSE if not
      */
-    public function bufferHasData()
+    public function buffer()
     {
         if (strlen($this->_buffer) === 0) {
             return false;
@@ -113,7 +113,7 @@ class Net_GameServerQuery_Response
      * @param   int             $length     Length of data to read
      * @return  string          The data read
      */
-    public function read($length = 1)
+    public function read($length = 1, $lookahead = false)
     {
         if ($length === true) {
             $length = strlen($this->_buffer);
@@ -128,7 +128,9 @@ class Net_GameServerQuery_Response
         $string = substr($this->_buffer, 0, $length);
 
         // Remove from buffer
-        $this->_buffer = substr($this->_buffer, $length);
+        if ($lookahead === false) {
+            $this->_buffer = substr($this->_buffer, $length);
+        }
 
         return $string;
     }
