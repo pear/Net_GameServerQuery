@@ -70,10 +70,18 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     /**
      * Hold an instance of the conversion class
      *
-     * @access     private
+     * @access     protected
      * @var        resource
      */
     protected $_convert;
+
+    /**
+     * Highest player index
+     *
+     * @access     protected
+     * @var        int
+     */
+    protected $_player_index;
 
 
     /**
@@ -81,8 +89,11 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      */
     public function __construct()
     {
-        // Initialize conversion class
+        // Initialise conversion class
         $this->_convert = new Net_GameServerQuery_Convert;
+
+        // Initialise variables
+        $this->_player_index = 0;
     }
 
 
@@ -141,27 +152,32 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     /**
      * Adds variable to output
      *
-     * @access     private
+     * @access     protected
      * @param      string    $name     Variable name
      * @param      string    $value    Variable value
      */
     protected function _add($name, $value)
     {
-        // Existing variable
-        if (isset($this->_output[$name])) {
+        $this->_output[$name] = $value;
+    }
 
-            // Variable has one value, put it into an array
-            if (!is_array($this->_output[$name])) {
-                $this->_output[$name] = array($this->_output[$name]);
-            }
 
-            // Add current match to array
-            array_push($this->_output[$name], $value);
-
-        } else {
-            // New variable
-            $this->_output[$name] = $value;
+    /**
+     * Adds player variable to output
+     *
+     * @access  protected
+     * @param   string   $name   Variable name
+     * @param   string   $value  Variable value
+     */
+    protected function _addPlayer($name, $value)
+    {
+        // Player var is already set, so it must belong to the next player
+        if (isset($this->_output['players'][$this->_player_index][$name])) {
+            ++$this->_player_index;
         }
+        
+        // Set player var
+        $this->_output['players'][$this->_player_index][$name] = $value;
     }
 }
 
