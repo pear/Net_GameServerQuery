@@ -141,12 +141,6 @@ class Net_GameServerQuery_Protocol_gamespy04 extends Net_GameServerQuery_Protoco
         }
 
         // Get team info (same packet)
-        echo "<pre>";
-        for ($i = 0; $i != strlen($this->_response); $i++) {
-            $c = $this->_response{$i};
-            echo $c . ':'. ord($c) . '][';
-        }
-        echo "</pre>";
         $this->_team(true);
         
         return $this->_output;
