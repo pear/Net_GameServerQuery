@@ -84,18 +84,12 @@ class Net_GameServerQuery_Process
      */
     public function batch($results)
     {
-        $newresults = array();
+        $processed = array();
         foreach ($results as $key => $result) {
-
-            // Load the object if it is not loaded
-            if (!key_exists($result['protocol'], $this->_protocols)) {
-                $classname = self::factory($this->_protocols);
-            }
-            
-            $newresults[$key] = $this->process($result);
+            $processed[$key] = $this->process($result);
         }
 
-        return $newresults;
+        return $processed;
     }
 
 
@@ -111,6 +105,14 @@ class Net_GameServerQuery_Process
         if ($result['response'] === false) {
             return false;
         }
+
+        // Load the protocol file into cache
+        if (!key_exists($result['protocol'], $this->_protocols)) {
+            $classname = self::factory($result['protocol']);
+            $this->_protocols[$result['protocol']] = new $classname;
+        }
+
+        return $result;
         
         // Parse the response
         $protocol = $this->_protocols[$result['protocol']];
