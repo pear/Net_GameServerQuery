@@ -139,7 +139,8 @@ class Net_GameServerQuery
         // Load the protocol class
         require_once "GameServerQuery/Protocol/{$protocol}.php";
         $protocolclass = "Net_GameServerQuery_Protocol_{$protocol}";
-        $normaliserclass = "Net_GameServerQuery_Protocol_Normaliser_{$protocol}";
+        require_once "GameServerQuery/Normalise/{$protocol}.php";
+        $normaliserclass = "Net_GameServerQuery_Normalise_{$protocol}";
         $protocol = new $protocolclass;
         $normaliser = new $normaliserclass;
 

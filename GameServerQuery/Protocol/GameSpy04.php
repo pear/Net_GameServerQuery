@@ -30,7 +30,7 @@ require_once 'GameServerQuery\Protocol.php';
  * @author         Tom Buskens <ortega@php.net>
  * @version        $Revision$
  */
-class Net_GameServerQuery_Protocol_gamespy04 extends Net_GameServerQuery_Protocol
+class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protocol
 {
 
     /**

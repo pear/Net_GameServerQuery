@@ -22,7 +22,5 @@ print_r($result);
 
 // benchmark
 echo 'Took ... ' . $bm->timems() . 'ms';
-
-//xdebug_dump_function_trace()
 ?>
 </pre>
