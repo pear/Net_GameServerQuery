@@ -45,7 +45,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         
         $buffer->read(4);
 
-        if ($buffer->readLast() !== "\x0") {
+        if ($buffer->readLast() !== "\x00") {
             return false;
         }
 
@@ -84,8 +84,8 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             }
 
             // Look ahead
-            if ($buffer->read(1, true) === "\x00") {
-                $buffer->read();
+            if ($buffer->readAhead() === "\x00") {
+                $buffer->skip();
                 break;
             }
         }
@@ -97,8 +97,8 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             }      
             
             // Look ahead
-            if ($buffer->read(1, true) === "\x00") {
-                $buffer->read();
+            if ($buffer->readAhead() === "\x00") {
+                $buffer->skip();
                 break;
             } 
         }
@@ -112,8 +112,8 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             $varnames[] = $buffer->readString();
 
             // Look ahead
-            if ($buffer->read(1, true) === "\x00") {
-                $buffer->read();
+            if ($buffer->readAhead() === "\x00") {
+                $buffer->skip();
                 break;
             }
         }
@@ -127,8 +127,8 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             ++$i;
             
             // Look ahead
-            if ($buffer->read(1, true) === "\x00") {
-                $buffer->read();
+            if ($buffer->readAhead() === "\x00") {
+                $buffer->skip();
                 break;
             } 
         }
