@@ -40,23 +40,29 @@ class Net_GameServerQuery_Process
      * @var         object
      */
     private $_gamedata;
-
+    
+    /**
+     * Array of options
+     *
+     * @var         object
+     */
+    private $_options;
     
     /**
      * Array holding all the loaded protocol objects
      *
      * @var         array
      */
-    private $_protocols;
+    private $_protocols = array();
 
 
     /**
      * Constructor
      */
-    public function __construct($gamedata)
+    public function __construct($gamedata, $options)
     {
         $this->_gamedata  = $gamedata;
-        $this->_protocols = array();
+        $this->_options   = $options;
     }
  
     
@@ -76,6 +82,7 @@ class Net_GameServerQuery_Process
         throw new DriverNotFoundException($protocol);
     }
 
+    
     /**
      * Batch process all the results
      *
@@ -113,14 +120,16 @@ class Net_GameServerQuery_Process
         }
         
         // Parse the response
-        $protocol   =& $this->_protocols[$result['protocol']];
-        $response   = $result['response'];
-        $parsedinfo = $protocol->parse($result['packetname'], $response);
+        $protocol =& $this->_protocols[$result['protocol']];
+        $response = $result['response'];
+        $data     = $protocol->parse($result['packetname'], $response, $this->_options['showmeta']);
 
         // Normalise the response
-        $result = $this->normalise($parsedinfo, $result['protocol'], $result['flag']);
-
-        return $result;
+        if ($this->_options['normalise'] === true) {
+            $data = $this->normalise($data, $result['protocol'], $result['flag']);
+        }
+        
+        return $data;
     }
 
     
