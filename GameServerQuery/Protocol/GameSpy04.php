@@ -33,7 +33,7 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
  */
 class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protocol
 {
-    /**
+    /*
      * Rules packet
      * Status packet
      */
@@ -49,7 +49,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             return false;
         }
 
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->add($buffer->readString(), $buffer->readString());
         }
         
@@ -57,7 +57,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     }
 
 
-    /**
+    /*
      * Player packet
      */
     protected function playerinfo(&$buffer, &$result)
@@ -76,7 +76,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         
         // Variable names
         $varnames = array();
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $varnames[] = $buffer->readString('_');
 
             if ($buffer->read() !== "\x00") {
@@ -91,7 +91,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         }
    
         // Loop through sets
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             foreach ($varnames as $varname) {
                 $result->addPlayer($varname, $buffer->readString());
             }      
@@ -108,7 +108,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         
         // Variable names
         $varnames = array();
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $varnames[] = $buffer->readString();
 
             // Look ahead
@@ -120,7 +120,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
 
         // Loop through sets
         $i = 0;
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             foreach ($varnames as $varname) {
                 $team[$i][$varname] = $buffer->readString();
             }

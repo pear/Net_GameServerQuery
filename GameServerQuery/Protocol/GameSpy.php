@@ -37,12 +37,12 @@ class Net_GameServerQuery_Protocol_GameSpy extends Net_GameServerQuery_Protocol
      * Status packet
      */
     protected function info(&$buffer, &$result)
-    {   echo $buffer->getData();
+    {
         if ($buffer->read() !== '\\') {
             return false;
         }
         
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $key = $buffer->readString('\\');
             if ($key == 'final') {
                 break;
@@ -63,7 +63,7 @@ class Net_GameServerQuery_Protocol_GameSpy extends Net_GameServerQuery_Protocol
             return false;
         }
         
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $key = $buffer->readString('\\');
             if ($key == 'player_0') {
                 break;
@@ -84,7 +84,7 @@ class Net_GameServerQuery_Protocol_GameSpy extends Net_GameServerQuery_Protocol
             return false;
         }
 
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $key = $buffer->readString('\\');
             if ($key == 'final') {
                 break;

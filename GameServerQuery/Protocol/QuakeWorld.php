@@ -50,7 +50,7 @@ class Net_GameServerQuery_Protocol_QuakeWorld extends Net_GameServerQuery_Protoc
             return false;
         }
         
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->add(
                 $buffer->readString('\\'),
                 $buffer->readStringMulti(array('\\', "\x0a"), $delimfound)
@@ -85,7 +85,7 @@ class Net_GameServerQuery_Protocol_QuakeWorld extends Net_GameServerQuery_Protoc
             return false;
         }
           
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->addPlayer('id', $buffer->readString("\x20"));
             $result->addPlayer('score', $buffer->readString("\x20"));
             $result->addPlayer('time', $buffer->readString("\x20"));

@@ -50,7 +50,7 @@ class Net_GameServerQuery_Protocol_Quake3 extends Net_GameServerQuery_Protocol
             return false;
         }
         
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->add(
                 $buffer->readString('\\'),
                 $buffer->readStringMulti(array('\\', "\x0a"), $delimfound)
@@ -85,16 +85,13 @@ class Net_GameServerQuery_Protocol_Quake3 extends Net_GameServerQuery_Protocol
         // Ignore all the rules information
         $buffer->readString("\x0a");
         
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->addPlayer('frags', $buffer->readString("\x20"));
             $result->addPlayer('ping', $buffer->readString("\x20"));
-            if ($buffer->read() !== '"') {
-                return false;
-            }
+            
+            if ($buffer->read() !== '"') { return false; }
             $result->addPlayer('nick', $buffer->readString('"'));
-            if ($buffer->read() !== "\x0a") {
-                return false;
-            }
+            if ($buffer->read() !== "\x0a") { return false; }
         }
 
         return $result->fetch();
@@ -118,7 +115,7 @@ class Net_GameServerQuery_Protocol_Quake3 extends Net_GameServerQuery_Protocol
             return false;
         }
 
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->add($buffer->readString('\\'), $buffer->readString('\\'));
         }
 

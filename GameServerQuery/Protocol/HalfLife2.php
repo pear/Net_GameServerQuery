@@ -33,7 +33,7 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
  */
 class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protocol
 {
-    /**
+    /*
      * Status
      */
     protected function details(&$buffer, &$result)
@@ -64,7 +64,7 @@ class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protoco
     }
 
 
-    /**
+    /*
      * Players
      */
     protected function players(&$buffer, &$result)
@@ -79,7 +79,7 @@ class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protoco
 
         $result->addMeta('count', $buffer->readInt8());
 
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->addPlayer('id',      $buffer->readInt8());
             $result->addPlayer('name',    $buffer->readString());
             $result->addPlayer('score',   $buffer->readInt32());
@@ -90,7 +90,7 @@ class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protoco
     }
 
 
-    /**
+    /*
      * Rules
      */
     protected function rules(&$buffer, &$result)
@@ -105,7 +105,7 @@ class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protoco
 
         $result->addMeta('count', $buffer->readInt16());
 
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->add($buffer->readString(), $buffer->readString());
         }
 

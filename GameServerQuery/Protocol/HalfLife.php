@@ -54,7 +54,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
             return false;
         }
         
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->add($buffer->readString('\\'), $buffer->readString('\\'));
         }
 
@@ -77,7 +77,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 
         $result->addMeta('count', $buffer->readInt8());
 
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->addPlayer('id',      $buffer->readInt8());
             $result->addPlayer('name',    $buffer->readString());
             $result->addPlayer('score',   $buffer->readInt32());
@@ -103,7 +103,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 
         $result->addMeta('count', $buffer->readInt16());
 
-        while (!$buffer->is_empty()) {
+        while ($buffer->getLength()) {
             $result->add($buffer->readString(), $buffer->readString());
         }
 
