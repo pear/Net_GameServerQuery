@@ -19,7 +19,7 @@
 // $Id$
 
 
-class Net_GameServerQuery_Normalise_GameSpy04 extends Net_GameServerQuery_Normalise
+class Net_GameServerQuery_Normalise_QuakeWorld extends Net_GameServerQuery_Normalise
 {
     public function process($query_type, $data)
     {

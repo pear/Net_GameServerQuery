@@ -20,17 +20,32 @@
 
 
 /**
- * FIXME Protocol
+ * QuakeWorld Protocol
  *
  * @category       Net
  * @package        Net_GameServerQuery
  * @author         Aidan Lister <aidan@php.net>
  * @version        $Revision$
  */
-class Net_GameServerQuery_Protocol_FIXME extends Net_GameServerQuery_Protocol
+class Net_GameServerQuery_Protocol_QuakeWorld extends Net_GameServerQuery_Protocol
 {
 
-     
+    protected function _status ()
+    {
+        hexdump($this->_response);
+    }
+    
+    protected function _players ()
+    {
+       
+
+    }
+
+    protected function _rules ()
+    {
+       
+
+    }
 }
 
 ?>

@@ -46,6 +46,9 @@ $packets['Unreal2']['players']      = array('players',      "\x78\x00\x00\x00\x0
 $packets['Unreal2']['rules']        = array('rules',        "\x78\x00\x00\x00\x01");
 $packets['Unreal2']['status']       = array('status',       "\x78\x00\x00\x00\x00");
 
+$packets['QuakeWorld']['players']   = array('players',      "\xff\xff\xff\xffstatus");
+$packets['QuakeWorld']['rules']     = array('rules',        "\xff\xff\xff\xffstatus");
+$packets['QuakeWorld']['status']    = array('status',       "\xff\xff\xff\xffstatus");
 
 /**
  * Define games and associated protocols
@@ -199,8 +202,8 @@ $games['painkiller']['protocol']    = 'GameSpy04';
 $games['painkiller']['queryport']   = '3455';
 
 $games['quakeworld']['name']        = 'QuakeWorld';
-$games['quakeworld']['protocol']    = 'qw';
-$games['quakeworld']['queryport'    = '27500';
+$games['quakeworld']['protocol']    = 'QuakeWorld';
+$games['quakeworld']['queryport']   = '27500';
 
 $games['quake2']['name']            = 'Quake 2';
 $games['quake2']['protocol']        = 'q3';
