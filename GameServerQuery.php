@@ -21,7 +21,7 @@
 
 define('NET_GAMESERVERQUERY_BASE', dirname(__FILE__) . '/GameServerQuery/');
 
-require_once NET_GAMESERVERQUERY_BASE . 'Config.php';
+require_once NET_GAMESERVERQUERY_BASE . 'GameData.php';
 require_once NET_GAMESERVERQUERY_BASE . 'Communicate.php';
 require_once NET_GAMESERVERQUERY_BASE . 'Process.php';
 require_once NET_GAMESERVERQUERY_BASE . 'Error.php';
@@ -57,7 +57,7 @@ class Net_GameServerQuery
      *
      * @var         object
      */
-    private $_config;
+    private $_gamedata;
 
     /**
      * An instance of the Net_GameServerQuery_Communicate class
@@ -102,9 +102,9 @@ class Net_GameServerQuery
         $this->_options = array('normalise' => true, 'showmeta' => true);
 
         // Load classes
-        $this->_config      = new Net_GameServerQuery_Config;
+        $this->_gamedata    = new Net_GameServerQuery_GameData;
         $this->_communicate = new Net_GameServerQuery_Communicate;
-        $this->_process     = new Net_GameServerQuery_Process($this->_config);
+        $this->_process     = new Net_GameServerQuery_Process($this->_gamedata);
     }
 
 
@@ -160,8 +160,8 @@ class Net_GameServerQuery
     public function addServer($game, $addr, $port = null, $query = 'status')
     {
         // Validate game
-        if ($this->_config->validgame($game) === false) {
-            throw new Exception ('Invalid Game');
+        if ($this->_gamedata->is_game($game) === false) {
+            throw new InvalidGameException;
             return false;
         }
 
@@ -169,11 +169,11 @@ class Net_GameServerQuery
 
         // Find default port
         if (is_null($port)) {
-            $port = $this->_config->getPort($game);
+            $port = $this->_gamedata->getGamePort($game);
         }
 
         // Find the protocol
-        $protocol = $this->_config->getProtocol($game);
+        $protocol = $this->_gamedata->getGameProtocol($game);
 
         // Get list of queries to be sent
         $queryflags = $this->_getQueryFlags($query);
@@ -273,7 +273,7 @@ class Net_GameServerQuery
             ++$this->_socketcount;
 
             list($packetname, $packet) =
-                $this->_config->getPacket($protocol, $flag);
+                $this->_gamedata->getProtocolPacket($protocol, $flag);
 
             // Master list
             $this->_socketlist[$this->_socketcount] = array(
