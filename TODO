@@ -1,1 +1,4 @@
-Make a todo list
+- Add setOption() function to main class, with neccesary code.
+- Add optional colourtag stripping for players.
+- Add optional playersorting.
+- Support more games.
