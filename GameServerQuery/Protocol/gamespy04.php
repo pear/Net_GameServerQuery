@@ -23,7 +23,7 @@ require_once 'GameServerQuery\Protocol.php';
 
 
 /**
- * Net_GameServerQuery_Protocol_HalfLife
+ * GameSpy04 Protocol
  *
  * @category       Net
  * @package        Net_GameServerQuery
@@ -31,7 +31,7 @@ require_once 'GameServerQuery\Protocol.php';
  * @version        $Revision$
  * @todo           implement all parsing functions
  */
-class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
+class Net_GameServerQuery_Protocol_gamespy04 extends Net_GameServerQuery_Protocol
 {
 
     /**
@@ -107,4 +107,5 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     }
 
 }
+
 ?>
