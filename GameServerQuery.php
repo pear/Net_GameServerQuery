@@ -47,20 +47,11 @@ class Net_GameServerQuery
      */
     private $_servers;
 
-	/**
-	 * A list of all protocol information
-	 *
-	 * @var			array
-	 */
-	private $_protocol;
-
-	/**
-	 * A list of all game information
-	 *
-	 * @var			array
-	 */
-	private $_game;
-
+    /**
+     * An instance of the Net_GameServerQuery_Config class
+     *
+     * @var         object
+     */
     private $_config;
 
 
@@ -99,7 +90,8 @@ class Net_GameServerQuery
 
 		// Default port
 		if (is_null($port)) {
-			$port = $this->_protocol[$this->_game[$game]]['queryport'];
+            $protocol = $this->_config->getprotocol($game);
+			$port = $this->_config->getdefaultport($protocol);
 		}
 
 		// Add information to our servers array
