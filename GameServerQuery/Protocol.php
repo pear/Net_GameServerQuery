@@ -171,7 +171,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         }
         
         // Set player var
-        $this->_output['players'][$this->_player_index][$name] = $value;
+        $this->_output[$this->_player_index][$name] = $value;
     }
 
 
