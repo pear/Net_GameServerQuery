@@ -1,3 +1,0 @@
-<?php
-$game['halflife']	= 'halflife';
-?>
