@@ -91,8 +91,8 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         }
    
         // Loop through sets
-        while($response->buffer()) {
-            foreach($varnames as $varname) {
+        while ($response->buffer()) {
+            foreach ($varnames as $varname) {
                 $result->addPlayer($varname, $response->readString());
             }      
             
@@ -104,9 +104,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         }
         
         // Start all over again to read team information
-        if ($response->read() !== "\x02") {
-            return false;
-        }
+        $response->readInt8();
         
         // Variable names
         $varnames = array();
@@ -123,7 +121,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         // Loop through sets
         $i = 0;
         while ($response->buffer()) {
-            foreach($varnames as $varname) {
+            foreach ($varnames as $varname) {
                 $team[$i][$varname] = $response->readString();
             }
             ++$i;
