@@ -117,8 +117,8 @@ $packets['Quake2']['players']               = array('status',       "\xFF\xFF\xF
 $packets['Quake2']['rules']                 = array('status',       "\xFF\xFF\xFF\xFFstatus");
 $packets['Quake2']['status']                = array('info',         "\xFF\xFF\xFF\xFFinfo");
 
-$packets['Quake3']['players']               = array('status',       "\xFF\xFF\xFF\xFFgetstatus");
-$packets['Quake3']['rules']                 = array('status',       "\xFF\xFF\xFF\xFFgetstatus");
+$packets['Quake3']['players']               = array('players',      "\xFF\xFF\xFF\xFFgetstatus");
+$packets['Quake3']['rules']                 = array('rules',        "\xFF\xFF\xFF\xFFgetstatus");
 $packets['Quake3']['status']                = array('info',         "\xFF\xFF\xFF\xFFgetinfo");
 
 $packets['RedFaction']['players']           = array();
