@@ -19,9 +19,11 @@
 // $Id$
 
 
-require_once 'Net\GameServerQuery\Config.php';
-require_once 'Net\GameServerQuery\Communicate.php';
-require_once 'Net\GameServerQuery\Process.php';
+define('NET_GAMESERVERQUERY_BASE', dirname(__FILE__) . '/GameServerQuery/');
+
+require_once NET_GAMESERVERQUERY_BASE . 'Config.php';
+require_once NET_GAMESERVERQUERY_BASE . 'Communicate.php';
+require_once NET_GAMESERVERQUERY_BASE . 'Process.php';
 
 
 /**
@@ -176,10 +178,10 @@ class Net_GameServerQuery
         $protocol = $this->_config->getProtocol($game);
 
         // Get list of queries to be sent
-        $querylist = $this->_getQueryFlags($query);
+        $queryflags = $this->_getQueryFlags($query);
 
         // Create a list of socket data
-        $this->_buildSocketList($querylist, $protocol, $game, $addr, $port);
+        $this->_buildSocketList($queryflags, $protocol, $game, $addr, $port);
 
         // Return the counter for identifying the server later
         return $this->_servercount;
@@ -220,14 +222,15 @@ class Net_GameServerQuery
         foreach ($this->_socketlist as $key => $server) {
             // Check if we missed out on any packets
             if (!isset($results[$key])) {
-                throw new Exception ('Server did not reply to request');
+                $results[$key] = false;
             }
 
             $this->_socketlist[$key]['response'] = $results[$key];
         }
 
         // Process the results
-        $results = $this->_process->process($this->_socketlist);
+        // This calls on the specific protocol files to parse the data
+        $results = $this->_process->batch($this->_socketlist);
 
         // Put the data back together
         foreach ($this->_socketlist as $key => $server) {
@@ -277,7 +280,6 @@ class Net_GameServerQuery
         // We loop through each of the query flags
         // Each flag gets its own socket
         foreach ($flags as $flag) {
-
             ++$this->_socketcount;
 
             list($packetname, $packet) =
@@ -294,7 +296,6 @@ class Net_GameServerQuery
                 'protocol'   => $protocol,
                 'game'       => $game
                 );
-            
         };
     }
 
