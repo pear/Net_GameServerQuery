@@ -39,7 +39,7 @@ class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protoc
     {
         // Packet id
         if (!$this->_match("\x02")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Init player id, needed for player properties
@@ -71,14 +71,14 @@ class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protoc
 
                 // Get property name length
                 if (!$this->_match(".")) {
-                    return false;
+                    throw new Exception('Parsing error');
                 }
                 $name_length = $this->toInt($this->_result[0]) - 1;
 
                 // Get property name
                 $expr = sprintf("(.{%d})(.)", $name_length);
                 if (!$this->_match($expr)) {
-                    return false;
+                    throw new Exception('Parsing error');
                 }
                 $name = $this->_result[1];
 
@@ -88,7 +88,7 @@ class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protoc
                 // Get property value
                 $expr = sprintf(".{%d}", $val_length);
                 if (!$this->_match($expr)) {
-                    return false;
+                    throw new Exception('Parsing error');
                 }
 
                 // Assign property value to a variable with property name

@@ -39,7 +39,7 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
     {
         // Header
         if (!$this->_match("\xff\xffinfoResponse")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Probably a (protocol) version number
@@ -48,7 +48,7 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
             $version .= $this->toInt($this->_result[2], 8);
         }
         else {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Variable / value pairs
@@ -58,7 +58,7 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
 
         // End marker for variables?
         if (!$this->_match("\x00\x00")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Players (ping and score in here somehwere)

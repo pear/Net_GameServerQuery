@@ -38,8 +38,8 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     protected function _rules()
     {
         // Header
-        if (!$this->_getHeader()) {
-            return false;
+        $this->_getHeader();
+            throw new Exception('Parsing error');
         }
 
         // Variable / value pairs
@@ -62,7 +62,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     {
         // Header
         if (!$this->_getHeader()) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Get values
@@ -88,7 +88,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     {
         // Header
         if (!$from_players && !$this->_getHeader()) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Get values
@@ -125,7 +125,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     {
         // Get number of sets
         if (!$this->_match("\x00(.)")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Convert byte to integer

@@ -36,7 +36,7 @@ class Net_GameServerQuery_Protocol_QuakeWorld extends Net_GameServerQuery_Protoc
 
         // Header
         if (!$this->_match("\xFF\xFF\xFF\xFFn")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         while ($this->_match('\\([^\\]+)\\([^\\]+)')) {

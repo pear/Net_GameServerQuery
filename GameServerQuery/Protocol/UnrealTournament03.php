@@ -40,7 +40,7 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
     {
         // Packet id
         if (!$this->_match("\x02")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Players
@@ -55,7 +55,7 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
 
             // Match expression
             if (!$this->_match($expr)) {
-                return false;
+                throw new Exception('Parsing error');
             }
 
             $this->_addPlayer('name',  $this->_result[1]);
@@ -78,7 +78,7 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
     {
         // Packet id
         if (!$this->_match("\x01")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Var / value set.
@@ -99,11 +99,11 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
                     $this->_add($name, $this->_result[1]);
                 }
                 else {
-                    return false;
+                    throw new Exception('Parsing error');
                 }
             }
             else {
-                return false;
+                throw new Exception('Parsing error');
             }
 
         }
@@ -120,7 +120,7 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
     {
         // Get some 32 bit variables
         if (!$this->_match("\x00(.{4})\x00(.{4})(.{4})([^\x00]+)\x00(.)")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         $this->_add('gameport',  $this->toInt($this->_result[2], 32));
@@ -130,7 +130,7 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
         // Create expression using result of previous match to set string length
         $expr = sprintf("(.{%d})(.)", ($this->toInt($this->_result[5]) - 1));
         if (!$this->_match($expr)) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         $this->_add('map', $this->_result[1]);
@@ -138,7 +138,7 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
         // Create expression using result of previous match to set string length
         $expr = sprintf("(.{%d})(.{4})(.{4})", ($this->toInt($this->_result[2]) - 1));
         if (!$this->_match($expr)) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         $this->_add('gametype',   $this->_result[1]);

@@ -40,7 +40,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     {
         // Header
         if (!$this->_match("\xFF\xFF\xFF\xFF\x6d")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Body regular expression
@@ -73,8 +73,11 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
             }
 
         }
+        else {
+            throw new Exception('Parsing error');
+        }
 
-
+        return $this->_output;
     }
 
 
@@ -88,7 +91,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     {
         // Header
         if (!$this->_match("\xFF\xFF\xFF\xFFinfostringresponse\x00")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Variable / value pairs
@@ -98,7 +101,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 
         // Terminating character
         if (!$this->_match("\x00")) {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         return $this->_output;
@@ -116,7 +119,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         if ($this->_match("\xFF\xFF\xFF\xFF\n")) {
             return $this->_output;
         } else {
-            return false;
+            throw new Exception('Parsing error');
         }
     }
 
@@ -133,7 +136,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         if ($this->_match("\xFF\xFF\xFF\xFF\x44(.)")) {
             $this->_add('playercount', $this->toInt($this->_result[1]));
         } else {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Players
@@ -163,7 +166,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         if ($this->_match("\xFF\xFF\xFF\xFF\x45(.{2})")) {
             $this->_add('rulecount', $this->toInt($this->_result[1], 16));
         } else {
-            return false;
+            throw new Exception('Parsing error');
         }
 
         // Variable / value pairs
