@@ -30,7 +30,7 @@ $results = $gsq->execute();
 
 // Sort the data by the game
 foreach ($results as $result) {
-    $data[$result['__game']][] = $result;
+    $data[$result['meta']['game']][] = $result;
 }
 $template['data'] = $data;
 

@@ -13,6 +13,7 @@
         <th>Players</th>
     </tr>
     <?php
+    $results = $template['results'];
     foreach ($results as $result):
         $status = $result['status'];
         if ($status === false):
@@ -24,7 +25,7 @@
         else:
             ?>
             <tr>
-                <td><?php echo $result['__gamename'];?></td>
+                <td><?php echo $result['meta']['gametitle'];?></td>
                 <td><?php echo $status['hostname'];?></td>
                 <td><?php echo $status['map'];?></td>
                 <td><?php echo (int) $status['numplayers'];?> / <?php echo (int) $status['maxplayers'];?></td>

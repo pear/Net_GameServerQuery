@@ -17,7 +17,7 @@
     foreach ($data as $game):
         ?>
         <tr>
-            <th colspan="4"><?php echo $game[0]['__gametitle']; ?></th>
+            <th colspan="4"><?php echo $game[0]['meta']['gametitle']; ?></th>
         </tr>
         <?php
         foreach ($game as $result):
@@ -35,8 +35,8 @@
                     <td><?php echo $status['map'];?></td>
                     <td><?php echo (int) $status['numplayers'];?> / <?php echo (int) $status['maxplayers'];?></td>
                     <td><a href="<?php
-                        $url = $_SERVER['SCRIPT_NAME'] . '?view=' . $result['__addr'] .
-                        '&port=' . $result['__port'] . '&game=' . $result['__game'];
+                        $url = $_SERVER['SCRIPT_NAME'] . '?view=' . $result['meta']['addr'] .
+                        '&port=' . $result['meta']['port'] . '&game=' . $result['meta']['game'];
                         echo $url;?>">View</a></td>
                 </tr>
                 <?php
@@ -47,7 +47,7 @@
 </table>
 
 <?php
-if ($template['moreinfo']):
+if (isset($template['moreinfo'])):
     ?>
     <h2>View Server</h2>
     <h3>Players</h3>
