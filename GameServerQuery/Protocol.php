@@ -49,7 +49,7 @@ abstract class Net_GameServerQuery_Protocol
 
         // Sanity check
         if (!is_callable($callback)) {
-            throw new InvalidPacketException;
+            throw new InvalidPacketException($packetname);
         }
                 
         // If the response is an array then multiple packets were recieved
