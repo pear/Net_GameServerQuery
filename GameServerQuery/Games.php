@@ -22,15 +22,15 @@
 /**
  * Define a limited subset of normalised data
  */
-$normals[0]                     = array('hostname', 'numplayers', 'maxplayers', 'password', 'mod', 'ip', 'port');
+$normals[0]                     = array('hostname',     'numplayers',   'maxplayers',   'password', '   mod');
 $normals['Breed']               = array();
 $normals['Doom3']               = array();
 $normals['FarCry']              = array();
 $normals['Freelancer']          = array();
 $normals['GameSpy']             = array();
-$normals['GameSpy04']           = array();
+$normals['GameSpy04']           = array('hostname',     'numplayers',   'maxplayers',   'password',     'game_id');
 $normals['GhostRecon']          = array();
-$normals['HalfLife']            = array('hostname', 'players', 'max', 'password', 'gamedir', 'address', 'address');
+$normals['HalfLife']            = array('hostname',     'players',      'max',          'password',     'gamedir');
 $normals['Hexen2']              = array();
 $normals['HomeWorld2']          = array();
 $normals['JediKnight']          = array();
@@ -72,9 +72,9 @@ $packets['GameSpy']['players']              = array('players',      "\\players\\
 $packets['GameSpy']['rules']                = array('status',       "\\status\\");
 $packets['GameSpy']['status']               = array('status',       "\\status\\");
 
-$packets['GameSpy04']['players']            = array('players',      "\xFE\xFD\x00NGSQ\x00\xFF\xFF");
-$packets['GameSpy04']['rules']              = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
-$packets['GameSpy04']['status']             = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+$packets['GameSpy04']['players']            = array('playerinfo',   "\xFE\xFD\x00NGSQ\x00\xFF\xFF");
+$packets['GameSpy04']['rules']              = array('serverinfo',   "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+$packets['GameSpy04']['status']             = array('serverinfo',   "\xFE\xFD\x00NGSQ\xFF\x00\x00");
 
 $packets['GhostRecon']['players']           = array();
 $packets['GhostRecon']['rules']             = array();
