@@ -184,6 +184,15 @@ class Net_GameServerQuery_Communicate
     public function concat($packets)
     {
         $newresults = array();
+        
+        /**
+         * Sorts a packet list by length
+         *
+         * @param       string      $a        Compare 1
+         * @param       string      $b        Compare 2
+         * @return      int         -1, 0 or 1
+         */
+        $sortfunc = create_function('$a, $b', 'if ($a == $b) { return 0; } return (strlen($a) > strlen($b)) ? -1 : 1;');
 
         foreach ($packets as $key => $packet)
         {
@@ -191,30 +200,13 @@ class Net_GameServerQuery_Communicate
             if (count($packet) > 1) {
 
                 // We need to sort the array with the biggest packet first
-                usort($packet, array($this, '_sortbylength'));
+                usort($packet, $sortfunc);
             }
 
             $newresults[$key] = implode($packet);
         }
 
         return $newresults;
-    }
-
-
-    /**
-     * Sorts a packet list by length
-     *
-     * @param       string      $a        Compare 1
-     * @param       string      $b        Compare 2
-     * @return      int         -1, 0 or 1
-     */
-    private function _sortbylength($a, $b)
-    {
-        if ($a == $b) {
-            return 0;
-        }
-
-        return (strlen($a) > strlen($b)) ? -1 : 1;
     }
 
 }
