@@ -25,6 +25,7 @@
  * @category       Net
  * @package        Net_GameServerQuery
  * @author         Aidan Lister <aidan@php.net>
+ * @author         Tom Buskens <ortega@php.net>
  * @version        $Revision$
  */
 class Net_GameServerQuery_Protocol_FIXME extends Net_GameServerQuery_Protocol
