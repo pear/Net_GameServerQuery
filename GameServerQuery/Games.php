@@ -18,6 +18,13 @@
 //
 // $Id$
 
+$games['bfvietnam']['name']             = 'BattleField: Vietnam';
+$games['bfvietnam']['protocol']         = 'GameSpy04';
+$games['bfvietnam']['queryport']        = '23000';
+
+$games['doom3']['name']                 = 'Doom 3';
+$games['doom3']['protocol']             = 'Doom3';
+$gaems['doom3']['queryport']            = '27666';
 
 $games['halflife']['name']              = 'Half-Life';
 $games['halflife']['protocol']          = 'HalfLife';
@@ -27,7 +34,4 @@ $games['painkiller']['name']            = 'Pain Killer';
 $games['painkiller']['protocol']        = 'GameSpy04';
 $games['painkiller']['queryport']       = '3455';
 
-$games['bfvietnam']['name']             = 'BattleField: Vietnam';
-$games['bfvietnam']['protocol']         = 'GameSpy04';
-$games['bfvietnam']['queryport']        = '23000';
 ?>
