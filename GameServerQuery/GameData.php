@@ -105,21 +105,41 @@ class Net_GameServerQuery_GameData
     /**
      * Return packet used by a certain protocol
      *
-     * @param   string  $protocol        The protocol
-     * @param   string  $type            The packet type
-     * @return  array   The packet used
+     * @param       string      $protocol       The protocol
+     * @param       string      $type           The packet type
+     * @return      array       The packet used
      */
     public function getProtocolPacket($protocol, $type)
     {
-        return $this->_packets[$protocol][$type];
+        if (isset($this->_packets[$protocol][$type])) {
+            return $this->_packets[$protocol][$type];
+        }
+        
+        return false;
     }
     
 
     /**
+     * Get game name
+     *
+     * @param       string      $game           The game
+     * @return      string      The game name
+     */
+    public function getGameTitle($game)
+    {
+        if (isset($this->_games[$game]['title'])) {
+            return $this->_games[$game]['title'];
+        }
+        
+        return false;
+    }
+    
+    
+    /**
      * Return normal keys
      *
-     * @param   string  The protocol
-     * @return  array   The normals  
+     * @param       string      The protocol
+     * @return      array       The normals  
      */
     public function getProtocolNormals($protocol = 0)
     {
@@ -130,8 +150,8 @@ class Net_GameServerQuery_GameData
     /**
      * Return protocol used by a certain game
      *
-     * @return  string  The game used
-     * @param   string  $game   The game
+     * @return      string      The game used
+     * @param       string      $game           The game
      */
     public function getGameProtocol($game)
     {
@@ -142,8 +162,8 @@ class Net_GameServerQuery_GameData
     /**
      * Return default query port used by a certain game
      *
-     * @return  string  The default query port used
-     * @param   string  $game   The game
+     * @return      string      The default query port used
+     * @param       string      $game           The game
      */
     public function getGamePort($game)
     {
