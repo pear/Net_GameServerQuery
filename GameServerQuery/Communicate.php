@@ -52,8 +52,15 @@ class Net_GameServerQuery_Communicate
         // Open and write
         $sockets = array();
         foreach ($servers as $key => $server) {     
+            // Attempt to connect to the server
+            $socket = $this->_open($server['addr'], $server['port']);
+  
+            if ($socket === false) {
+                continue;   
+            }
+            
             // Save the connection for this server
-            $sockets[$key] = $socket = $this->_open($server['addr'], $server['port']);
+            $sockets[$key] = $socket;
             
             // Associate the connection id with the server id
             $this->_serverkeys[(int) $socket] = $key;
@@ -62,11 +69,13 @@ class Net_GameServerQuery_Communicate
             $this->_write($socket, $server['packet']);
         }
 
-        // Listen
-        $result = $this->_listen($sockets, $timeout);
-        if ($result === false) {
+        // Ensure there is something to listen to
+        if (empty($sockets)) {
             return false;
         }
+        
+        // Listen
+        $result = $this->_listen($sockets, $timeout);
 
         // Condense
         $result = $this->_condense($result);
@@ -147,6 +156,10 @@ class Net_GameServerQuery_Communicate
             foreach ($r as $socket) {
                 $response = stream_socket_recvfrom($socket, 2048);
                 
+                if ($response === false) {
+                    continue;
+                }
+                
                 $id = $this->_getserverkey($socket);
                 $result[$id][] = $response;
             }
@@ -223,15 +236,15 @@ class Net_GameServerQuery_Communicate
         $preg = '#^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}' . 
             '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$#';
         if (!preg_match($preg, $addr)) {
-            $addr = gethostbyname($addr);
+            $res = gethostbyname($addr);
 
             // Not a valid host nor IP
-            if ($addr === $server['addr']) {
-                $addr = false;
+            if ($res === $addr) {
+                $res = false;
             }
         }
-            
-        return $addr;
+
+        return $res;
     }
     
 }
