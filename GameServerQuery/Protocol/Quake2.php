@@ -19,8 +19,11 @@
 // $Id$
 
 
+require_once 'Net\GameServerQuery\Protocol.php';
+
+
 /**
- * FIXME Protocol
+ * Quake2 Protocol
  *
  * @category       Net
  * @package        Net_GameServerQuery
@@ -28,7 +31,7 @@
  * @author         Tom Buskens <ortega@php.net>
  * @version        $Revision$
  */
-class Net_GameServerQuery_Protocol_FIXME extends Net_GameServerQuery_Protocol
+class Net_GameServerQuery_Protocol_Quake2 extends Net_GameServerQuery_Protocol
 {
 
 

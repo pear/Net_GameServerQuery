@@ -19,9 +19,6 @@
 // $Id$
 
 
-require_once 'GameServerQuery\Protocol.php';
-
-
 /**
  * Processing class
  *
@@ -63,7 +60,6 @@ class Net_GameServerQuery_Process
     }
  
 
-
     /**
      * Batch process all the results
      *
@@ -82,13 +78,12 @@ class Net_GameServerQuery_Process
             if (!key_exists($result['protocol'], $this->_protocols)) {
                 
                 // Load the protocol class
-                $filename = 'GameServerQuery/Protocol/' . $result['protocol'] . '.php';
+                $filename = 'Net\GameServerQuery/Protocol/' . $result['protocol'] . '.php';
 
                 if (include_once $filename) {
                     $classname = 'Net_GameServerQuery_Protocol_' .  $result['protocol'];
                     $this->_protocols[$result['protocol']] = new $classname;
-                }
-                else {
+                } else {
                     throw new Exception('Protocol driver not found');
                 }
             }
@@ -134,12 +129,20 @@ class Net_GameServerQuery_Process
         $keys = $this->_config->normal();
         $normals = $this->_config->normal($protocol);
 
-        for ($i = 0, $x = count($keys); $i !== $x; $i++) {
-            $ndata[$keys[$i]] = ($normals[$i] === false) ? $normals[$i] : $data[$normals[$i]];
+        // If no normal keys are set return 
+        if (empty($normals)) { 
+            return $data;
+        }
+
+        $ndata = array();
+        for ($i = 0, $x = count($keys); $i < $x; $i++) {
+            $d = isset($data[$normals[$i]]) ? $data[$normals[$i]] : false;
+            $ndata[$keys[$i]] = ($normals[$i] === false) ? $normals[$i] : $d;
         }
 
         return $ndata;
     }
 
 }
+
 ?>

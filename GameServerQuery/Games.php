@@ -28,6 +28,7 @@ $normals['Doom3']               = array();
 $normals['FarCry']              = array();
 $normals['Freelancer']          = array();
 $normals['GameSpy']             = array();
+$normals['GameSpy04']           = array();
 $normals['GhostRecon']          = array();
 $normals['HalfLife']            = array('hostname', 'players', 'max', 'password', 'gamedir', 'address', 'address');
 $normals['Hexen2']              = array();

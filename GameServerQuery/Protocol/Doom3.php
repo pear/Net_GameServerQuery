@@ -19,6 +19,9 @@
 // $Id$
 
 
+require_once 'Net\GameServerQuery\Protocol.php';
+
+
 /**
  * Doom 3 Protocol
  *

@@ -19,6 +19,9 @@
 // $Id$
 
 
+require_once 'Net\GameServerQuery\Protocol.php';
+
+
 /**
  * Unreal Tournament 2003 protocol
  *

@@ -1,9 +1,9 @@
 <package version="1.0">
 	<name>Net_GameServerQuery</name>
-	<summary>An interface to query and return information from a game server.</summary>
+	<summary>An interface to query and return information from a game server</summary>
 
 	<description>
-		Net_GameServerQuery provides an interface for querying game servers.
+		Net_GameServerQuery provides an interface for querying game servers
 	</description>
 
 	<maintainers>
@@ -26,19 +26,31 @@
 		<date>2004-04-10</date>
 		<license>PHP License</license>
 		<state>alpha</state>
-		<notes>First release! This package is alpha, everything is likely to change.</notes>
+		<notes>
+<![CDATA[
+First release! This package is alpha, everything is likely to change.
+]]>
+  </notes>
 		<deps>
 			<dep type="php" rel="ge" version="5.0.0"/>
 		</deps>
 	</release>
 
 	<release>
-		<version>0.2</version>
-		<date>2004-04-26</date>
+		<version>0.2.0</version>
+		<date>2004-11-23</date>
 		<license>PHP License</license>
 		<state>alpha</state>
 		<notes>
-			...
+<![CDATA[
+The structure of the class has been completely changed, along with the API.
+The API is now relatively stable, though still subject to change.
+
+Supports simultaneous querying of servers, so many servers can be queried relatively quickly.
+
+The class now fetches all data from game servers, including rules, status, players and ping.
+Many protocols have been implemented, but still alpha quality.
+]]>
 		</notes>
 
 		<deps>
@@ -47,11 +59,36 @@
 
 		<filelist>
 			<dir name="/" baseinstalldir="Net" role="php">	 
-				<file>GameServerQuery.php</file>
+    <file>GameServerQuery.php</file>
 				<dir name="GameServerQuery">
-					<file>Protocols.php</file>
+     <file>Communicate.php</file>
+     <file>Config.php</file>
+     <file>Games.php</file>
+     <file>Process.php</file>
+     <file>Protocol.php</file>
 					<dir name="Protocol">
-						<file>halflife.php</file>
+      <file>Breed.php</file>
+      <file>Doom3.php</file>
+      <file>FarCry.php</file>
+      <file>Freelancer.php</file>
+      <file>GameSpy04.php</file>
+      <file>GhostRecon.php</file>
+      <file>HalfLife.php</file>
+      <file>Hexen2.php</file>
+      <file>HomeWorld2.php</file>
+      <file>JediKnight.php</file>
+      <file>JediKnight2.php</file>
+      <file>MultiTheftAuto.php</file>
+      <file>Quake2.php</file>
+      <file>QuakeWorld.php</file>
+      <file>RavenShield.php</file>
+      <file>RedFaction.php</file>
+      <file>Savage.php</file>
+      <file>Starsiege.php</file>
+      <file>Tribes.php</file>
+      <file>Unreal2XMP.php</file>
+      <file>UnrealTournament.php</file>
+      <file>UnrealTournament03.php</file>
 					</dir>
 				</dir>
 			</dir>

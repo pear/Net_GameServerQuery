@@ -19,9 +19,9 @@
 // $Id$
 
 
-require_once 'GameServerQuery\Config.php';
-require_once 'GameServerQuery\Communicate.php';
-require_once 'GameServerQuery\Process.php';
+require_once 'Net\GameServerQuery\Config.php';
+require_once 'Net\GameServerQuery\Communicate.php';
+require_once 'Net\GameServerQuery\Process.php';
 
 
 /**
@@ -30,6 +30,7 @@ require_once 'GameServerQuery\Process.php';
  * @category        Net
  * @package         Net_GameServerQuery
  * @author          Aidan Lister <aidan@php.net>
+ * @author          Tom Buskens <ortega@php.net>
  * @version         $Revision$
  */
 class Net_GameServerQuery
@@ -39,14 +40,14 @@ class Net_GameServerQuery
      *
      * @var         int
      */
-    private $_servercount;
+    private $_servercount = -1;
 
     /**
      * Hold the counter per socket
      *
      * @var         int
      */
-    private $_socketcount;
+    private $_socketcount = -1;
 
     /**
      * An instance of the Net_GameServerQuery_Config class
@@ -70,13 +71,14 @@ class Net_GameServerQuery
     private $_process;
 
     /**
-     * A list of the socket data,
-     * there can be multiple sockets per server
+     * A master list of socket data
      *
-     * @var         object
+     * Contains a mass of information about each socket opened
+     * serverid|flag|addr|port|packet|packetname|protocol|game
+     *
+     * @var         array
      */
     private $_socketlist;
-
 
     /**
      * Hold an array of runtime options
@@ -93,17 +95,13 @@ class Net_GameServerQuery
      */
     public function __construct()
     {
-        // Initialise counters
-        $this->_servercount = -1;
-        $this->_socketcount = -1;
-
         // Set default option values
         $this->_options = array('timeout' => 300);
 
         // Load classes
         $this->_config      = new Net_GameServerQuery_Config;
         $this->_communicate = new Net_GameServerQuery_Communicate;
-        $this->_process     = new Net_GameServerQuery_Process ($this->_config);
+        $this->_process     = new Net_GameServerQuery_Process($this->_config);
     }
 
 
@@ -161,13 +159,12 @@ class Net_GameServerQuery
      */
     public function addServer($game, $addr, $port = null, $query = 'status')
     {
-        // Check if it's a valid game
+        // Validate game
         if ($this->_config->validgame($game) === false) {
             throw new Exception ('Invalid Game');
             return false;
         }
 
-        // Increment the counter
         ++$this->_servercount;
 
         // Find default port
@@ -221,7 +218,6 @@ class Net_GameServerQuery
         // Finish the array for the process class
         // Add the packets we just recieved into the array
         foreach ($this->_socketlist as $key => $server) {
-
             // Check if we missed out on any packets
             if (!isset($results[$key])) {
                 throw new Exception ('Server did not reply to request');
@@ -235,12 +231,11 @@ class Net_GameServerQuery
 
         // Put the data back together
         foreach ($this->_socketlist as $key => $server) {
-            $servid                     = $this->_servercount;
+            $servid                     = $server['serverid'];
             $flag                       = $server['flag'];
             $newresults[$servid][$flag] = $results[$key];
         }
 
-        // Return
         return $newresults;
     }
 
@@ -254,7 +249,7 @@ class Net_GameServerQuery
     {
         $flags = explode('|', $flags);
 
-        // Validate each query
+        // Validate each flag
         foreach ($flags as $flag) {
             if ($flag !== 'status' &&
                 $flag !== 'players' &&
@@ -280,7 +275,7 @@ class Net_GameServerQuery
     private function _buildSocketList($flags, $protocol, $game, $addr, $port)
     {
         // We loop through each of the query flags
-        //   because each flag gets its own socket
+        // Each flag gets its own socket
         foreach ($flags as $flag) {
 
             ++$this->_socketcount;
@@ -304,4 +299,5 @@ class Net_GameServerQuery
     }
 
 }
+
 ?>

@@ -19,6 +19,9 @@
 // $Id$
 
 
+require_once 'Net\GameServerQuery\Protocol.php';
+
+
 /**
  * GameSpy04 Protocol
  *
