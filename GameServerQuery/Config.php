@@ -20,7 +20,9 @@
 
 
 /**
- * Get protocol config options
+ * Get protocol information
+ *
+ * This class serves as a wrapper for the games definition file
  *
  * @category        Net
  * @package         Net_GameServerQuery

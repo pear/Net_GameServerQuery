@@ -20,7 +20,10 @@
 
 
 /**
- * Net_GameServerQuery_Process
+ * Processing class
+ *
+ * This class wraps around the processing methods.
+ * Calls the normalise and protocol classes for each game.
  *
  * @category        Net
  * @package         Net_GameServerQuery
@@ -33,7 +36,7 @@ class Net_GameServerQuery_Process
     /**
      * Batch process all the results
      */
-    public function process ($results)
+    public function process($results)
     {
         // Loop through each of the results
         $newresults = array();
@@ -48,10 +51,10 @@ class Net_GameServerQuery_Process
     /**
      * Process a single result
      */
-    public function process_once ($result)
+    public function process_once($result)
     {
         // Parse the response
-        $parsed = $result['protocol']->processResponse($result['packetname'], $result['packet']);
+        $parsed = $result['protocol']->process($result['packetname'], $result['packet']);
 
         // Normalise the response
         $result = $result['normaliser']->process($result['packetname'], $parsed);

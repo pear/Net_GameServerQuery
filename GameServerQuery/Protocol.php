@@ -20,7 +20,7 @@
 
 
 /**
- * Net_GameServerQuery_Protocol_Interface
+ * Define the interface for all protocol classes
  *
  * @category       Net
  * @package        Net_GameServerQuery
@@ -29,8 +29,8 @@
  */
 interface Net_GameServerQuery_Protocol_Interface
 {
-    public function processResponse($packetname, $response);
-    public function getPacket($packetname);
+    public function process($packetname, $response);
+    public function getpacket($packetname);
 }
 
 
@@ -96,7 +96,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * @param      array     $packet   Array containing the packet and its type
      * @return     array     Array containing formatted server response
      */
-    public function processResponse($packetname, $response)
+    public function process($packetname, $response)
     {
         // Clear previous output
         $this->_output = array();
@@ -121,7 +121,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * @param      string    $packet   Abstract packet
      * @return     array     Packet and packet name
      */
-    public function getPacket($packet)
+    public function getpacket($packet)
     {
         // Map packets to those used by the protocol
         if (isset($this->_map[$packet])) {

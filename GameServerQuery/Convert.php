@@ -20,7 +20,7 @@
 
 
 /**
- * Net_GameServerQuery_Convert
+ * Converts binary data
  *
  * @category       Net
  * @package        Net_GameServerQuery
@@ -29,7 +29,6 @@
  */
 class Net_GameServerQuery_Convert
 {
-
     /**
      * Conversion to float
      *
@@ -93,6 +92,7 @@ class Net_GameServerQuery_Convert
 
         return $int;
     }
- 
 
-}
+ }
+
+ ?>
