@@ -65,7 +65,7 @@ class Net_GameServerQuery_Protocol_GameSpy extends Net_GameServerQuery_Protocol
         
         while ($buffer->getLength()) {
             $key = $buffer->readString('\\');
-            if ($key == 'player_0') {
+            if ($key == 'player_0' || $key == 'final') {
                 break;
             }
             $result->add($key, $buffer->readString('\\'));
@@ -95,6 +95,42 @@ class Net_GameServerQuery_Protocol_GameSpy extends Net_GameServerQuery_Protocol
 
         return $result->fetch();
     }
+    
+    
+    /*
+     * Join multiple packets
+     */
+    protected function multipacketjoin($packets)
+    {
+        // Order each packet by the "queryid"
+        $newpackets = array();
+        foreach ($packets as $packet) {
+            $key = substr($packet, strrpos($packet, 'queryid'));
+            $packet = substr($packet, 0, strlen($packet) - strlen($key));
+            $newpackets[$key{strlen($key) - 1}] = $packet;
+        }
+        
+        // Remove the keys
+        ksort($newpackets);
+        $newpackets = array_values($newpackets);
+        
+        // Strip "final" from the last packet
+        $last = count($newpackets) - 1;
+        $newpackets[$last] = substr($newpackets[$last], 0, strrpos($newpackets[$last], 'final'));
+        
+        // Remove the leading "/" from each packet
+        $packets = array();
+        foreach ($newpackets as $key => $packet) {
+            if ($key === 0) {
+                $packets[] = $packet;
+                continue;
+            }
+            $packets[] = substr($packet, 1);
+        }
+        
+        return implode('', $packets);
+    }
+    
 }
 
 ?>
