@@ -22,15 +22,16 @@
 /**
  * Define a limited subset of normalised data
  */
-$normals[0]                     = array('hostname',     'numplayers',   'maxplayers',   'password', '   mod');
+$normals[0]                     = array('hostname',     'map',      'numplayers',   'maxplayers',   'password',     'mod');
 $normals['Breed']               = array();
 $normals['Doom3']               = array();
 $normals['FarCry']              = array();
 $normals['Freelancer']          = array();
 $normals['GameSpy']             = array();
-$normals['GameSpy04']           = array('hostname',     'numplayers',   'maxplayers',   'password',     'game_id');
+$normals['GameSpy04']           = array('hostname',     'map',      'numplayers',   'maxplayers',   'password',     'game_id');
 $normals['GhostRecon']          = array();
-$normals['HalfLife']            = array('hostname',     'players',      'max',          'password',     'gamedir');
+$normals['HalfLife']            = array('hostname',     'map',      'players',      'max',          'password',     'gamedir');
+$normals['HalfLife2']           = array('hostname',     'map',      'numplayers',   'maxplayers',   'password',     'gamedir');
 $normals['Hexen2']              = array();
 $normals['HomeWorld2']          = array();
 $normals['JediKnight']          = array();
@@ -83,6 +84,10 @@ $packets['GhostRecon']['status']            = array();
 $packets['HalfLife']['players']             = array('players',      "\xFF\xFF\xFF\xFFplayers");
 $packets['HalfLife']['rules']               = array('rules',        "\xFF\xFF\xFF\xFFrules");
 $packets['HalfLife']['status']              = array('infostring',   "\xFF\xFF\xFF\xFFinfostring");
+
+$packets['HalfLife2']['players']            = array('players',      "\xFF\xFF\xFF\xFF\x55");
+$packets['HalfLife2']['rules']              = array('rules',        "\xFF\xFF\xFF\xFF\x56");
+$packets['HalfLife2']['status']             = array('details',      "\xFF\xFF\xFF\xFF\x54");
 
 $packets['Hexen2']['players']               = array();
 $packets['Hexen2']['rules']                 = array();
@@ -213,25 +218,25 @@ $games['farcry']['name']            = 'FarCry';
 $games['farcry']['protocol']        = 'FarCry';
 $games['farcry']['queryport']       = '49001';
 
-$games['freelanc']['name']          = 'Freelancer';
-$games['freelanc']['protocol']      = 'Freelancer';
-$games['freelanc']['queryport']     = '2302';
+$games['freelancer']['name']        = 'Freelancer';
+$games['freelancer']['protocol']    = 'Freelancer';
+$games['freelancer']['queryport']   = '2302';
 
 $games['giants']['name']            = 'Giants: Citizen Kabuto';
 $games['giants']['protocol']        = 'GameSpy';
 $games['giants']['queryport']       = '8911';
 
-$games['gobs']['name']              = 'Global Operations';
-$games['gobs']['protocol']          = 'GameSpy';
-$games['gobs']['queryport']         = '28672';
+$games['globalops']['name']         = 'Global Operations';
+$games['globalops']['protocol']     = 'GameSpy';
+$games['globalops']['queryport']    = '28672';
 
 $games['gore']['name']              = 'Gore';
 $games['gore']['protocol']          = 'GameSpy';
 $games['gore']['queryport']         = '27778';
 
-$games['ghostrec']['name']          = 'Ghost Recon';
-$games['ghostrec']['protocol']      = 'GhostRecon';
-$games['ghostrec']['queryport']     = '2348';
+$games['ghostrecon']['name']        = 'Ghost Recon';
+$games['ghostrecon']['protocol']    = 'GhostRecon';
+$games['ghostrecon']['queryport']   = '2348';
 
 $games['halo']['name']              = 'Halo: Combat Evolved';
 $games['halo']['protocol']          = 'GameSpy';
@@ -240,6 +245,10 @@ $games['halo']['queryport']         = '2302';
 $games['halflife']['name']          = 'Half-Life';
 $games['halflife']['protocol']      = 'HalfLife';
 $games['halflife']['queryport']     = '27015';
+
+$games['halflife2']['name']         = 'Half-Life: Source';
+$games['halflife2']['protocol']     = 'HalfLife';
+$games['halflife2']['queryport']    = '27015';
 
 $games['homeworld2']['name']        = 'Homeworld 2';
 $games['homeworld2']['protocol']    = 'HomeWorld2';
