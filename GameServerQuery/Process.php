@@ -44,24 +44,31 @@ class Net_GameServerQuery_Process
      */
     private $_config;
 
+    
+    /**
+     * Array holding all the loaded protocol objects
+     *
+     * @var         array
+     */
+    private $_protocols;
+
 
     /**
      * Constructor
      */
     public function __construct($config)
     {
-        $this->_config = $config;
+        $this->_config    = $config;
+        $this->_protocols = array();
     }
-
-
-    /**
-     * Array holding all the loaded protocol objects
-     */
-    private $_protocols = array();
+ 
 
 
     /**
      * Batch process all the results
+     *
+     * @param  array  $results  Query results
+     * @return array  Processed results
      */
     public function process($results)
     {
@@ -75,15 +82,18 @@ class Net_GameServerQuery_Process
             if (!key_exists($result['protocol'], $this->_protocols)) {
                 
                 // Load the protocol class
-                if (include_once "GameServerQuery/Protocol/{$result['protocol']}.php") {
-                    $protocol_classname = "Net_GameServerQuery_Protocol_{$result['protocol']}";
-                    $this->_protocols[$result['protocol']] = new $protocol_classname;
-                } else {
-                    throw new Exception ('Protocol driver not found');
+                $filename = 'GameServerQuery/Protocol/' . $result['protocol'] . '.php';
+
+                if (include_once $filename) {
+                    $classname = 'Net_GameServerQuery_Protocol_' .  $result['protocol'];
+                    $this->_protocols[$result['protocol']] = new $classname;
+                }
+                else {
+                    throw new Exception('Protocol driver not found');
                 }
             }
             
-            $newresults[$key] = $this->process_once($result);
+            $newresults[$key] = $this->processOnce($result);
         }
 
         return $newresults;
@@ -92,11 +102,14 @@ class Net_GameServerQuery_Process
 
     /**
      * Process a single result
+     *
+     * @param  array  $results  Query result
+     * @return array  Processed result
      */
-    public function process_once($result)
+    public function processOnce($result)
     {
         // Parse the response
-        $parsed = $this->_protocols[$result['protocol']]->process($result['packetname'], $result['packet']);
+        $parsed = $this->_protocols[$result['protocol']]->process($result['packetname'], $result['response']);
 
         // Normalise the response
         $result = $this->normalise($result['protocol'], $result['flag'], $parsed);
@@ -106,18 +119,22 @@ class Net_GameServerQuery_Process
 
     
     /**
-     * Normalise
+     * Normalise result arrays
+     *
+     * @param  string  $protocol  Protocol name
+     * @param  string  $flag      Protocol flag
+     * @param  array   $data      Response data
      */
     public function normalise($protocol, $flag, $data)
     {
-        if ($flag != 'status') {
+        if ($flag !== 'status') {
             return $data;
         }
 
         $keys = $this->_config->normal();
         $normals = $this->_config->normal($protocol);
 
-        for ($i = 0, $ii = count($keys); $i < $ii; $i++) {
+        for ($i = 0, $x = count($keys); $i !== $x; $i++) {
             $ndata[$keys[$i]] = ($normals[$i] === false) ? $normals[$i] : $data[$normals[$i]];
         }
 
@@ -125,9 +142,4 @@ class Net_GameServerQuery_Process
     }
 
 }
-
-//$normals[0]                     = array('hostname', 'numplayers', 'maxplayers', 'password', 'mod', 'ip', 'port');
-//$normals['HalfLife']            = array('hostname', 'players', 'max', 'password', 0, 'address', 'address');
-
-
 ?>

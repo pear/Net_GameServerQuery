@@ -74,7 +74,7 @@ class Net_GameServerQuery_Config
      * @return  string  The game used
      * @param   string  $game   The game
      */
-    public function validgame($game)
+    public function validGame($game)
     {
         if (isset($this->_games[$game])) {
             return true;
@@ -90,7 +90,7 @@ class Net_GameServerQuery_Config
      * @return  string  The game used
      * @param   string  $game   The game
      */
-    public function protocol($game)
+    public function getProtocol($game)
     {
         return $this->_games[$game]['protocol'];
     }
@@ -103,7 +103,7 @@ class Net_GameServerQuery_Config
      * @param   string  $type            The packet type
      * @return  array   The packet used
      */
-    public function packet($protocol, $type)
+    public function getPacket($protocol, $type)
     {
         return $this->_packets[$protocol][$type];
     }
@@ -115,7 +115,7 @@ class Net_GameServerQuery_Config
      * @return  string  The default query port used
      * @param   string  $game   The game
      */
-    public function queryport($game)
+    public function getPort($game)
     {
         return $this->_games[$game]['queryport'];
     }
