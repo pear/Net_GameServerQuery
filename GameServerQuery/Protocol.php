@@ -67,7 +67,7 @@ abstract class Net_GameServerQuery_Protocol
 
         // Check for error
         if ($result === false) {
-            throw new ParsingException;
+            throw new ParsingException($packetname);
         }
 
         return $result;
