@@ -31,12 +31,20 @@
 class Net_GameServerQuery_Response
 {
     /**
-     * Server response
+     * The full server response
      *
      * @var        string
      * @access     public
      */
     private $_response;
+
+    /**
+     * The buffered server response
+     *
+     * @var        string
+     * @access     public
+     */
+    private $_buffer;
 
     /**
      * Results from last regular expression match
@@ -70,12 +78,37 @@ class Net_GameServerQuery_Response
      */
     public function __construct($response)
     {
-        $this->_response = $response;
+        $this->_response = $this->_buffer = $response;
     }
 
 
     /**
-     * Retrieve the response
+     * Read from the virtual buffer
+     *
+     * @param   int             $length     Length of data to read
+     * @return  string          The data read
+     */
+    public function read($length)
+    {
+        $string = substr($this->_buffer, 0, $length);
+        $this->_buffer = substr($this->_buffer, $length);
+        return $string;
+    }
+
+    
+    /**
+     * Read an int32 from the buffer
+     *
+     * @return  int             The data read
+     */
+    public function getInt32()
+    {
+        return $this->read(4);
+    }
+
+
+    /**
+     * Retrieve the server response
      *
      * @return  string|array    The response
      */
@@ -185,25 +218,6 @@ class Net_GameServerQuery_Response
         
         // Set player var
         $this->_result[$this->_pindex][$name] = $value;
-    }
-
-
-    /**
-     * Remove and return a prefix from the response string
-     *
-     * @param   int      $length  Length of the prefix
-     * @return  string   The prefix
-     */
-    public function getPrefix($length = 1)
-    {
-        // Get prefix
-        $result = substr($this->_response, 0, $length);
-
-        // Remove prefix from response string
-        $remainder = strlen($this->_response) - $length;
-        $this->_response = substr($this->_response, $length, $remainder);
-
-        return $this->_response;
     }
 
 
