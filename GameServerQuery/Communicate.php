@@ -20,133 +20,121 @@
 
 
 /**
- * Sends and recieves information from servers
+ * Handles all communication between client and game server
  *
  * @category        Net
  * @package         Net_GameServerQuery
  * @author          Aidan Lister <aidan@php.net>
+ * @author          Tom Buskens <ortega@php.net>
  * @version         $Revision$
  */
 class Net_GameServerQuery_Communicate
 {
     /**
+     * An array linking the connection resources to server keys
+     *
+     * @var         array
+     */
+    private $_serverkeys = array();
+     
+    
+    /**
      * Perform a batch query
      *
      * This runs open, write, listen and close sequentially
      *
-     * @param       array   $servers    An array of server data
-     * @param       int     $timeout    A timeout in milliseconds
-     * @return      array   An array of results
+     * @param       array       $servers        Server data (n=>addr,port,packet)
+     * @param       int         $timeout        Maximum wait time (milliseconds)
+     * @return      array       An array of results
      */
     public function query($servers, $timeout)
     {
-        // Open
-        list($sockets, $packets, $sockets_list) = $this->open($servers);
-
-        // Write
-        $this->write($sockets, $packets);
+        // Open and write
+        $sockets = array();
+        foreach ($servers as $key => $server) {     
+            // Save the connection for this server
+            $sockets[$key] = $socket = $this->_open($server['addr'], $server['port']);
+            
+            // Associate the connection id with the server id
+            $this->_serverkeys[(int) $socket] = $key;
+            
+            // Send the packet
+            $this->_write($socket, $server['packet']);
+        }
 
         // Listen
-        // Contains an array of packets
-        $result = $this->listen($sockets, $sockets_list, $timeout);
+        $result = $this->_listen($sockets, $timeout);
+        if ($result === false) {
+            return false;
+        }
 
-        // Normalise
-        // Now contains an array of multiple packets, or a string for single packets
-        $result = $this->normalise($result);
+        // Condense
+        $result = $this->_condense($result);
 
         // Close
-        $this->close($sockets);
+        $this->_close($sockets);
 
         return $result;
     }
 
-
+    
     /**
-     * Open the sockets
+     * Open a socket
      *
-     * @param       array       $servers     An array of server data
-     * @return      array       An array of sockets and an array of corresponding keys
+     * @param       array       $addr           Address to connect to
+     * @return      array       A connection resource or FALSE if connect failed
      */
-    public function open($servers)
+    private function _open($addr, $port)
     {
-        $sockets = array();
-        $packets = array();
-        $sockets_list = array();
-
-        foreach ($servers as $key => $server) {
-            $addr = $server['addr'];
-
-            // If it isn't a valid IP assume it is a hostname
-            $preg = '#^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}' . 
-                '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$#';
-            if (!preg_match($preg, $addr)) {
-                $addr = gethostbyname($addr);
-
-                // Not a valid host nor IP
-                if ($addr == $server['addr']) {
-                    continue;
-                }
-            }
-
-            // Open socket
-            $socket = fsockopen('udp://' . $addr, $server['port'], $errno, $errstr, 1);
-            if ($socket !== false) {
-                stream_set_blocking($socket, false);
-
-                $sockets[$key] = $socket;
-                $packets[$key] = $server['packet'];
-                $sockets_list[(int) $socket] = $key;
-            }
+        // Get address
+        $addr = $this->_getip($addr);
+        if ($addr === false) {
+            return false;
         }
 
-        // Return an array of sockets, and an array of socket identifiers
-        return array($sockets, $packets, $sockets_list);
+        // Open socket
+        $errno = null;
+        $errstr = null;
+        $socket = fsockopen('udp://' . $addr, $port, $errno, $errstr, 1);
+
+        // Non blocking
+        if ($socket !== false) {
+            stream_set_blocking($socket, false);
+        }
+
+        return $socket;
     }
 
 
     /**
-     * Write to an array of sockets
+     * Write to a sockets
      *
-     * @param       array       $sockets        An array of sockets
-     * @param       array       $packets        An array of packets
+     * @param       resource    $socket         Socket to write to
+     * @param       string      $packet         Packet to be written
      */
-    public function write($sockets, $packets)
+    private function _write($socket, $packet)
     {
-        // If we have no sockets don't bother
-        if (empty($sockets)) {
-            return array();
-        }
-
-        // Write packet to each of the sockets
-        foreach($sockets as $key => $socket) {
-            fwrite($socket, $packets[$key]);
-        }
+        fwrite($socket, $packet);
     }
 
 
     /**
      * Listen to an array of sockets
      *
-     * @param       array       $sockets        An array of sockets
-     * @param       array       $sockets_list   An array of socket relationships
-     * @param       int         $timeout        The maximum time to listen for
+     * @param       array       $sockets        Array of sockets
+     * @param       int         $timeout        Maximum wait time (milliseconds)
      * @return      array       An array of result data
      */
-    public function listen($sockets, $sockets_list, $timeout)
+    private function _listen($sockets, $timeout)
     {
-        // If we have no sockets don't bother
-        if (empty($sockets)) {
-            return array();
-        }
-
-        // Initialise enviroment
+        // Init
         $loops = 0;
         $maxloops = 30;
         $result = array();
         $starttime = microtime(true);
         $r = $sockets;
 
-        // Listen to sockets for any activity
+        // Listen
         while (stream_select($r, $w = null, $e = null, 0,
             ($timeout * 1000) - ((microtime(true) - $starttime) * 1000000)) !== 0) {
 
@@ -155,11 +143,12 @@ class Net_GameServerQuery_Communicate
                 break;
             }
 
-            // For each socket that had activity, read a single packet
+            // For each socket that had activity read a single packet
             foreach ($r as $socket) {
                 $response = stream_socket_recvfrom($socket, 2048);
-                $key = $sockets_list[(int) $socket];
-                $result[$key][] = $response;
+                
+                $id = $this->_getserverkey($socket);
+                $result[$id][] = $response;
             }
 
             // Reset the listening array
@@ -171,14 +160,15 @@ class Net_GameServerQuery_Communicate
 
 
     /**
-     * Normalises packets.
+     * Condenses server replies
      *
-     * If a server returned multiple packets return an array, else a string.
+     * Moves single packet replies into a string and leaves multipacket
+     * responses as an array.
      *
-     * @param       string      $sockets        An array of sockets
-     * @return      array       An array of packets
+     * @param       array       $packets        Array of packets
+     * @return      array       Array of packets
      */
-    public function normalise($packets)
+    private function _condense($packets)
     {
         foreach ($packets as $key => $packet) {
             if (count($packet) === 1) {
@@ -193,16 +183,57 @@ class Net_GameServerQuery_Communicate
     /**
      * Close each socket
      *
-     * @param       string      $sockets        An array of sockets
+     * @param       string      $sockets        Array of sockets
      * @return      void
      */
-    public function close($sockets)
+    private function _close($sockets)
     {
         foreach ($sockets as $socket) {
             fclose($socket);
         }
     }
+    
+        
+    /**
+     * Find the server key for a given resource
+     *
+     * @param       resource    $resourceid     Resource
+     * @return      int         Server key
+     */
+    private function _getserverkey($resource)
+    {
+        if (isset($this->_serverkeys[(int) $resource])) {
+            return $this->_serverkeys[$resource];
+        }
+        
+        // If we're here the socket was not opened properly
+        return -1;
+    }
+    
+        
+    /**
+     * Get the address to connect to
+     *
+     * @param       string      $addr           An IP or hostname
+     * @return      string      An IP address, or FALSE if address was not valid
+     */
+    private function _getip($addr)
+    {
+        // If it isn't a valid IP assume it is a hostname
+        $preg = '#^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}' . 
+            '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$#';
+        if (!preg_match($preg, $addr)) {
+            $addr = gethostbyname($addr);
 
+            // Not a valid host nor IP
+            if ($addr === $server['addr']) {
+                $addr = false;
+            }
+        }
+            
+        return $addr;
+    }
+    
 }
 
 ?>
