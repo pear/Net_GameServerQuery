@@ -119,18 +119,17 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * @param      array     $packet   Array containing the packet and its type
      * @return     array     Array containing formatted server response
      */
-    public function processResponse($packet)
+    public function processResponse($packetname, $response)
     {
         // Clear previous output
         $this->_output = array();
         
         // Get packet data
-        $type            = $packet['type'];
-        $this->_response = $packet['response'];
+        $this->_response = $response;
         
         // Check if packet type exists, process packet
-        if (isset($this->_packets[$type])) {
-            return $this->_{$type}();
+        if (isset($this->_packets[$packetname])) {
+            return $this->_{$packetname}();
         }
         else {
             return false;
