@@ -33,7 +33,10 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
  */
 class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 {
-    protected function infostring(&$response)
+    /**
+     * Status
+     */
+    protected function infostring(&$response, &$result)
     {
         if ($response->readInt32() !== -1) {
             return false;
@@ -51,14 +54,18 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
             return false;
         }
 
-        while ($response->bufferHasData()) {
-            $response->addResult($response->readString('\\'), $response->readString('\\'));
+        while ($response->buffer()) {
+            $result->add($response->readString('\\'), $response->readString('\\'));
         }
 
-        return $response->getResult();
+        return $result->fetch();
     }
 
-    protected function players(&$response)
+
+    /**
+     * Players
+     */
+    protected function players(&$response, &$result)
     {
         if ($response->readInt32() !== -1) {
             return false;
@@ -68,24 +75,27 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
             return false;
         }
 
-        $response->addMeta('count', $response->readInt8());
+        $result->addMeta('count', $response->readInt8());
 
-        while ($response->bufferHasData()) {
-            $response->addPlayer('id',      $response->readInt8());
-            $response->addPlayer('name',    $response->readString());
-            $response->addPlayer('score',   $response->readInt32());
-            $response->addPlayer('time',    $response->readFloat32());
+        while ($response->buffer()) {
+            $result->addPlayer('id',      $response->readInt8());
+            $result->addPlayer('name',    $response->readString());
+            $result->addPlayer('score',   $response->readInt32());
+            $result->addPlayer('time',    $response->readFloat32());
         }
 
-        return $response->getResult();
+        return $result->fetch();
     }
 
-    protected function rules(&$response)
+
+    /**
+     * Rules
+     */
+    protected function rules(&$response, &$result)
     {
         // Convert multiple packets into a single response
         // Extract the packet order from each packet and order by that
         if (is_array($response->getResponse())) {
-
             $r = $response->getResponse();
             $packets = array();
             foreach ($r as $packet) {
@@ -98,19 +108,22 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
             $response->setResponse($r);
         }
 
-        // Get header and rulecount
-        if ($response->match("\xFF\xFF\xFF\xFF\x45(.{2})")) {
-            $response->addMeta('rulecount', $response->toInt($response->getMatch(1), 16));
-        } else {
+        // Standard parsing
+        if ($response->readInt32() !== -1) {
             return false;
         }
 
-        // Variable / value pairs
-        while ($response->match("([^\x00]+)\x00([^\x00]*)\x00")) {
-            $response->addMatch($response->getMatch(1), $response->getMatch(2));
+        if ($response->read() !== 'E') {
+            return false;
         }
 
-        return $response->getResult();
+        $result->addMeta('count', $response->readInt16());
+
+        while ($response->buffer()) {
+            $result->add($response->readString(), $response->readString());
+        }
+
+        return $result->fetch();
     }
 
 }

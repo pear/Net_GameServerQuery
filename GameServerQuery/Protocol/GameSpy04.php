@@ -19,7 +19,7 @@
 // $Id$
 
 
-require_once 'Net\GameServerQuery\Protocol.php';
+require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 
 
 /**
@@ -27,6 +27,7 @@ require_once 'Net\GameServerQuery\Protocol.php';
  *
  * @category       Net
  * @package        Net_GameServerQuery
+ * @author         Aidan Lister <aidan@php.net>
  * @author         Tom Buskens <ortega@php.net>
  * @version        $Revision$
  */
@@ -34,146 +35,109 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
 {
     /**
      * Rules packet
-     *
-     * @access    protected
-     * @return    array      Array containing formatted server response
+     * Status packet
      */
-    protected function _rules()
+    protected function serverinfo(&$response, &$result)
     {
-        // Header
-        $this->_getHeader();
+        if ($response->read() !== "\x00") {
+            return false;
+        }
+        
+        $response->read(4);
 
-        // Variable / value pairs
-        while ($this->_match("([^\x00]+)\x00([^\x00]*)\x00")) {
-            $this->_add($this->_result[1], $this->_result[2]);
+        if ($response->readLast() !== "\x0") {
+            return false;
         }
 
-        return $this->_output;
-
+        while ($response->buffer()) {
+            $result->add($response->readString(), $response->readString());
+        }
+        
+        return $result->fetch();
     }
 
 
     /**
      * Player packet
-     *
-     * @access     protected
-     * @return     array     Array containing formatted server response
      */
-    protected function _players()
+    protected function playerinfo(&$response, &$result)
     {
-        // Header
-        $this->_getHeader();
+        if ($response->read() !== "\x00") {
+            return false;
+        }
+        
+        $response->read(4);
 
-        // Get values
-        if (!$this->_getValues('player')) {
+        if ($response->read() !== "\x00") {
             return false;
         }
 
-        // Get team info (same packet)
-        $this->_team(true);
+        $result->addMeta('count', $response->readInt8());
+        
+        // Variable names
+        $varnames = array();
+        while ($response->buffer()) {
+            $varnames[] = $response->readString('_');
 
-        return $this->_output;
-
-    }
-
-    /**
-     * Team packet
-     *
-     * @access     protected
-     * @param      bool  $from_players  True if packet was also contained player data.
-     * @return     array Array containing formatted server response
-     */
-    protected function _team($from_players = false)
-    {
-        // Header
-        if (!$from_players) {
-            $this->_getHeader();
-        }
-
-        // Get values
-        if (!$this->_getValues('team')) {
-            return false;
-        }
-
-    }
-
-    /**
-     * Checks header
-     *
-     * @access     private
-     * @return     bool      True if matched, false if not
-     */
-    private function _getHeader()
-    {
-        if ($this->_getPrefix(5) == "\x00NGSQ") {
-            return true;
-        }
-        else {
-            throw new Exception('Parsing error: header not matched');
-            return false;
-        }
-    }
-
-    /**
-     * Gets variables according to a specific pattern
-     *
-     * @access     private
-     * @param      string    $type     Variable type
-     * @return     bool      True on success, false on pattern match failure
-     */
-    private function _getValues($type)
-    {
-        // Get number of sets
-        if (!$this->_match("\x00(.)")) {
-            throw new Exception('Parsing error');
-        }
-
-        // Convert byte to integer
-        $count = $this->toInt($this->_result[1], 8);
-
-        // Add count to output
-        $this->_add($type . 'count', $count);
-
-        // Get variable names, always start with an underscore
-        $variables = array();
-
-        while (true) {
-
-            if (!$this->_match("_([^\x00]+)\x00")) {
+            if ($response->read() !== "\x00") {
                 return false;
             }
 
-            // Save variable name
-            array_push($variables, $this->_result[1]);
-
-            // Variable name sequence is ended with a second \x00
-            if ($this->_match("\x00")) {
+            // Look ahead
+            if ($response->read(1, true) === "\x00") {
+                $response->read();
                 break;
             }
-
         }
+   
+        // Loop through sets
+        while($response->buffer()) {
+            foreach($varnames as $varname) {
+                $result->addPlayer($varname, $response->readString());
+            }      
+            
+            // Look ahead
+            if ($response->read(1, true) === "\x00") {
+                $response->read();
+                break;
+            } 
+        }
+        
+        // Start all over again to read team information
+        if ($response->read() !== "\x02") {
+            return false;
+        }
+        
+        // Variable names
+        $varnames = array();
+        while ($response->buffer()) {
+            $varnames[] = $response->readString();
 
-        // Get variable values
-        $var_count = count($variables);
+            // Look ahead
+            if ($response->read(1, true) === "\x00") {
+                $response->read();
+                break;
+            }
+        }
 
         // Loop through sets
-        for ($i = 0; $i !== $count; $i++) {
-
-            // Get values for each set
-            for ($j = 0; $j !== $var_count; $j++) {
-
-                if (!$this->_match("([^\x00]+)\x00")) {
-                    return false;
-                }
-
-                // Add variables to output
-                $this->_addPlayer($variables[$j], $this->_result[1]);
-
+        $i = 0;
+        while ($response->buffer()) {
+            foreach($varnames as $varname) {
+                $team[$i][$varname] = $response->readString();
             }
-
+            ++$i;
+            
+            // Look ahead
+            if ($response->read(1, true) === "\x00") {
+                $response->read();
+                break;
+            } 
         }
+        
+        $result->addMeta('team', $team);
 
-        return true;
+        return $result->fetch();
 
     }
 
