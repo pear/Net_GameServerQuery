@@ -108,8 +108,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         if (isset($this->_packets[$packetname])) {
             $function = '_' . $packetname;
             return $this->{$function}();
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -156,8 +155,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         // Match pattern
         if (preg_match($expr, $this->_response, $this->_result) == false) {
             return false;
-        }
-        else {
+        } else {
 
             // Remove pattern from response
             if (!empty($this->_result[0])) {
@@ -189,9 +187,8 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
             // Add current match to array
             array_push($this->_output[$name], $value);
             
-        }
-        // New variable
-        else {
+        } else {
+            // New variable
             $this->_output[$name] = $value;
         }
     }

@@ -15,7 +15,7 @@ $serv2 = $gsq->addServer('halflife', '202.173.159.8', null, 'rules|ping');
 $serv3 = $gsq->addServer('halflife', '203.26.94.152', null, 'status|rules');
 
 // fire up
-$result = $gsq->execute(100);
+$result = $gsq->execute(300);
 
 // results
 $bm->stop();
