@@ -46,30 +46,6 @@ class Net_GameServerQuery_Response
      */
     private $_buffer;
 
-    /**
-     * Results from last regular expression match
-     *
-     * @var        array
-     * @access     public
-     */
-    private $_match;
-
-    /**
-     * Formatted server response
-     *
-     * @var        array
-     * @access     public
-     */
-    private $_result;
-
-    /**
-     * Highest player index
-     *
-     * @var        int
-     * @access     public
-     */
-    private $_pindex = 0;
-
 
     /**
      * Constructor
@@ -79,6 +55,55 @@ class Net_GameServerQuery_Response
     public function __construct($response)
     {
         $this->_response = $this->_buffer = $response;
+    }
+
+
+    /**
+     * Retrieve the full server response
+     *
+     * @return  string|array    The response
+     */
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+
+
+    /**
+     * Set the response
+     *
+     * @param   string|array    $response   The server response
+     * @return  void
+     */
+    public function setResponse($response)
+    {
+        $this->_response = $response;
+    }
+
+
+    /**
+     * Retrieve the full server response
+     *
+     * @return  string|array    The response
+     */
+    public function getBuffer()
+    {
+        return $this->_buffer;
+    }
+
+
+    /**
+     * Check if the buffer has data
+     *
+     * @return  bool    TRUE if the buffer has data in it, FALSE if not
+     */
+    public function bufferHasData()
+    {
+        if (strlen($this->_buffer) === 0) {
+            return false;
+        }
+        
+        return true;
     }
 
 
@@ -105,6 +130,27 @@ class Net_GameServerQuery_Response
         // Remove from buffer
         $this->_buffer = substr($this->_buffer, $length);
 
+        return $string;
+    }
+
+
+    /**
+     * Read from buffer until delimiter is reached
+     *
+     * If not found, return everything
+     *
+     * @param   int             $length     Length of data to read
+     * @return  string          The data read
+     */
+    public function readString($delim = "\x0")
+    {
+        $p = strpos($this->_buffer, $delim);
+        if ($p === false) {
+            return $this->read(true);
+        }
+
+        $string = $this->read($p);
+        $this->read();
         return $string;
     }
 
@@ -168,121 +214,6 @@ class Net_GameServerQuery_Response
     public function readFloat32()
     {
         return $this->toFloat($this->read(4));
-    }
-
-
-    /**
-     * Read a $delim terminated string from the buffer
-     *
-     * If not found, read everything
-     *
-     * @return  int             The data read
-     */
-    public function readString($delim = "\x0")
-    {
-        $p = strpos($this->_buffer, $delim);
-
-        if ($p === false) {
-            return $this->read(true);
-        }
-
-        $string = $this->read($p);
-        $this->read();
-
-        return $string;
-    }
-
-
-    /**
-     * Retrieve the full server response
-     *
-     * @return  string|array    The response
-     */
-    public function getResponse()
-    {
-        return $this->_response;
-    }
-
-
-    /**
-     * Set the response
-     *
-     * @param   string|array    $response   The server response
-     * @return  void
-     */
-    public function setResponse($response)
-    {
-        $this->_response = $response;
-    }
-
-
-    /**
-     * Retrieve the full server response
-     *
-     * @return  string|array    The response
-     */
-    public function getBuffer()
-    {
-        return $this->_buffer;
-    }
-
-
-    /**
-     * Check if the buffer has data
-     *
-     * @return  bool    TRUE if the buffer has data in it, FALSE if not
-     */
-    public function bufferHasData()
-    {
-        if (strlen($this->_buffer) === 0) {
-            return false;
-        }
-        
-        return true;
-    }
-
-
-    /**
-     * Adds variable to results
-     *
-     * @param      string    $name     Variable name
-     * @param      string    $value    Variable value
-     */
-    public function addResult($name, $value)
-    {
-        $this->_result[$name] = $value;
-    }
-
-
-    /**
-     * Adds meta information to the results
-     *
-     * Currently prefixes key with __
-     *
-     * @param      string    $name     Variable name
-     * @param      string    $value    Variable value
-     */
-    public function addMeta($name, $value)
-    {
-        $this->_result['__' . $name] = $value;
-    }
-
-
-    /**
-     * Adds player variable to output
-     *
-     * @param   string   $name   Variable name
-     * @param   string   $value  Variable value
-     */
-    public function addPlayer($name, $value)
-    {
-        // Player var is already set, so it must belong to the next player
-        if (isset($this->_result[$this->_pindex][$name])) {
-            ++$this->_pindex;
-        }
-        
-        // Set player var
-        $this->_result[$this->_pindex][$name] = $value;
     }
 
 
