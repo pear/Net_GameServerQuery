@@ -19,12 +19,8 @@
 // $Id$
 
 
-require_once NET_GAMESERVERQUERY_BASE . 'Response.php';
-require_once NET_GAMESERVERQUERY_BASE . 'Result.php';
-
-
 /**
- * Abstract class which all protocol classes must inherit
+ * Provide an interface for easy storage of a parsed server response
  *
  * @category       Net
  * @package        Net_GameServerQuery
@@ -32,38 +28,78 @@ require_once NET_GAMESERVERQUERY_BASE . 'Result.php';
  * @author         Tom Buskens <ortega@php.net>
  * @version        $Revision$
  */
-abstract class Net_GameServerQuery_Protocol
+class Net_GameServerQuery_Result
 {
-    /**
-     * Parse server response according to packet type
-     *
-     * @access     public
-     * @param      array     $packet   Array containing the packet and its type
-     * @return     array     Array containing formatted server response
-     */
-    public function parse($packetname, $response)
-    {
-        // Init
-        $callback = array($this, $packetname);
 
-        // Sanity check
-        if (!is_callable($callback)) {
-            throw new InvalidPacketException;
+    /**
+     * Formatted server response
+     *
+     * @var        array
+     * @access     public
+     */
+    private $_result;
+
+    /**
+     * Highest player index
+     *
+     * @var        int
+     * @access     public
+     */
+    private $_pindex = 0;
+
+
+    /**
+     * Adds variable to results
+     *
+     * @param      string    $name     Variable name
+     * @param      string    $value    Variable value
+     */
+    public function add($name, $value)
+    {
+        $this->_result[$name] = $value;
+    }
+
+
+    /**
+     * Adds meta information to the results
+     *
+     * Currently prefixes key with __
+     *
+     * @param      string    $name     Variable name
+     * @param      string    $value    Variable value
+     */
+    public function addMeta($name, $value)
+    {
+        $this->_result['__' . $name] = $value;
+    }
+
+
+    /**
+     * Adds player variable to output
+     *
+     * @param   string   $name   Variable name
+     * @param   string   $value  Variable value
+     */
+    public function addPlayer($name, $value)
+    {
+        // Player var is already set, so it must belong to the next player
+        if (isset($this->_result[$this->_pindex][$name])) {
+            ++$this->_pindex;
         }
         
-        // Response class
-        $response = new Net_GameServerQuery_Response($response);
-        $result   = new Net_GameServerQuery_Result();
+        // Set player var
+        $this->_result[$this->_pindex][$name] = $value;
+    }
 
-        // Parse packet
-        $result = call_user_func(array($this, $packetname), $response, $result);
 
-        // Check for error
-        if ($result === false) {
-            throw new ParsingException;
-        }
-
-        return $result;
+    /**
+     * Return the results
+     *
+     * @return  array       The results
+     */
+    public function fetch()
+    {
+        return $this->_result;
     }
 
 }
