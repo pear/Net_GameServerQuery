@@ -54,11 +54,11 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 
         // Define packets
         $this->_packets = array(
-            'details'    => "\xff\xff\xff\xffdetails",
-            'infostring' => "\xff\xff\xff\xffinfostring",
-            'ping'       => "\xff\xff\xff\xffping",
-            'players'    => "\xff\xff\xff\xffplayers",
-            'rules'      => "\xff\xff\xff\xffrules"
+            'details'    => "\xFF\xFF\xFF\xFFdetails",
+            'infostring' => "\xFF\xFF\xFF\xFFinfostring",
+            'ping'       => "\xFF\xFF\xFF\xFFping",
+            'players'    => "\xFF\xFF\xFF\xFFplayers",
+            'rules'      => "\xFF\xFF\xFF\xFFrules"
         );
         
         // Define packet mapping array
@@ -79,7 +79,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     private function _details()
     {
         // Header
-        if (!$this->_match("\xff\xff\xff\xff\x6d")) {
+        if (!$this->_match("\xFF\xFF\xFF\xFF\x6d")) {
             return false;
         }
         
@@ -127,7 +127,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     protected function _infostring()
     {
         // Header
-        if (!$this->_match("\xff\xff\xff\xffinfostringresponse\\x00")) {
+        if (!$this->_match("\xFF\xFF\xFF\xFFinfostringresponse\\x00")) {
             return false;
         }
 
@@ -153,10 +153,9 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
      */
     protected function _ping()
     {
-        if ($this->_match("\xff\xff\xff\xff\x6a")) {
+        if ($this->_match("\xFF\xFF\xFF\xFF\x6a")) {
             return $this->_output;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -171,12 +170,9 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     protected function _players()
     {
         // Header
-        if ($this->_match("\xff\xff\xff\xff\x44(.)")) {
-
-                $this->_addVar('playercount', $this->_convert->toInt($this->_result[1]));
-
-        }
-        else {
+        if ($this->_match("\xFF\xFF\xFF\xFF\x44(.)")) {
+            $this->_addVar('playercount', $this->_convert->toInt($this->_result[1]));
+        } else {
             return false;
         }
 
@@ -202,13 +198,12 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     protected function _rules()
     {
         // Remove the header of the possible second packet
-        $this->_response = preg_replace("/\xfe\xff\xff\xff.{5}/", '', $this->_response);
+        $this->_response = preg_replace("/\xfe\xFF\xFF\xFF.{5}/", '', $this->_response);
 
         // Get header, rulecount
-        if ($this->_match("\xff\xff\xff\xff\x45(.{2})")) {
+        if ($this->_match("\xFF\xFF\xFF\xFF\x45(.{2})")) {
             $this->_addVar('rulecount', $this->_convert->toInt($this->_result[1], 16));
-        }
-        else {
+        } else {
             return false;
         }
 
