@@ -33,78 +33,55 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
  */
 class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Protocol
 {
+
     /*
      * Players
      */
     protected function players(&$buffer, &$result)
     {
-        // Header
-        $gameident = $buffer->read();
-        $buffer->skip(3);
-
-        // Packet type
+        $buffer->skip(4);
+        
         if ($buffer->read() !== "\x02") {
             return false;
         }
 
-        // Decide on parsing method to use
-        if ($gameident == "\x7e") {
-            // Unreal2XMP
-            $result = $this->_playersXmp(&$buffer, &$result);
-        } else {
-            // This is for anything else
-            $result = $this->_playersStd(&$buffer, &$result);
-        }
-        
-        return $result->fetch();
-    }
-    
-    
-    /*
-     * Players - Standard
-     */
-    private function _playersStd(&$buffer, &$result)
-    {
+        // Parse players
         while ($buffer->getLength()) {
-            $result->addPlayer('id',      $buffer->readInt32());
-            $result->addPlayer('name',    $buffer->readPascalString(1));
-            $result->addPlayer('ping',    $buffer->readInt32());
-            $result->addPlayer('score',   $buffer->readInt32());
 
-            // Stats and team info in UT2004
-            // Not sure how to interpret
-            $buffer->skip(4);
-        }
-        
-        return $result;   
-    }
-
-    
-    /*
-     * Players - Unreal2 XMP
-     */
-    private function _playersXmp(&$buffer, &$result)
-    {
-        while ($buffer->getLength()) {
-            $buffer->skip(8); // XMP Bug (Two I32s of 0)
-            $result->addPlayer('name',    $this->_readEncodedString($buffer));
-            $result->addPlayer('ping',    $buffer->readInt32());
-            $result->addPlayer('score',   $buffer->readInt32());
-
-            // Stats, 0
-            $buffer->skip(4);
+            $id = $buffer->readInt32();
             
-            $count = $buffer->readInt8();
-            for ($i = 0; $i < $count; $i++) {
-                $result->addPlayer(
-                    $buffer->readPascalString(1),
-                    $this->_readEncodedString(&$buffer)
-                );
+            // u2XMP player (ID is always 0), skip 8 bytes
+            if ($id === 0) {
+                $buffer->skip(4);
+            }
+            // ut2003/2004 player
+            else {
+                $result->addPlayer('id', $id);
+            }
+            
+            // Common data
+            $result->addPlayer('name',  $this->_readString($buffer));
+            $result->addPlayer('ping',  $buffer->readInt32());
+            $result->addPlayer('score', $buffer->readInt32());
+
+            // Stats id
+            $buffer->skip(4);
+
+            // Extra data for u2XMP players
+            if ($id === 0) {
+                $count = $buffer->readInt8();
+                for ($i = 0; $i !== $count; $i++) {
+                    $result->addPlayer(
+                        $buffer->readPascalString(1),
+                        $this->_readString($buffer)
+                    );
+                }                
             }
         }
-        
-        return $result;
-    }
+
+        return $result->fetch();
+    }    
+
     
     
     /*
@@ -175,28 +152,32 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
 
 
     /**
-     * Read an Unreal2XMP "Type2" string
+     * Check which string type it is, return "decoded" string
      *
      * @param       object      $buffer         A buffer object
      * @return      string      The string
      */
-    private function _readEncodedString(&$buffer)
+    private function _readString(&$buffer)
     {
-        // Check for color coding marker
-        if (substr($buffer->readAhead(5), 1) === "\x5e\x00\x23\x00") {           
-            $length = ($buffer->readInt8() - 128) * 2;
-            $encstr = $buffer->read($length);
-
-            // Remove first 6 chars and last 3
-            $encstr = substr($encstr, 6, strpos($encstr, "\0\0\0") - 6);
-            
-            // Remove all the strange characters
-            $str = preg_replace(array('~\^.\#.~', '~[\0-\32]~'), '', $encstr);
-        } else {
-            // No marker, normal pascal string
-            $str = $buffer->readPascalString(1);
+        // Normal pascal string
+        if (ord($buffer->readAhead(1)) < 129) {
+            return $buffer->readPascalString(1);
         }
 
+        // UnrealEngine2 colorcoded string
+        $length = ($buffer->readInt8() - 128) * 2 - 3;
+        $encstr = $buffer->read($length);
+        $buffer->skip(3);
+
+        // Remove colorcode tags
+        $encstr = preg_replace('~\x5e\\0\x23\\0..~s', '', $encstr);
+
+        // Remove every second character
+        $str = '';
+        for ($i = 0, $x = strlen($encstr); $i < $x; $i += 2) {
+            $str .= $encstr{$i};
+        }
+        
         return $str;
     }
     
@@ -209,14 +190,9 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
      */
     protected function multipacketjoin($packets)
     {
-        foreach ($packets as $key => $packet) {
-            if ($key == 0) {
-                continue;
-            }
-           
+        for ($i = 1, $x = count($packets); $i !== $x; $i++) {
             $packets[$key] = substr($packet, 5);
         }
-        
         return implode('', $packets);
     }
     
