@@ -33,7 +33,7 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
  */
 class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 {
-    /**
+    /*
      * Status
      */
     protected function infostring(&$buffer, &$result)
@@ -62,7 +62,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     }
 
 
-    /**
+    /*
      * Players
      */
     protected function players(&$buffer, &$result)
@@ -88,7 +88,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     }
 
 
-    /**
+    /*
      * Rules
      */
     protected function rules(&$buffer, &$result)
@@ -111,7 +111,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     }
     
     
-    /**
+    /*
      * Join multiple packets
      */
     protected function multipacketjoin($packets)

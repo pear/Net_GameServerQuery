@@ -33,7 +33,7 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
  */
 class Net_GameServerQuery_Protocol_Quake3 extends Net_GameServerQuery_Protocol
 {
-    /**
+    /*
      * Rules packet
      */
     protected function rules(&$buffer, &$result)
@@ -65,7 +65,7 @@ class Net_GameServerQuery_Protocol_Quake3 extends Net_GameServerQuery_Protocol
     }
     
     
-    /**
+    /*
      * Players packet
      */
     protected function players(&$buffer, &$result)
@@ -101,7 +101,7 @@ class Net_GameServerQuery_Protocol_Quake3 extends Net_GameServerQuery_Protocol
     }
     
     
-    /**
+    /*
      * Status packet
      */
     protected function info(&$buffer, &$result)
