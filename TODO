@@ -3,13 +3,13 @@ FEATURES
 - Add error stack for servers which did not reply, or returned malformed packets
 - Clean up the query port stuff, make it less confusing. We need
   to implement a +10 on the server port, for example.
+- Find a way of making the protocols not specific to GSQ (no rule/status/players funcs)
+- Make sure player information is normalised also
 
 PROTOCOLS
 Urgent
-- GameSpy
 - UnrealTournament03
 - Unreal2XMP
-- Doom3
 - UnrealTournament
 Later
 - Breed
