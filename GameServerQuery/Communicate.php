@@ -138,7 +138,7 @@ class Net_GameServerQuery_Communicate
     {
         // Init
         $loops = 0;
-        $maxloops = 30;
+        $maxloops = 20;
         $result = array();
         $starttime = microtime(true);
         $r = $sockets;
@@ -242,6 +242,8 @@ class Net_GameServerQuery_Communicate
             if ($res === $addr) {
                 $res = false;
             }
+        } else {
+            $res = $addr;
         }
 
         return $res;
