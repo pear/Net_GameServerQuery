@@ -75,16 +75,8 @@ class Net_GameServerQuery_Communicate
                 stream_set_blocking($socket, false);
 
                 $sockets[$key] = $socket;
-                $sockets_list[(int)$socket] = array('key' => $key, 'query' => $server['query']);
+                $sockets_list[(int) $socket] = $key;
 
-                /*
-                // Need some error checking here
-                foreach ($server['query'] as $packet) {
-                    $this->write($socket, $packet);
-                }
-                */
-
-                // Single packets now
                 $this->write($socket, $server['packet']);
             }
         }
@@ -140,10 +132,9 @@ class Net_GameServerQuery_Communicate
             // For each socket that had activity, read a single packet
             foreach ($r as $socket) {
                 $response = stream_socket_recvfrom($socket, 2048);
-                $sockid = (int) $socket;
-                $key = $sockets_list[$sockid]['key'];
-                $query = $sockets_list[$sockid]['query'];
-                $result[$key][$query] = $response;
+                $sockid = (int)$socket;
+                $key = $sockets_list[$sockid];
+                $result[$key][] = $response;
             }
             
             // Reset the listening array

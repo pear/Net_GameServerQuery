@@ -12,8 +12,8 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors: Tom Buskens <ortega@php.net>                                |
-// |          Aidan Lister <aidan@php.net>                                |
+// | Authors: Aidan Lister <aidan@php.net>                                |
+// |          Tom Buskens <ortega@php.net>                                |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -206,144 +206,40 @@ class Net_GameServerQuery_Process
 
 
     /**
-     * Matches input with pattern
-     *
-     * @access     private
-     * @param      string    $pattern  Pattern to match input against
+     * Batch process all the results
      */
-    private function _matchPattern($pattern)
+    public function process ($results)
     {
-        // Match pattern
-        if (preg_match($pattern, $this->_string, $match)) {
-
-            // Set match, remove match from input string
-            $match = $match[0];   
-            $this->_Encap->setMatch($match);
-            $this->_string = substr($this->_string, strlen($match));
-            
-            return true;
+        // Loop through each of the results
+        $newresults = array();
+        foreach ($results as $key => $result) {
+            $newresults[$key] = $this->process_once($result);
         }
-        // No match
-        else {
-            return false;
+
+        return $newresults;
+    }
+
+    /**
+     * Process a single result
+     */
+    public function process_once ($result)
+    {
+        // Do some example useless processing
+
+        // Count packets
+        $packets = count($result['packet']);
+
+        // Count length of each packet
+        foreach ($result['packet'] as $packet_key => $packet) {
+            $length[] = strlen($packet) . ' bytes';
         }
+
+        // Glue and return
+        $len = implode(' & ', $length);
+        $game = $result['game'];
+        $query = $result['query'];
+        return "Spoke to a ($game) server, asked for ($query) and got $packets packets @ $len";
     }
-
-    
-    /**
-     * Processes last match
-     *
-     * @access     private
-     * @param      string    $code     Code to process last match
-     */
-    private function _processMatch($code)
-    {
-        // eval'd code only uses variables and methods from $this->_Encap
-        eval($code);
-    }
-    
-}
-
-/**
- * Net_GameServerQuery_Process_Encapsulate
- *
- * @version        0.1
- * @package        Net_GameServerQuery
- */
-class Net_GameServerQuery_Process_Encapsulate
-{
-    /**
-     * Holds all variables
-     *
-     * @var        array
-     * @access     public
-     */
-    public $vars;
-
-
-    /**
-     * Holds formatted data
-     *
-     * @var        array
-     * @access     private
-     */
-    private $_output;
-
-    
-    /**
-     * Constructor
-     *
-     * @access     public
-     */
-    public function __construct()
-    {
-        // Initialize variables
-        $this->vars    = array();
-        $this->_output = array();
-    }
-
-
-    /**
-     * Sets last match
-     *
-     * @access     public
-     * @param      string    $value    Last match
-     */
-    public function setMatch($value)
-    {
-        $this->vars[1] = $value;
-    }
-    
-
-    /**
-     * Adds variable to output
-     *
-     * @access     public
-     * @param      string    $name     Variable name
-     */ 
-    public function addVar($name)
-    {
-        // Existing variable
-        if (isset($this->_output[$name])) {
-            
-            // Variable has one value, put it into an array
-            if (!is_array($this->_output[$name])) {
-                $this->_output[$name] = array($this->_output[$name]);
-            }
-            
-            // Add current match to array
-            array_push($this->_output[$name], $this->vars['1']);
-            
-        }
-        // Fresh variable
-        else {
-            $this->_output[$name] = $this->vars['1'];
-        }
-    }
-
-    
-    /**
-     * Returns formatted data
-     *
-     * @access     public
-     * @return     array     Formatted data
-     */
-    public function getOutput()
-    {
-        return $this->_output;
-    }
-
-    
-    /**
-     * Converts last match to its byte value
-     *
-     * @access     public
-     */
-    public function toByte()
-    {
-        $this->vars[1] = ord($this->vars[1]);
-    }
-   
 }
 
 

@@ -10,20 +10,16 @@ $bm = new Benchmark;
 $bm->start();
 
 // add servers
-$serv1 = $gsq->addServer('halflife', '202.173.159.7', null, 'players');
-$serv2 = $gsq->addServer('halflife', '202.173.159.8', null, 'status');
-$serv3 = $gsq->addServer('halflife', '203.26.94.152', null, 'rules');
+$serv1 = $gsq->addServer('halflife', '202.173.159.7', null, 'players|status|rules');
+$serv2 = $gsq->addServer('halflife', '202.173.159.8', null, 'rules|ping');
+$serv3 = $gsq->addServer('halflife', '203.26.94.152', null, 'status|rules');
 
 // fire up
-$result = $gsq->execute(45);
+$result = $gsq->execute(100);
 
 // results
 $bm->stop();
-echo $result[$serv1]['players'];
-echo "\n\n";
-echo $result[$serv2]['status'];
-echo "\n\n";
-echo $result[$serv3]['rules'];
+print_r($result);
 
 // benchmark
 echo 'Took ... ' . $bm->timems() . 'ms';

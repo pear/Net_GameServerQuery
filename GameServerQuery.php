@@ -44,13 +44,6 @@ class Net_GameServerQuery
     private $_counter;
 
     /**
-     * The array of servers to query
-     *
-     * @var            array
-     */
-    private $_servers;
-
-    /**
      * An instance of the Net_GameServerQuery_Config class
      *
      * @var         object
@@ -64,6 +57,20 @@ class Net_GameServerQuery
      */
     private $_communicate;
 
+    /**
+     * An instance of the Net_GameServerQuery_Process class
+     *
+     * @var         object
+     */
+    private $_process;
+
+    /**
+     * These need better names etc.
+     */
+    private $_commdata;
+    private $_recon;
+    private $_processdata;
+
 
     /**
      * Constructor
@@ -73,7 +80,7 @@ class Net_GameServerQuery
         // Initialise counter
         $this->_counter = -1;
 
-        // Load the config class (this could probably be called something more specific)
+        // Load the config class
         $this->_config = new Net_GameServerQuery_Config;
 
         // Load the communicate class
@@ -98,31 +105,30 @@ class Net_GameServerQuery
         // Incriment the counter
         ++$this->_counter;
 
-        /*
-        // Build the list of packets to be sent
-        $querylist = explode('|', $query);
-        foreach ($querylist as $query) {
-            $querypackets[$query] = $this->_config->packet($game, $query);
-        }
-        */
-
-        // Only doing single packets now
-        $packet = $this->_config->packet($game, $query);
-
         // Default port
         if (is_null($port)) {
             $protocol = $this->_config->protocol($game);
             $port = $this->_config->queryport($protocol);
         }
 
-        // Add information to our servers array
-        $this->_servers[$this->_counter] = array(
-                    'game'     => $game,
-                    'ip'       => $ip,
-                    'port'     => $port,
-                    'query'    => $query,
-                    'packet'   => $packet,
+        // Build the list of packets to be sent
+        $querylist = explode('|', $query);
+        foreach ($querylist as $query) {
+            $this->_recon[] = array(
+                'servid'    => $this->_counter,
+                'query'     => $query
                 );
+
+            $this->_commdata[] = array(
+                'ip'        => $ip,
+                'port'      => $port,
+                'packet'    => $this->_config->packet($game, $query)
+            );
+            $this->_processdata[] = array(
+                'game'      => $game,
+                'query'     => $query
+            );
+        }
 
         // Return the counter for identifying the server later
         return $this->_counter;
@@ -139,9 +145,34 @@ class Net_GameServerQuery
     {
         // Timeout in millseconds
         $timeout = $timeout * 1000;
-        $result = $this->_communicate->query($this->_servers, $timeout);
-        $result = $this->_process->process($result);
-        return $result;
+        $results = $this->_communicate->query($this->_commdata, $timeout);
+
+        // Finish the array for the process class
+        foreach ($this->_recon as $key => $server) {
+
+            // Check if we missed out on any packets
+            if (!isset($results[$key])) {
+                // If we missed packets, replace with something
+                // Not sure what we should do here
+                $results[$key] = array(0 => false);
+            }
+
+
+            $this->_processdata[$key]['packet'] = $results[$key];
+        }
+
+        // Process the results
+        $results = $this->_process->process($this->_processdata);
+
+        // Put the data back together
+        foreach ($this->_recon as $key => $server) {
+            $servid = $server['servid'];
+            $querytype = $server['query'];
+            $newresult[$servid][$querytype] = $results[$key];
+        }
+
+        // Return
+        return $newresult;
     }
 
 }
