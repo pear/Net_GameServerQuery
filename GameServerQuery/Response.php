@@ -88,27 +88,113 @@ class Net_GameServerQuery_Response
      * @param   int             $length     Length of data to read
      * @return  string          The data read
      */
-    public function read($length)
+    public function read($length = 1)
     {
+        if ($length === true) {
+            $length = strlen($this->_buffer);
+        }
+
+        // Sanity check
+        if ($length > strlen($this->_buffer)) {
+            return false;
+        }
+
+        // Get the string
         $string = substr($this->_buffer, 0, $length);
+
+        // Remove from buffer
         $this->_buffer = substr($this->_buffer, $length);
+
         return $string;
     }
 
+
+    /**
+     * Read the last character from the virtual buffer
+     *
+     * @param   int             $length     Length of data to read
+     * @return  string          The data read
+     */
+    public function readLast()
+    {
+        // Get the last char
+        $string = substr($this->_buffer, -1, 1);
+
+        // Remove from buffer
+        $this->_buffer = substr($this->_buffer, 0, -1);
+
+        return $string;
+    }
     
+
     /**
      * Read an int32 from the buffer
      *
      * @return  int             The data read
      */
-    public function getInt32()
+    public function readInt32()
     {
-        return $this->read(4);
+        return $this->toInt($this->read(4), 32);
     }
 
 
     /**
-     * Retrieve the server response
+     * Read an int16 from the buffer
+     *
+     * @return  int             The data read
+     */
+    public function readInt16()
+    {
+        return $this->toInt($this->read(2), 16);
+    }
+
+
+    /**
+     * Read an int8 from the buffer
+     *
+     * @return  int             The data read
+     */
+    public function readInt8()
+    {
+        return $this->toInt($this->read(1), 8);
+    }
+
+
+    /**
+     * Read an float32 from the buffer
+     *
+     * @return  int             The data read
+     */
+    public function readFloat32()
+    {
+        return $this->toFloat($this->read(4));
+    }
+
+
+    /**
+     * Read a $delim terminated string from the buffer
+     *
+     * If not found, read everything
+     *
+     * @return  int             The data read
+     */
+    public function readString($delim = "\x0")
+    {
+        $p = strpos($this->_buffer, $delim);
+
+        if ($p === false) {
+            return $this->read(true);
+        }
+
+        $string = $this->read($p);
+        $this->read();
+
+        return $string;
+    }
+
+
+    /**
+     * Retrieve the full server response
      *
      * @return  string|array    The response
      */
@@ -131,75 +217,54 @@ class Net_GameServerQuery_Response
 
 
     /**
-     * Fetch the results of the parsing operations
+     * Retrieve the full server response
      *
-     * @return  array   The result
+     * @return  string|array    The response
      */
-    public function getResult()
+    public function getBuffer()
     {
-        return $this->_result;
+        return $this->_buffer;
     }
 
 
     /**
-     * Match response to regular expression
+     * Check if the buffer has data
      *
-     * @access     protected
-     * @param      string    $expr       Regular expression
-     * @return     bool      True if expression was matched, false otherwise
+     * @return  bool    TRUE if the buffer has data in it, FALSE if not
      */
-    public function match($expr)
+    public function bufferHasData()
     {
-        // Reset match array
-        $this->_match = array();
-
-        // We need to escape nulls, and single slashes
-        $expr = addslashes($expr);
-
-        // Format regular expression
-        $expr = sprintf('#^%s#s', $expr);
-
-        // Match pattern
-        if (preg_match($expr, $this->_response, $this->_match) == false) {
-            $status = false;
-        } else {
-            // Remove pattern from response
-            if (!empty($this->_match[0])) {
-                $this->_response = substr($this->_response, strlen($this->_match[0]));
-            }
-            
-            $status = true;
+        if (strlen($this->_buffer) === 0) {
+            return false;
         }
-
-        return $status;
+        
+        return true;
     }
 
 
     /**
-     * Fetch the result of the last call to match()
-     *
-     * @param   int     $index      The index of the result to return
-     * @return  string  The matched portion of the server response or FALSE
-     */
-    public function getMatch($index = 0)
-    {
-        if (isset($this->_match[$index])) {
-            return $this->_match[$index];
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Adds variable to output
+     * Adds variable to results
      *
      * @param      string    $name     Variable name
      * @param      string    $value    Variable value
      */
-    public function addMatch($name, $value)
+    public function addResult($name, $value)
     {
         $this->_result[$name] = $value;
+    }
+
+
+    /**
+     * Adds meta information to the results
+     *
+     * Currently prefixes key with __
+     *
+     * @param      string    $name     Variable name
+     * @param      string    $value    Variable value
+     */
+    public function addMeta($name, $value)
+    {
+        $this->_result['__' . $name] = $value;
     }
 
 
@@ -212,7 +277,7 @@ class Net_GameServerQuery_Response
     public function addPlayer($name, $value)
     {
         // Player var is already set, so it must belong to the next player
-        if (isset($this->output[$this->_pindex][$name])) {
+        if (isset($this->_result[$this->_pindex][$name])) {
             ++$this->_pindex;
         }
         
