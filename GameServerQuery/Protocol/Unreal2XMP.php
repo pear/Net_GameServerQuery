@@ -19,7 +19,7 @@
 // $Id$
 
 
-require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
+require_once NET_GAMESERVERQUERY_BASE . 'Protocol/Unreal2.php';
 
 
 /**
@@ -30,76 +30,57 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
  * @author         Tom Buskens <ortega@php.net>
  * @version        $Revision$
  */
-class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protocol_UnrealTournament03
+class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protocol_Unreal2
 {
     /**
      * Players packet
-     *
-     * @access  protected
-     * @return  array      Array containing formatted server response
      */
-    protected function _players()
+    protected function players(&$buffer, &$result)
     {
-        // Packet id
-        if (!$this->_match("\x02")) {
-            throw new Exception('Parsing error');
+        // Header
+        $buffer->read(4);
+
+        // Packet type
+        if ($buffer->read() !== "\x02") {
+            return false;
         }
 
-        // Init player id, needed for player properties
-        $player_id = 0;
-
-        // Players
-        while ($this->_match("(.{4})(.{4})(.)")) {
-
-            // Player number & ID (never updated, bug?)
-            $this->_add('playernumber', $this->toInt($this->_result[1], 32));
-            $this->_add('playerid',     $this->toInt($this->_result[2], 32));
-
-            // Get player name length and create expression
-            $name_length = $this->toInt($this->_result[3]) - 1;
-            $expr = sprintf("(.{%d})\x00(.{4})(.{4})(.{4})(.)", $name_length);
-
-            if (!$this->_match($expr)) {
-                return false;
+        while ($buffer->getLength() > 0) {
+            $result->addPlayer('number',  $buffer->readInt32()); // 0
+            $result->addPlayer('id',      $buffer->readInt32()); // 0
+            $buffer->readAhead(4);
+            $result->addPlayer('name',    $this->readU2xmpString(&$buffer));
+            $result->addPlayer('ping',    $buffer->readInt32());
+            $result->addPlayer('score',   $buffer->readInt32());
+            $buffer->read(4);   // stats, 0
+            
+            $count = $buffer->readInt8();
+            for ($i = 0; $i !== $count; $i++) {
+                $result->addPlayer(
+                    $buffer->readPascalString(1),
+                    $this->readU2xmpString(&$buffer)
+                );
             }
-
-            $this->_addPlayer('name',   $this->_result[1]);
-            $this->_addPlayer('ping',   $this->toInt($this->_result[2], 32));
-            $this->_addPlayer('score',  $this->toInt($this->_result[3], 32));
-            $this->_addPlayer('statid', $this->toInt($this->_result[4], 32));
-
-            // Get player properties
-            $properties_number = $this->toInt($this->_result[5]));
-            for ($i = 0; $i != $properties_number; $i++) {
-
-                // Get property name length
-                if (!$this->_match(".")) {
-                    throw new Exception('Parsing error');
-                }
-                $name_length = $this->toInt($this->_result[0]) - 1;
-
-                // Get property name
-                $expr = sprintf("(.{%d})(.)", $name_length);
-                if (!$this->_match($expr)) {
-                    throw new Exception('Parsing error');
-                }
-                $name = $this->_result[1];
-
-                // Get property value length
-                $val_length = $this->toInt($this->_result[2]) - 1;
-
-                // Get property value
-                $expr = sprintf(".{%d}", $val_length);
-                if (!$this->_match($expr)) {
-                    throw new Exception('Parsing error');
-                }
-
-                // Assign property value to a variable with property name
-                $this->_add($name . $player_id, $this->_match[0]);
-            }
-
-            ++$player_id;
         }
+        return $result->fetch();
+    }
+
+    /**
+     * Unreal 2 XMP color coded strings
+     */
+    private function readU2xmpString(&$buffer)
+    {
+        // Check for color coding marker
+        if (substr($buffer->readAhead(5), 1) === "\x5e\x00\x23\x00") {
+            $length = ($buffer->readInt8() - 128) * 2;
+            return $buffer->read($length);
+        }
+        
+        // No marker, normal string
+        else {
+            return $buffer->readPascalString(1);
+        }
+        
+    }
 }
-
 ?>
