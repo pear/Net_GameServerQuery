@@ -23,7 +23,7 @@
  * Get protocol config options
  *
  * @category        Net
- * @package         Net_GameServerQuery_Config
+ * @package         Net_GameServerQuery
  * @author			Aidan Lister <aidan@php.net>
  * @version			$Revision$
  */

@@ -23,7 +23,7 @@
  * Handles communication to and from servers
  *
  * @category        Net
- * @package         Net_GameServerQuery_Communicate
+ * @package         Net_GameServerQuery
  * @author          Aidan Lister <aidan@php.net>
  * @version         $Revision$
  */
