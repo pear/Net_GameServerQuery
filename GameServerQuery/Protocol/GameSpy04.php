@@ -39,8 +39,6 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     {
         // Header
         $this->_getHeader();
-            throw new Exception('Parsing error');
-        }
 
         // Variable / value pairs
         while ($this->_match("([^\x00]+)\x00([^\x00]*)\x00")) {
@@ -61,9 +59,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     protected function _players()
     {
         // Header
-        if (!$this->_getHeader()) {
-            throw new Exception('Parsing error');
-        }
+        $this->_getHeader();
 
         // Get values
         if (!$this->_getValues('player')) {
@@ -87,8 +83,8 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     protected function _team($from_players = false)
     {
         // Header
-        if (!$from_players && !$this->_getHeader()) {
-            throw new Exception('Parsing error');
+        if (!$from_players) {
+            $this->_getHeader();
         }
 
         // Get values
@@ -106,10 +102,11 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
      */
     private function _getHeader()
     {
-        if ($this->_match("\x00NGSQ")) {
+        if ($this->_getPrefix(5) == "\x00NGSQ") {
             return true;
         }
         else {
+            throw new Exception('Parsing error: header not matched');
             return false;
         }
     }
