@@ -158,7 +158,14 @@ class Net_GameServerQuery
         $querylist = explode('|', $query);
 
         // Validate each query
-        // FIXME
+        foreach ($querylist as $query) {
+            if ($query != 'status' &&
+                $query != 'players' && 
+                $query != 'rules') {
+
+                throw new Exception ('Invalid Query');
+            }
+        }
 
         // Map arrays
         foreach ($querylist as $query) {
