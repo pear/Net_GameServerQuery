@@ -166,7 +166,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     protected function _addPlayer($name, $value)
     {
         // Player var is already set, so it must belong to the next player
-        if (isset($this->_output['players'][$this->_player_index][$name])) {
+        if (isset($this->_output[$this->_player_index][$name])) {
             ++$this->_player_index;
         }
         
