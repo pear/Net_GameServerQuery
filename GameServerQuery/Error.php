@@ -27,7 +27,6 @@ class ParsingException extends Exception
     {
         parent::__construct('Unable to parse "' . $packetname . '" packet');
     }
-
 }
 
 
@@ -40,7 +39,6 @@ class InvalidFlagException extends Exception
     {
         parent::__construct('Invalid query flag');
     }
-
 }
 
 
@@ -49,11 +47,10 @@ class InvalidFlagException extends Exception
  */
 class InvalidPacketException extends Exception
 {
-    public function __construct()
+    public function __construct($packetname)
     {
-        parent::__construct('Protocol does not support parsing of given packet');
+        parent::__construct('Protocol does not support parsing of the "'. $packetname .'" packet');
     }
-
 }
 
 
@@ -62,13 +59,11 @@ class InvalidPacketException extends Exception
  */
 class DriverNotFoundException extends Exception
 {
-    public function __construct()
+    public function __construct($protocol)
     {
-        parent::__construct('The driver required for this game is missing');
+        parent::__construct('The protocol driver "'. $protocol .'"  required for this game is missing');
     }
-
 }
-
 
 
 /**
@@ -80,7 +75,18 @@ class InvalidGameException extends Exception
     {
         parent::__construct('Invalid Game');
     }
+}
 
+
+/**
+ * InvalidServerException
+ */
+class InvalidServerException extends Exception
+{
+    public function __construct()
+    {
+        parent::__construct('Unable to connect');
+    }
 }
 
 ?>
