@@ -27,7 +27,7 @@ $normals['Breed']               = array();
 $normals['Doom3']               = array();
 $normals['FarCry']              = array();
 $normals['Freelancer']          = array();
-$normals['GameSpy']             = array();
+$normals['GameSpy']             = array('hostname',     'mapname',  'numplayers',   'maxplayers',       false,          'gametype');
 $normals['GameSpy04']           = array('hostname',     'map',      'numplayers',   'maxplayers',       'password',     'game_id');
 $normals['GhostRecon']          = array();
 $normals['HalfLife']            = array('hostname',     'map',      'players',      'max',              'password',     'gamedir');
@@ -37,7 +37,7 @@ $normals['HomeWorld2']          = array();
 $normals['JediKnight']          = array();
 $normals['JediKnight2']         = array();
 $normals['MultiTheftAuto']      = array();
-$normals['QuakeWorld']          = array();
+$normals['QuakeWorld']          = array('hostname',     'map',      'deathmatch',   'maxclients',       false,          false);
 $normals['Quake2']              = array();
 $normals['Quake3']              = array('hostname',     'mapname',  'clients',      'sv_maxclients',    false,          'gametype');
 $normals['RedFaction']          = array();
@@ -71,7 +71,7 @@ $packets['Freelancer']['status']            = array();
 
 $packets['GameSpy']['players']              = array('players',      "\\players\\");
 $packets['GameSpy']['rules']                = array('status',       "\\status\\");
-$packets['GameSpy']['status']               = array('status',       "\\status\\");
+$packets['GameSpy']['status']               = array('info',         "\\info\\");
 
 $packets['GameSpy04']['players']            = array('playerinfo',   "\xFE\xFD\x00NGSQ\x00\xFF\xFF");
 $packets['GameSpy04']['rules']              = array('serverinfo',   "\xFE\xFD\x00NGSQ\xFF\x00\x00");
@@ -109,7 +109,7 @@ $packets['MultiTheftAuto']['players']       = array();
 $packets['MultiTheftAuto']['rules']         = array();
 $packets['MultiTheftAuto']['status']        = array();
 
-$packets['QuakeWorld']['players']           = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['QuakeWorld']['players']           = array('players',      "\xFF\xFF\xFF\xFFstatus");
 $packets['QuakeWorld']['rules']             = array('status',       "\xFF\xFF\xFF\xFFstatus");
 $packets['QuakeWorld']['status']            = array('status',       "\xFF\xFF\xFF\xFFstatus");
 
@@ -141,9 +141,9 @@ $packets['Tribes']['players']               = array();
 $packets['Tribes']['rules']                 = array();
 $packets['Tribes']['status']                = array();
 
-$packets['UnrealTournament03']['players']   = array();
-$packets['UnrealTournament03']['rules']     = array();
-$packets['UnrealTournament03']['status']    = array();
+$packets['UnrealTournament03']['players']   = array('players',      "\x78\x00\x00\x00\x02");
+$packets['UnrealTournament03']['rules']     = array('rules',        '\\rules\\');
+$packets['UnrealTournament03']['status']    = array('info',         '\\info\\');
 
 $packets['Unreal2']['players']              = array('players',      "\x78\x00\x00\x00\x02");
 $packets['Unreal2']['rules']                = array('rules',        "\x78\x00\x00\x00\x01");
