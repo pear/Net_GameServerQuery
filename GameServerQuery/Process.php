@@ -59,6 +59,22 @@ class Net_GameServerQuery_Process
         $this->_protocols = array();
     }
  
+    
+    /**
+     * Factory for including protocols
+     */
+    static public function &factory($protocol)
+    {
+        $filename   = NET_GAMESERVERQUERY_BASE . 'Protocol/' . $protocol . '.php';
+        $classname  = 'Net_GameServerQuery_Protocol_' .  $protocol;
+
+        if (file_exists($filename)) {
+            include_once $filename;
+            return new $classname;
+        }
+
+        throw new Exception('Protocol driver not found');
+    }
 
     /**
      * Batch process all the results
@@ -66,29 +82,17 @@ class Net_GameServerQuery_Process
      * @param  array  $results  Query results
      * @return array  Processed results
      */
-    public function process($results)
+    public function batch($results)
     {
-        // Init
         $newresults = array();
- 
-        // Process
         foreach ($results as $key => $result) {
-           
+
             // Load the object if it is not loaded
             if (!key_exists($result['protocol'], $this->_protocols)) {
-                
-                // Load the protocol class
-                $filename = 'Net\GameServerQuery/Protocol/' . $result['protocol'] . '.php';
-
-                if (include_once $filename) {
-                    $classname = 'Net_GameServerQuery_Protocol_' .  $result['protocol'];
-                    $this->_protocols[$result['protocol']] = new $classname;
-                } else {
-                    throw new Exception('Protocol driver not found');
-                }
+                $classname = self::factory($this->_protocols);
             }
             
-            $newresults[$key] = $this->processOnce($result);
+            $newresults[$key] = $this->process($result);
         }
 
         return $newresults;
@@ -101,10 +105,16 @@ class Net_GameServerQuery_Process
      * @param  array  $results  Query result
      * @return array  Processed result
      */
-    public function processOnce($result)
+    public function process($result)
     {
+        // No reply means no parsing
+        if ($result['response'] === false) {
+            return false;
+        }
+        
         // Parse the response
-        $parsed = $this->_protocols[$result['protocol']]->process($result['packetname'], $result['response']);
+        $protocol = $this->_protocols[$result['protocol']];
+        $parsed = $protocol->parse($result['packetname'], $result['response']);
 
         // Normalise the response
         $result = $this->normalise($result['protocol'], $result['flag'], $parsed);
@@ -115,6 +125,8 @@ class Net_GameServerQuery_Process
     
     /**
      * Normalise result arrays
+     *
+     * This only normalises the status array
      *
      * @param  string  $protocol  Protocol name
      * @param  string  $flag      Protocol flag
