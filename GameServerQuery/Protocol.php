@@ -38,11 +38,12 @@ abstract class Net_GameServerQuery_Protocol
      * Parse server response according to packet type
      *
      * @access     public
-     * @param      string           $packetname   The name of the packet
-     * @param      string|array     $response     The packet
+     * @param      string           $packetname   Name of the packet
+     * @param      string|array     $response     Packet
+     * @param      bool             $showmeta     If additional meta info should be included
      * @return     array            Array containing formatted server response
      */
-    public function parse($packetname, $response)
+    public function parse($packetname, $response, $showmeta = false)
     {
         // Init
         $callback = array($this, $packetname);
@@ -60,7 +61,7 @@ abstract class Net_GameServerQuery_Protocol
            
         // Response class
         $response = new Net_GameServerQuery_Process_Buffer($response);
-        $result   = new Net_GameServerQuery_Process_Result();
+        $result   = new Net_GameServerQuery_Process_Result($showmeta);
 
         // Parse packet
         $result = call_user_func(array($this, $packetname), $response, $result);
