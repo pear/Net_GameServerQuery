@@ -201,6 +201,11 @@ class Net_GameServerQuery
      */
     public function execute($timeout = 100)
     {
+        // Check we have something to do
+        if ($this->_counter === -1) {
+            return false;
+        }
+
         // Timeout in millseconds
         $timeout = $timeout * 1000;
 
