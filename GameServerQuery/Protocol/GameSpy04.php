@@ -171,7 +171,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         $count = $this->_convert->toInt($this->_result[1], 8);
         
         // Add count to output
-        $this->_addVar($type . 'count', $team_count);
+        $this->_addVar($type . 'count', $count);
         
         // Get variable names
         $variables = array();
