@@ -64,7 +64,11 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
         }
 
         // Probably a (protocol) version number
-        if (!$this->_match("(.{8})\\x00")) {
+        if ($this->_match(".{5}(.)\\x00(.)\\x00")) {
+            $this->_addVar('versionlow', $this->_convert->toInt($this->_result[1], 8));
+            $this->_addVar('versionhigh', $this->_convert->toInt($this->_result[2], 8));            
+        }
+        else {
             return false;
         }
 
