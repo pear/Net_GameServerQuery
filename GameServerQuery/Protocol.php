@@ -112,7 +112,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     /**
      * Match response to regular expression
      *
-     * @access     private
+     * @access     protected
      * @param      string    $expr       Regular expression
      * @return     bool      True if expression was matched, false otherwise
      */
@@ -140,6 +140,26 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         }
 
         return $status;
+    }
+
+
+    /**
+     * Remove and return a prefix from the response string
+     *
+     * @access  protected
+     * @param   int      $length  Length of the prefix
+     * @return  string   The prefix
+     */
+    protected function _getPrefix($length = 1)
+    {
+        // Get prefix
+        $result          = substr($this->_response, 0, $length);
+
+        // Remove prefix from response string
+        $remainder       = strlen($this->_response) - $length;
+        $this->_response = substr($this->_response, $length, $remainder);
+
+        return $result;
     }
 
 
