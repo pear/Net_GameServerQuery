@@ -166,16 +166,17 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
 
         // Match pattern
         if (preg_match($expr, $this->_response, $this->_result) == false) {
-            return false;
+            $status = false;
         } else {
-
             // Remove pattern from response
             if (!empty($this->_result[0])) {
                 $this->_response = substr($this->_response, strlen($this->_result[0]));
             }
 
-            return true;
+            $status = true;
         }
+
+        return $status;
     }
     
 
