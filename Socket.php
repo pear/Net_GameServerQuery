@@ -37,7 +37,7 @@ class Net_GameServerQuery_Socket
         foreach ($servers as $key => $server)
         {
             // Open each socket
-            $ip = "udp://" . $server['ip'];
+            $ip = "udp://" . $server['ip']; 
 			$socket = @fsockopen($ip, $server['port'], $errno, $errstr, 1);
 			if ($socket !== false)
 			{
