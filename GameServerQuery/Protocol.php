@@ -29,8 +29,8 @@
  */
 interface Net_GameServerQuery_Protocol_Interface
 {
-    public function processResponse();
-    public function translatePacket();
+    public function processResponse($packetname, $response);
+    public function getPacket($packetname);
 }
 
 
