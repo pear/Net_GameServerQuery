@@ -29,16 +29,6 @@
  */
 class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 {
-
-    /**
-     * Hold an instance of the conversion class
-     *
-     * @access     private
-     * @var        resource
-     */
-    private $_convert;
-
-
     /**
      * Constructor
      *
@@ -46,8 +36,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
      */ 
     public function __construct()
     {
-        // Initialize conversion class
-        $this->_convert = new Net_GameServerQuery_Convert;
+        parent::__construct();
 
         // Define packets
         $this->_packets = array(

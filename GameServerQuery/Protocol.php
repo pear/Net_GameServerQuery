@@ -78,7 +78,6 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      */
     protected $_packets;
 
-
     /**
      * Used to map abstract packets to those used by the specific protocol
      *
@@ -87,6 +86,20 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      */
     protected $_map;
     
+    /**
+     * Hold an instance of the conversion class
+     *
+     * @access     private
+     * @var        resource
+     */
+    protected $_convert;
+
+
+    public function __construct()
+    {
+        // Initialize conversion class
+        $this->_convert = new Net_GameServerQuery_Convert;
+    }
     
     /**
      * Process server response according to packet type

@@ -185,24 +185,32 @@ class Net_GameServerQuery_Communicate
             // Check if we got multiple packets back from the server
             if (count($packet) > 1) {
                 
-                // The helper sorting function
-                function sort_bylength($a, $b)
-                {
-                    if ($a == $b) {
-                        return 0;
-                    }
-
-                    return (strlen($a) > strlen($b)) ? -1 : 1;
-                }
-
                 // We need to sort the array with the biggest packet first
-                usort($packet, 'sort_bylength');
+                usort($packet, array($this, '_sortbylength'));
             }
 
             $newresults[$key] = implode($packet);
         }
 
         return $newresults;
+    }
+
+    /**
+     * Sorts a packet list by length
+     * 
+     * @param       string      $a        Compare 1
+     * @param       string      $b        Compare 2
+     * @return      int         -1, 0 or 1
+     */
+    private function _sortbylength($a, $b)
+    {
+                
+                    if ($a == $b) {
+                        return 0;
+                    }
+
+                    return (strlen($a) > strlen($b)) ? -1 : 1;
+
     }
 
 }
