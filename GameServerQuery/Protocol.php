@@ -42,18 +42,26 @@ abstract class Net_GameServerQuery_Protocol
      */
     public function parse($packetname, $response)
     {
+        // Init
+        $callback = array($this, $packetname);
+
+        // Sanity check
+        if (!is_callable($callback)) {
+            throw new InvalidPacketException;
+        }
+        
         // Response class
         $response = new Net_GameServerQuery_Response($response);
 
         // Parse packet
         $result = call_user_func(array($this, $packetname), $response);
 
-        // Return result
-        if ($result !== false) {
-            return $result;
+        // Check for error
+        if ($result === false) {
+            throw new ParsingException;
         }
 
-        throw new Exception('Parsing Error');
+        return $result;
     }
 
 }
