@@ -19,7 +19,7 @@
 // $Id$
 
 
-class Net_GameServerQuery_Normalise_HalfLife extends Net_GameServerQuery_Normalise
+class Net_GameServerQuery_Normalise_UnrealTournament04 extends Net_GameServerQuery_Normalise
 {
     public function process($query, $data)
     {

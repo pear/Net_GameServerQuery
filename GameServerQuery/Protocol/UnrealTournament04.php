@@ -27,7 +27,7 @@
  * @author         Tom Buskens <ortega@php.net>
  * @version        $Revision$
  */
-class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
+class Net_GameServerQuery_Protocol_UnrealTournament04 extends Net_GameServerQuery_Protocol
 {
     /**
      * Constructor
