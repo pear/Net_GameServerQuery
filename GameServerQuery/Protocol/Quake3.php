@@ -35,11 +35,69 @@ class Net_GameServerQuery_Protocol_Quake3 extends Net_GameServerQuery_Protocol
 {
     /**
      * Rules packet
+     */
+    protected function rules(&$buffer, &$result)
+    {
+        if ($buffer->readInt32() !== -1) {
+            return false;
+        }
+
+        if ($buffer->read(14) !== 'statusResponse') {
+            return false;
+        }
+        
+        if ($buffer->read(2) !== "\x0a\\") {
+            return false;
+        }
+        
+        while (!$buffer->is_empty()) {
+            $result->add(
+                $buffer->readString('\\'),
+                $buffer->readStringMulti(array('\\', "\x0a"), $delimfound)
+                );
+                
+            if ($delimfound === "\x0a") {
+                break;
+            }
+        }
+
+        return $result->fetch();
+    }
+    
+    
+    /**
      * Players packet
      */
-    protected function xx(&$buffer, &$result)
+    protected function players(&$buffer, &$result)
     {
-        return $buffer->getData();
+        if ($buffer->readInt32() !== -1) {
+            return false;
+        }
+
+        if ($buffer->read(14) !== 'statusResponse') {
+            return false;
+        }
+        
+        if ($buffer->read(2) !== "\x0a\\") {
+            return false;
+        }
+        
+        // Ignore all the rules information
+        $buffer->readString("\x0a");
+        
+        while (!$buffer->is_empty()) {
+            $result->addPlayer('frags', $buffer->readString("\x20"));
+            $result->addPlayer('ping', $buffer->readString("\x20"));
+            if ($buffer->read() !== '"') {
+                return false;
+            }
+            $result->addPlayer('nick', $buffer->readString('"'));
+            if ($buffer->read() !== "\x0a") {
+                return false;
+            }
+        }
+
+        return $result->fetch();
     }
     
     
@@ -55,10 +113,8 @@ class Net_GameServerQuery_Protocol_Quake3 extends Net_GameServerQuery_Protocol
         if ($buffer->read(12) !== 'infoResponse') {
             return false;
         }
-
-        $result->addMeta('count', $buffer->readInt8());
-        
-        if ($buffer->read() !== '\\') {
+ 
+        if ($buffer->read(2) !== "\x0a\\") {
             return false;
         }
 
