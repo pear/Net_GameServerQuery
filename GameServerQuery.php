@@ -168,6 +168,10 @@ class Net_GameServerQuery
     /**
      * Execute the query
      *
+     * Communicate with the server, then send the information for
+     * processing. Then, reconstruct the array so the user can access
+     * the data.
+     *
      * @param     int        $timeout        The timeout in milliseconds
      * @return    array      An array of server information
      */
