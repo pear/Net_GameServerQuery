@@ -25,103 +25,59 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 /**
  * HalfLife Protocol
  *
- * @category       Net
- * @package        Net_GameServerQuery
- * @author         Tom Buskens <ortega@php.net>
- * @version        $Revision$
+ * @category        Net
+ * @package         Net_GameServerQuery
+ * @author          Aidan Lister <aidan@php.net>
+ * @author          Tom Buskens <ortega@php.net>
+ * @version         $Revision$
  */
 class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 {
-    protected function details(&$response)
+    protected function infostring(&$response)
     {
-        // Header
-        if (!$response->_match("\xFF\xFF\xFF\xFF\x6d")) {
+        if ($response->readInt32() !== -1) {
+            return false;
+        }
+        
+        if ($response->readString() !== 'infostringresponse') {
             return false;
         }
 
-        // Body regular expression
-        $pattern = "(([^\x00]+)\x00([^\x00]+)\x00([^\x00]+)\x00([^\x00]+)\x00"
-              . "([^\x00]+)\x00(.)(.)(.)(.)(.)(.)(.)";
-
-        // Body variable names
-        $keys = array('serverip', 'servername', 'mapname', 'gamedir',
-                      'gamename', 'playercount', 'playermax',
-                      'protocolversion', 'servertype', 'serveros',
-                      'serverpassword', 'gamemod'
-        );
-
-        // Match body
-        if ($response->match($pattern)) {
-
-            // Process and save variables
-            for ($i = 0, $ii = count($vars); $i < $ii; $i++) {
-                switch ($i) {
-                    case  5:
-                    case  6:
-                    case  7:
-                    case 10:
-                    case 11:
-                        $pattern->_result[$i+1] = $this->toInt($this->_result[$i+1]);
-                    default:
-                        $this->_add($vars[$i], $this->_result[$i+1]);
-                        break;
-                }
-            }
-
-        } else {
+        if ($response->read() !== '\\') {
             return false;
+        }
+
+        if ($response->readLast() !== "\x0") {
+            return false;
+        }
+
+        while ($response->bufferHasData()) {
+            $response->addResult($response->readString('\\'), $response->readString('\\'));
         }
 
         return $response->getResult();
     }
 
-    protected function infostring(&$response)
-    {
-        // Header
-        if (!$this->_match("\xFF\xFF\xFF\xFFinfostringresponse\x00")) {
-            throw new Exception('Parsing error');
-        }
-
-        // Variable / value pairs
-        while ($this->_match("\\([^\\]+)\\([^\\\x00]*)")) {
-            $this->_add($this->_result[1], $this->_result[2]);
-        }
-
-        // Terminating character
-        if (!$this->_match("\x00")) {
-            throw new Exception('Parsing error');
-        }
-
-        return $this->_output;
-    }
-
-    protected function ping(&$response)
-    {
-        if ($this->_match("\xFF\xFF\xFF\xFF\n")) {
-            return $this->_output;
-        }
-
-        throw new Exception('Parsing error');
-    }
-
     protected function players(&$response)
     {
-        // Header
-        if ($this->_match("\xFF\xFF\xFF\xFF\x44(.)")) {
-            //$this->_add('playercount', $this->toInt($this->_result[1]));
-        } else {
-            throw new Exception('Parsing error');
+        if ($response->readInt32() !== -1) {
+            return false;
         }
 
-        // Players
-        while ($this->_match("(.)([^\x00]+)\x00(.{4})(.{4})")) {
-            $this->_addPlayer('id',    $this->toInt($this->_result[1]));
-            $this->_addPlayer('name',  $this->_result[2]);
-            $this->_addPlayer('score', $this->toInt($this->_result[3], 32));
-            $this->_addPlayer('time',  $this->toFloat($this->_result[4]));
+        if ($response->read() !== 'D') {
+            return false;
         }
 
-        return $this->_output;
+        $response->addMeta('count', $response->readInt8());
+
+        while ($response->bufferHasData()) {
+            $response->addPlayer('id',      $response->readInt8());
+            $response->addPlayer('name',    $response->readString());
+            $response->addPlayer('score',   $response->readInt32());
+            $response->addPlayer('time',    $response->readFloat32());
+        }
+
+        return $response->getResult();
     }
 
     protected function rules(&$response)
@@ -144,7 +100,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 
         // Get header and rulecount
         if ($response->match("\xFF\xFF\xFF\xFF\x45(.{2})")) {
-            $response->addMatch('__rulecount', $response->toInt($response->getMatch(1), 16));
+            $response->addMeta('rulecount', $response->toInt($response->getMatch(1), 16));
         } else {
             return false;
         }
