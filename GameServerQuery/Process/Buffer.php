@@ -97,7 +97,7 @@ class Net_GameServerQuery_Process_Buffer
      */
     public function getLength()
     {
-        return ($this->_length - $this->_index);
+        return max($this->_length - $this->_index, 0);
     }
 
 
@@ -190,13 +190,14 @@ class Net_GameServerQuery_Process_Buffer
     /**
      * Reads a pascal string from the buffer
      *
-     * @return  string  The data read
+     * @return  string          The data read
      */
     public function readPascalString($offset = 0)
     {
         // Get length of the string
         $len = $this->readInt8();
         $offset = max($len - $offset, 0);
+
         return substr($this->read($len), 0, $offset);
     }
         
@@ -239,7 +240,7 @@ class Net_GameServerQuery_Process_Buffer
      * @return  int             The data read
      */
     public function readInt32()
-    {     
+    {
         $int = unpack('Lint', $this->read(4));
         return $int['int'];
     }
