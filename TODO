@@ -1,28 +1,29 @@
-OTHER STUFF
-- Add optional colourtag stripping for players
-- Add optional playersorting
-- Add packet caching
+FEATURES
+- Add method of both colour stripping and converting
+- Add error stack for servers which did not reply, or returned malformed packets
+- Clean up the query port stuff, make it less confusing. We need
+  to implement a +10 on the server port, for example.
 
 PROTOCOLS
-- Breed
+Urgent
+- GameSpy
+- UnrealTournament03
+- Unreal2XMP
 - Doom3
+- UnrealTournament
+Later
+- Breed
 - FarCry
 - Freelancer
-- GameSpy
 - GhostRecon
-- HalfLife
 - Hexen2
 - HomeWorld2
 - JediKnight
 - JediKnight2
 - MultiTheftAuto
-- QuakeWorld
 - Quake2
-- Quake3
 - RedFaction
 - RavenShield
 - Savage
 - Starsiege
 - Tribes
-- UnrealTournament03
-- Unreal2XMP
