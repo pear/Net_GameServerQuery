@@ -40,8 +40,11 @@ class Net_GameServerQuery_Communicate
      */
     public function query($servers, $timeout)
     {
-        // Open and write
-        list($sockets, $sockets_list) = $this->open($servers);
+        // Open
+        list($sockets, $packets, $sockets_list) = $this->open($servers);
+
+        // Write
+        $this->write($sockets, $packets);
 
         // Listen
         $result = $this->listen($sockets, $sockets_list, $timeout);
@@ -62,6 +65,7 @@ class Net_GameServerQuery_Communicate
     public function open($servers)
     {
         $sockets = array();
+        $packets = array();
         $sockets_list = array();
 
         foreach ($servers as $key => $server)
@@ -72,27 +76,34 @@ class Net_GameServerQuery_Communicate
                 stream_set_blocking($socket, false);
 
                 $sockets[$key] = $socket;
+                $packets[$key] = $server['packet'];
                 $sockets_list[(int) $socket] = $key;
 
-                $this->write($socket, $server['packet']);
             }
         }
 
         // Return an array of sockets, and an array of socket identifiers
-        return array($sockets, $sockets_list);
+        return array($sockets, $packets, $sockets_list);
     }
 
 
     /**
-     * Write a packet to a socket
+     * Write to an array of sockets
      *
-     * @param       resource    $socket     The socket
-     * @param       string      $packet     The packet
-     * @return      bool        True if the packet was written
+     * @param       array       $sockets        An array of sockets
+     * @param       array       $packets        An array of packets
      */
-    public function write($socket, $packet)
+    public function write($sockets, $packets)
     {
-        return fwrite($socket, $packet);
+        // If we have no sockets don't bother
+        if (empty($sockets)) {
+            return array();
+        }
+
+        // Write packet to each of the sockets
+        foreach($sockets as $key => $socket) {
+            fwrite($socket, $packets[$key]);
+        }
     }
 
 
