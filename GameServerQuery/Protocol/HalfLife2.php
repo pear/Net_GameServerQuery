@@ -55,8 +55,8 @@ class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protoco
         $result->add('numplayers',  $buffer->readInt8());
         $result->add('maxplayers',  $buffer->readInt8());
         $result->add('botcount',    $buffer->readInt8());
-        $result->add('server',      $buffer->readInt8());
-        $result->add('os',          $buffer->readInt8());
+        $result->add('type',        $buffer->read());
+        $result->add('os',          $buffer->read());
         $result->add('password',    $buffer->readInt8());
         $result->add('secure',      $buffer->readInt8());
         
