@@ -37,7 +37,8 @@ class Net_GameServerQuery_Socket
         foreach ($servers as $key => $server)
         {
             // Open each socket
-			$socket = @fsockopen("udp://" . $server['ip'], $server['port'], $errno, $errstr, 1);
+            $ip = "udp://" . $server['ip'];
+			$socket = @fsockopen($ip, $server['port'], $errno, $errstr, 1);
 			if ($socket !== false)
 			{
 				stream_set_blocking($socket, false);
@@ -45,6 +46,7 @@ class Net_GameServerQuery_Socket
 				$sockets[$key] = $socket;
 				$sockets_list[(int)$socket] = $key;
 
+                // Need some error checking here
 				foreach ($server['query'] as $packet) {
 					$this->write($socket, $packet);
 				}
@@ -76,6 +78,12 @@ class Net_GameServerQuery_Socket
 		$result = array ();
 		$starttime = microtime(true);
 		$r = $this->_sockets;
+    
+        // If we have no sockets don't bother
+        if (empty($this->_sockets)) {
+            return array ();
+        }
+
 		while (stream_select($r, $w = null,	$e = null, 0, $timeout - ((microtime(true) - $starttime) * 1000000)) !== 0)  
 		{
 			foreach ($r as $socket) {
