@@ -19,7 +19,7 @@
 // $Id$
 
 
-/**
+/*
  * Define a limited subset of normalised data for status queries
  */
 $normals[0]                     = array('hostname',     'map',      'numplayers',   'maxplayers',       'password',     'mode');
@@ -45,12 +45,10 @@ $normals['RavenShield']         = array();
 $normals['Savage']              = array();
 $normals['Starsiege']           = array();
 $normals['Tribes']              = array();
-$normals['UnrealTournament03']  = array();
-$normals['Unreal2XMP']          = array();
+$normals['UnrealEngine2']       = array('servername',   'mapname',  'playercount',  'maxplayers',       false,          'gametype');
 
 
-
-/**
+/*
  * Define packets for each protocol
  */
 $packets['Breed']['players']                = array();
@@ -141,20 +139,12 @@ $packets['Tribes']['players']               = array();
 $packets['Tribes']['rules']                 = array();
 $packets['Tribes']['status']                = array();
 
-$packets['UnrealTournament03']['players']   = array('players',      "\x78\x00\x00\x00\x02");
-$packets['UnrealTournament03']['rules']     = array('rules',        '\\rules\\');
-$packets['UnrealTournament03']['status']    = array('info',         '\\info\\');
-
-$packets['Unreal2']['players']              = array('players',      "\x78\x00\x00\x00\x02");
-$packets['Unreal2']['rules']                = array('rules',        "\x78\x00\x00\x00\x01");
-$packets['Unreal2']['status']               = array('status',       "\x78\x00\x00\x00\x00");
-
-$packets['Unreal2XMP']['players']           = array('players',      "\x7e\x00\x00\x00\x02");
-$packets['Unreal2XMP']['rules']             = array('rules',        "\x7e\x00\x00\x00\x01");
-$packets['Unreal2XMP']['status']            = array('status',       "\x7e\x00\x00\x00\x00");
+$packets['UnrealEngine2']['players']        = array('players',      "\x78\x00\x00\x00\x02");
+$packets['UnrealEngine2']['rules']          = array('rules',        "\x78\x00\x00\x00\x01");
+$packets['UnrealEngine2']['status']         = array('status',       "\x78\x00\x00\x00\x00");
 
 
-/**
+/*
  * Define games and associated protocols
  */
 $games['aarmy']['title']            = 'America\'s Army: Operations';
@@ -417,25 +407,25 @@ $games['unreal']['title']           = 'Unreal';
 $games['unreal']['protocol']        = 'GameSpy';
 $games['unreal']['queryport']       = '7778';
 
-$games['u2xmp']['title']            = 'Unreal 2 XMP';
-$games['u2xmp']['protocol']         = 'Unreal2XMP';
-$games['u2xmp']['queryport']        = '7778';
+$games['unreal2xmp']['title']       = 'Unreal 2 XMP';
+$games['unreal2xmp']['protocol']    = 'UnrealEngine2';
+$games['unreal2xmp']['queryport']   = '7778';
 
-$games['ut']['title']               = 'Unreal Tournament';
-$games['ut']['protocol']            = 'GameSpy';
-$games['ut']['queryport']           = '7778';
+$games['unrealt']['title']          = 'Unreal Tournament';
+$games['unrealt']['protocol']       = 'GameSpy';
+$games['unrealt']['queryport']      = '7778';
 
 $games['ut2003']['title']           = 'Unreal Tournament 2003';
-$games['ut2003']['protocol']        = 'UnrealTournament03';
+$games['ut2003']['protocol']        = 'UnrealEngine2';
 $games['ut2003']['queryport']       = '7778';
 
 $games['ut2004']['title']           = 'Unreal Tournament 2004';
-$games['ut2004']['protocol']        = 'UnrealTournament03';
+$games['ut2004']['protocol']        = 'UnrealEngine2';
 $games['ut2004']['queryport']       = '7778';
 
-$games['v8']['title']               = 'V8 Supercar Challenge';
-$games['v8']['protocol']            = 'GameSpy';
-$games['v8']['queryport']           = '16700';
+$games['v8super']['title']          = 'V8 Supercar Challenge';
+$games['v8super']['protocol']       = 'GameSpy';
+$games['v8super']['queryport']      = '16700';
 
 $games['vietcong']['title']         = 'Vietcong';
 $games['vietcong']['protocol']      = 'GameSpy';
