@@ -40,6 +40,9 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
      * @var        resource
      */
     private $_convert;
+    private $_map;
+    private $_packets;
+    private $_to;
 
 
     /**
@@ -70,6 +73,25 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         );
     }
  
+    /**
+     * Translate abstract packet to one or more actual packets
+     *
+     * @access     public
+     * @param      string    $packet   Abstract packet
+     * @return     array     Packet and packet name
+     */
+    public function getPacket($packet)
+    {
+        // Map packets to those used by the protocol
+        if (isset($this->_map[$packet])) {
+            $name = $this->_map[$packet];
+            $packet['packetname'] = $name;
+            $packet['packet']     = $this->_packets[$name];
+            return $packet;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Details packet

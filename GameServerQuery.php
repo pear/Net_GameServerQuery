@@ -153,6 +153,8 @@ class Net_GameServerQuery
 
             // Data sent to communications class
             list ($packetname, $packet) = $object->getpacket($query);
+            echo $packetname, $packet;
+            var_dump($object->getpacket($query));
             $this->_commlist[$this->_socketcount] = array(
                 'ip'            => $ip,
                 'port'          => $port,

@@ -89,27 +89,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     private $_map;
 
 
-    /**
-     * Translate abstract packet to one or more actual packets
-     *
-     * @access     public
-     * @param      string    $packet   Abstract packet
-     * @return     array     Packet and packet name
-     */
-    public function getPacket($packet)
-    {
 
-        // Map packets to those used by the protocol
-        if (isset($this->_map[$packet])) {
-            $name = $this->_map[$packet];
-            $packet['packetname'] = $name;
-            $packet['packet']     = $this->_packets[$name];
-            return $packet;
-        }
-        else {
-            return false;
-        }
-    }
     
     
     /**
