@@ -40,6 +40,9 @@ class Net_GameServerQuery_Protocol_QuakeWorld extends Net_GameServerQuery_Protoc
         while ($this->_match("\\\\([^\\\\]*)\\\\([^\\\\]*)")) {
             $this->_addVar($this->_result[1], $this->_result[2]);
         }
+
+        return $this->_output;
+
     }
     
     protected function _players ()
