@@ -91,7 +91,7 @@ $games['dx']['protocol']            = 'GameSpy';
 $games['dx']['queryport']           = '7791';
 
 $games['dev']['name']               = 'Devastation';
-$games['dev']['protocol']           = 'ut2003';
+$games['dev']['protocol']           = 'UnrealTournament03';
 $games['dev']['queryport']          = '7778';
 
 $games['doom3']['name']             = 'Doom 3';
@@ -315,7 +315,7 @@ $games['unreal']['protocol']        = 'GameSpy';
 $games['unreal']['queryport']       = '7778';
 
 $games['u2xmp']['name']             = 'Unreal 2 XMP';
-$games['u2xmp']['protocol']         = 'u2xmp';
+$games['u2xmp']['protocol']         = 'Unreal2XMP';
 $games['u2xmp']['queryport']        = '7778';
 
 $games['ut']['name']                = 'Unreal Tournament';
@@ -323,11 +323,11 @@ $games['ut']['protocol']            = 'GameSpy';
 $games['ut']['queryport']           = '7778';
 
 $games['ut2003']['name']            = 'Unreal Tournament 2003';
-$games['ut2003']['protocol']        = 'ut2003';
+$games['ut2003']['protocol']        = 'UnrealTournament03';
 $games['ut2003']['queryport']       = '7778';
 
 $games['ut2004']['name']            = 'Unreal Tournament 2004';
-$games['ut2004']['protocol']        = 'ut2003';
+$games['ut2004']['protocol']        = 'UnrealTournament03';
 $games['ut2004']['queryport']       = '7778';
 
 $games['v8']['name']                = 'V8 Supercar Challenge';
