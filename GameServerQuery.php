@@ -187,7 +187,7 @@ class Net_GameServerQuery
             if (!isset($results[$key])) {
                 // If we missed packets, replace with something
                 // Not sure what we should do here
-                $results[$key] = array(0 => false);
+                $results[$key] = false;
             }
 
             $this->_processlist[$key]['packet'] = $results[$key];

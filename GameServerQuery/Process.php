@@ -51,20 +51,11 @@ class Net_GameServerQuery_Process
     public function process_once ($result)
     {
         // Do some example useless processing
-
-        // Count packets
-        $packets = count($result['packet']);
-
-        // Count length of each packet
-        foreach ($result['packet'] as $packet_key => $packet) {
-            $length[] = strlen($packet) . ' bytes';
-        }
-
-        // Glue and return
-        $len = implode(' & ', $length);
+        $len = strlen($result['packet']);
         $game = $result['game'];
         $query = $result['query'];
-        return "Spoke to a ($game) server, asked for ($query) and got $packets packets @ $len";
+        
+        return "Spoke to a ($game) server, asked for ($query) and got $len bytes: {$result['packet']}";
     }
 
 }
