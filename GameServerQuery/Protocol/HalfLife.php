@@ -44,8 +44,8 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         }
 
         // Body regular expression
-        $body = "((.+)\x00(.+)\x00([.+)\x00(.+)\x00"
-              . "(.+)\x00(.)(.)(.)(.)(.)(.)(.)";
+        $body = "(([^\x00]+)\x00([^\x00]+)\x00([^\x00]+)\x00([^\x00]+)\x00"
+              . "([^\x00]+)\x00(.)(.)(.)(.)(.)(.)(.)";
 
         // Body variable names
         $vars = array('serverip', 'servername', 'mapname', 'gamedir',
@@ -92,7 +92,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         }
 
         // Variable / value pairs
-        while ($this->_match("\\(.*)\\(.*)")) {
+        while ($this->_match("\\([^\\]+)\\([^\\\x00]*)")) {
             $this->_add($this->_result[1], $this->_result[2]);
         }
 
@@ -137,7 +137,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         }
 
         // Players
-        while ($this->_match("(.)(.+)\x00(.{4})(.{4})")) {
+        while ($this->_match("(.)([^\x00]+)\x00(.{4})(.{4})")) {
             $this->_addPlayer('id',    $this->toInt($this->_result[1]));
             $this->_addPlayer('name',  $this->_result[2]);
             $this->_addPlayer('score', $this->toInt($this->_result[3], 32));
@@ -167,7 +167,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         }
 
         // Variable / value pairs
-        while ($this->_match("(.*)\x00(.*)\x00")) {
+        while ($this->_match("([^\x00]+)\x00([^\x00]*)\x00")) {
             $this->_add($this->_result[1], $this->_result[2]);
         }
 
