@@ -40,6 +40,14 @@ class Net_GameServerQuery_Config
 
 
     /**
+     * An array of all packet information
+     *
+     * @var        array 
+     */
+     private static $_packets;
+
+
+    /**
      * Constructor
      *
      * Load the protocol and games information file
@@ -48,7 +56,8 @@ class Net_GameServerQuery_Config
     {
         // Load the game config
         require 'Games.php';
-        $this->_games = $games;
+        $this->_games   = $games;
+        $this->_packets = $packets;
     }
 
 
@@ -62,6 +71,19 @@ class Net_GameServerQuery_Config
     {
         return $this->_games[$game]['protocol'];
 
+    }
+
+
+    /**
+     * Return packet used by a certain protocol
+     *
+     * @param   string  $protocol        The protocol
+     * @param   string  $type            The packet type
+     * @return  array   The packet used
+     */
+    public function getPacket($protocol, $type)
+    {
+        return $this->_packets[$protocol][$type];
     }
 
 
