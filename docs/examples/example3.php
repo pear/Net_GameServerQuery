@@ -9,6 +9,21 @@
 <?php
 require 'Net/GameServerQuery.php';
 
+// Get the packet to send
+$cfg = new Net_GameServerQuery_Config;
+list($packetname, $packet) = $cfg->getPacket('HalfLife', 'status');
+
+// Create array of server information
+$serverdata = array(
+    0 => array(
+        'packet'    => $packet,
+        'addr'      => '202.12.147.111',
+        'port'      => 27045,
+        ));
+
+// Query
+$gsq_comm = new Net_GameServerQuery_Communicate;
+$results = $gsq_comm->query($serverdata, 200);
 
 ?>
 </pre>
