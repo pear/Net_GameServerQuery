@@ -47,13 +47,15 @@ class Net_GameServerQuery_Communicate
         $this->write($sockets, $packets);
 
         // Listen
+        // Contains an array of packets
         $result = $this->listen($sockets, $sockets_list, $timeout);
+
+        // Normalise
+        // Now contains an array of multiple packets, or a string for single packets
+        $result = $this->normalise($result);
 
         // Close
         $this->close($sockets);
-
-        // Concat
-        $result = $this->concat($result);
 
         return $result;
     }
@@ -162,6 +164,24 @@ class Net_GameServerQuery_Communicate
 
 
     /**
+     * Normalise
+     *
+     * @param       string      $sockets        An array of sockets
+     * @return      array       An array of packets
+     */
+    public function normalise($packets)
+    {
+        foreach ($packets as $key => $packet) {
+            if (count($packet) === 1) {
+                $packets[$key] = $packet[0];
+            }
+        }
+
+        return $packets;
+    }
+
+
+    /**
      * Close each socket
      *
      * @param       string      $sockets        An array of sockets
@@ -172,37 +192,6 @@ class Net_GameServerQuery_Communicate
         foreach ($sockets as $socket) {
             fclose($socket);
         }
-    }
-
-
-    /**
-     * Concatonate multiple packets
-     *
-     * @param       array       $packets        An array of packets
-     * @return      array       An array of joined packets
-     */
-    public function concat($packets)
-    {
-        /**
-         * Sorts a string by length
-         *
-         * @param       string      $a        Compare 1
-         * @param       string      $b        Compare 2
-         * @return      int         -1, 0 or 1
-         */
-        $sortfunc = create_function('$a, $b', 'if ($a == $b) { return 0; } return (strlen($a) > strlen($b)) ? -1 : 1;');
-
-        $newresults = array();
-        foreach ($packets as $key => $packet) {
-            // Check if we got multiple packets back from the server
-            if (count($packet) > 1) {
-                // We need to sort the array with the biggest packet first
-                usort($packet, $sortfunc);
-            }
-            $newresults[$key] = implode($packet);
-        }
-
-        return $newresults;
     }
 
 }
