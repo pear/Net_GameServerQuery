@@ -29,7 +29,6 @@ require_once 'GameServerQuery\Protocol.php';
  * @package        Net_GameServerQuery
  * @author         Tom Buskens <ortega@php.net>
  * @version        $Revision$
- * @todo           implement all parsing functions
  */
 class Net_GameServerQuery_Protocol_gamespy04 extends Net_GameServerQuery_Protocol
 {
@@ -72,7 +71,7 @@ class Net_GameServerQuery_Protocol_gamespy04 extends Net_GameServerQuery_Protoco
     /**
      * Rules packet
      *
-     * @access    private
+     * @access    protected
      * @return    array      Array containing formatted server response
      */
     protected function _rules()
@@ -95,28 +94,120 @@ class Net_GameServerQuery_Protocol_gamespy04 extends Net_GameServerQuery_Protoco
     /**
      * Player packet
      *
-     * @access     private
+     * @access     protected
      * @return     array     Array containing formatted server response
      */
-    private function _players()
+    protected function _players()
     {
         // Header
         if (!$this->_match("\\x00NGSQ")) {
             return false;
         }
+        // Number of players
+        if (!$this->_match("\\x00(.)")) {
+            return false;
+        }
+        $player_count = $this->_convert->toInt($this->_result[1], 8);
+        $this->_addVar('playercount', $player_count);
+     
+        // Get variable names
+        $variables = array();
+        
+        while (true) {
+            if (!$this->_match("([^\\x00]+)\\x00")) {
+                return false;
+            }
+            
+            // Save variable name
+            array_push($variables, $this->_result[1]);
+
+            // Check for second \x00
+            if ($this->_match("\\x00")) {
+                break;
+            }
+            
+        }
+
+        // Get values
+        $var_count = count($variables);
+        
+        for ($i = 0; $i !== $player_count; $i++) {
+            for ($j = 0; $j !== $var_count; $j++) {
+                if (!$this->_match("([^\\x00]+)\\x00")) {
+                    return false;
+                }
+                $this->_addVar($variables[$j], $this->_result[1]);
+            }
+        }
+
+        // Get team info (same packet)
+        echo "<pre>";
+        for ($i = 0; $i != strlen($this->_response); $i++) {
+            $c = $this->_response{$i};
+            echo $c . ':'. ord($c) . '][';
+        }
+        echo "</pre>";
+        $this->_team(true);
+        
+        return $this->_output;
+        
     }
 
-}
-
-
-/**
- * Normaliser class
- */
-class Net_GameServerQuery_Protocol_Normaliser_gamespy04
-{
-    public function process($packetname, $data)
+    /**
+     * Team packet
+     *
+     * @access     protected
+     * @param      bool  $from_players  True if packet was also contained player data.
+     * @return     array Array containing formatted server response
+     */
+    protected function _team($from_players = false)
     {
-        return $data;
+        // Header
+        if (!$from_players && !$this->_match("\\x00NGSQ")) {
+            return false;
+        }
+
+        // Number of teams
+        if (!$this->_match("\\x00(.)")) {
+            return false;
+        }
+        $team_count = $this->_convert->toInt($this->_result[1], 8);
+        $this->_addVar('teamcount', $team_count);
+     
+        // Get variable names
+        $variables = array();
+        
+        while (true) {
+            if (!$this->_match("([^\\x00]+)\\x00")) {
+                return false;
+            }
+            
+            // Save variable name
+            array_push($variables, $this->_result[1]);
+
+            // Check for second \x00
+            if ($this->_match("\\x00")) {
+                break;
+            }
+            
+        }
+
+        // Get values
+        $var_count = count($variables);
+        
+        for ($i = 0; $i !== $team_count; $i++) {
+            for ($j = 0; $j !== $var_count; $j++) {
+                if (!$this->_match("([^\\x00]+)\\x00")) {
+                    return false;
+                }
+                $this->_addVar($variables[$j], $this->_result[1]);
+            }
+        }
+
+        return $this->_output;
+        
     }
+
 }
+
 ?>
