@@ -73,14 +73,14 @@ class Net_GameServerQuery_Process
             return new $classname;
         }
 
-        throw new DriverNotFoundException;
+        throw new DriverNotFoundException($protocol);
     }
 
     /**
      * Batch process all the results
      *
-     * @param  array  $results  Query results
-     * @return array  Processed results
+     * @param       array       $results        Query results
+     * @return      array       Processed results
      */
     public function batch($results)
     {
@@ -96,8 +96,8 @@ class Net_GameServerQuery_Process
     /**
      * Process a single result
      *
-     * @param  array  $results  Query result
-     * @return array  Processed result
+     * @param       array       $results        Query result
+     * @return      array       Processed result
      */
     public function process($result)
     {
@@ -113,12 +113,12 @@ class Net_GameServerQuery_Process
         }
         
         // Parse the response
-        $protocol =& $this->_protocols[$result['protocol']];
-        $response = $result['response'];
-        $parsed = $protocol->parse($result['packetname'], $response);
+        $protocol   =& $this->_protocols[$result['protocol']];
+        $response   = $result['response'];
+        $parsedinfo = $protocol->parse($result['packetname'], $response);
 
         // Normalise the response
-        $result = $this->normalise($result['protocol'], $result['flag'], $parsed);
+        $result = $this->normalise($parsedinfo, $result['protocol'], $result['flag']);
 
         return $result;
     }
@@ -129,31 +129,36 @@ class Net_GameServerQuery_Process
      *
      * This only normalises the status array
      *
-     * @param  string  $protocol  Protocol name
-     * @param  string  $flag      Protocol flag
-     * @param  array   $data      Response data
+     * @param       array       $data           Server data
+     * @param       string      $protocol       Protocol name
+     * @param       string      $flag           Query flag
      */
-    public function normalise($protocol, $flag, $data)
+    public function normalise($data, $protocol, $flag)
     {
         if ($flag !== 'status') {
             return $data;
         }
 
-        $keys = $this->_gamedata->getProtocolNormals();
-        $normals = $this->_gamedata->getProtocolNormals($protocol);
+        $normalkeys = $this->_gamedata->getProtocolNormals();
+        $gamekeys = $this->_gamedata->getProtocolNormals($protocol);
 
-        // If no normal keys are set return all
-        if (empty($normals)) { 
+        // If no normal keys are set return everything
+        if (empty($normalkeys)) { 
             return $data;
         }
 
-        $ndata = array();
-        for ($i = 0, $x = count($keys); $i < $x; $i++) {
-            $d = isset($data[$normals[$i]]) ? $data[$normals[$i]] : false;
-            $ndata[$keys[$i]] = ($normals[$i] === false) ? $normals[$i] : $d;
+        $newdata = array();
+        for ($i = 0, $ii = count($normalkeys); $i < $ii; $i++) {  
+            if ($gamekeys[$i] === false) {
+                $value = false;
+            } else {
+                $value = isset($data[$gamekeys[$i]]) ? $data[$gamekeys[$i]] : false;
+            }
+            
+            $newdata[$normalkeys[$i]] = $value;
         }
 
-        return $ndata;
+        return $newdata;
     }
 
 }
