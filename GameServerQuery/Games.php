@@ -149,10 +149,9 @@ $packets['Unreal2']['players']              = array('players',      "\x78\x00\x0
 $packets['Unreal2']['rules']                = array('rules',        "\x78\x00\x00\x00\x01");
 $packets['Unreal2']['status']               = array('status',       "\x78\x00\x00\x00\x00");
 
-$packets['Unreal2XMP']['players']           = array();
-$packets['Unreal2XMP']['rules']             = array();
-$packets['Unreal2XMP']['status']            = array();
-
+$packets['Unreal2XMP']['players']           = array('players',      "\x7e\x00\x00\x00\x02");
+$packets['Unreal2XMP']['rules']             = array('rules',        "\x7e\x00\x00\x00\x01");
+$packets['Unreal2XMP']['status']            = array('status',       "\x7e\x00\x00\x00\x00");
 
 
 /**
