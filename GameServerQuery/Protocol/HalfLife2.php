@@ -36,29 +36,29 @@ class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protoco
     /**
      * Status
      */
-    protected function details(&$response, &$result)
+    protected function details(&$buffer, &$result)
     {
-        if ($response->readInt32() !== -1) {
+        if ($buffer->readInt32() !== -1) {
             return false;
         }
 
-        if ($response->read() !== 'I') {
+        if ($buffer->read() !== 'I') {
             return false;
         }
         
-        $result->add('protocol',    $response->readInt8());
-        $result->add('hostname',    $response->readString());
-        $result->add('map',         $response->readString());
-        $result->add('gamedir',     $response->readString());
-        $result->add('gamedescrip', $response->readString());
-        $result->add('steamappid',  $response->readInt32());
-        $result->add('numplayers',  $response->readInt8());
-        $result->add('maxplayers',  $response->readInt8());
-        $result->add('botcount',    $response->readInt8());
-        $result->add('server',      $response->readInt8());
-        $result->add('os',          $response->readInt8());
-        $result->add('password',    $response->readInt8());
-        $result->add('secure',      $response->readInt8());
+        $result->add('protocol',    $buffer->readInt8());
+        $result->add('hostname',    $buffer->readString());
+        $result->add('map',         $buffer->readString());
+        $result->add('gamedir',     $buffer->readString());
+        $result->add('gamedescrip', $buffer->readString());
+        $result->add('steamappid',  $buffer->readInt32());
+        $result->add('numplayers',  $buffer->readInt8());
+        $result->add('maxplayers',  $buffer->readInt8());
+        $result->add('botcount',    $buffer->readInt8());
+        $result->add('server',      $buffer->readInt8());
+        $result->add('os',          $buffer->readInt8());
+        $result->add('password',    $buffer->readInt8());
+        $result->add('secure',      $buffer->readInt8());
         
         return $result->fetch();
     }
@@ -67,23 +67,23 @@ class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protoco
     /**
      * Players
      */
-    protected function players(&$response, &$result)
+    protected function players(&$buffer, &$result)
     {
-        if ($response->readInt32() !== -1) {
+        if ($buffer->readInt32() !== -1) {
             return false;
         }
 
-        if ($response->read() !== 'D') {
+        if ($buffer->read() !== 'D') {
             return false;
         }
 
-        $result->addMeta('count', $response->readInt8());
+        $result->addMeta('count', $buffer->readInt8());
 
-        while ($response->buffer()) {
-            $result->addPlayer('id',      $response->readInt8());
-            $result->addPlayer('name',    $response->readString());
-            $result->addPlayer('score',   $response->readInt32());
-            $result->addPlayer('time',    $response->readFloat32());
+        while (!$buffer->is_empty()) {
+            $result->addPlayer('id',      $buffer->readInt8());
+            $result->addPlayer('name',    $buffer->readString());
+            $result->addPlayer('score',   $buffer->readInt32());
+            $result->addPlayer('time',    $buffer->readFloat32());
         }
 
         return $result->fetch();
@@ -93,20 +93,20 @@ class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protoco
     /**
      * Rules
      */
-    protected function rules(&$response, &$result)
+    protected function rules(&$buffer, &$result)
     {
-        if ($response->readInt32() !== -1) {
+        if ($buffer->readInt32() !== -1) {
             return false;
         }
 
-        if ($response->read() !== 'E') {
+        if ($buffer->read() !== 'E') {
             return false;
         }
 
-        $result->addMeta('count', $response->readInt16());
+        $result->addMeta('count', $buffer->readInt16());
 
-        while ($response->buffer()) {
-            $result->add($response->readString(), $response->readString());
+        while (!$buffer->is_empty()) {
+            $result->add($buffer->readString(), $buffer->readString());
         }
 
         return $result->fetch();

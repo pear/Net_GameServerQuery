@@ -37,20 +37,20 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
      * Rules packet
      * Status packet
      */
-    protected function serverinfo(&$response, &$result)
+    protected function serverinfo(&$buffer, &$result)
     {
-        if ($response->read() !== "\x00") {
+        if ($buffer->read() !== "\x00") {
             return false;
         }
         
-        $response->read(4);
+        $buffer->read(4);
 
-        if ($response->readLast() !== "\x0") {
+        if ($buffer->readLast() !== "\x0") {
             return false;
         }
 
-        while ($response->buffer()) {
-            $result->add($response->readString(), $response->readString());
+        while (!$buffer->is_empty()) {
+            $result->add($buffer->readString(), $buffer->readString());
         }
         
         return $result->fetch();
@@ -60,75 +60,75 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     /**
      * Player packet
      */
-    protected function playerinfo(&$response, &$result)
+    protected function playerinfo(&$buffer, &$result)
     {
-        if ($response->read() !== "\x00") {
+        if ($buffer->read() !== "\x00") {
             return false;
         }
         
-        $response->read(4);
+        $buffer->read(4);
 
-        if ($response->read() !== "\x00") {
+        if ($buffer->read() !== "\x00") {
             return false;
         }
 
-        $result->addMeta('count', $response->readInt8());
+        $result->addMeta('count', $buffer->readInt8());
         
         // Variable names
         $varnames = array();
-        while ($response->buffer()) {
-            $varnames[] = $response->readString('_');
+        while (!$buffer->is_empty()) {
+            $varnames[] = $buffer->readString('_');
 
-            if ($response->read() !== "\x00") {
+            if ($buffer->read() !== "\x00") {
                 return false;
             }
 
             // Look ahead
-            if ($response->read(1, true) === "\x00") {
-                $response->read();
+            if ($buffer->read(1, true) === "\x00") {
+                $buffer->read();
                 break;
             }
         }
    
         // Loop through sets
-        while ($response->buffer()) {
+        while (!$buffer->is_empty()) {
             foreach ($varnames as $varname) {
-                $result->addPlayer($varname, $response->readString());
+                $result->addPlayer($varname, $buffer->readString());
             }      
             
             // Look ahead
-            if ($response->read(1, true) === "\x00") {
-                $response->read();
+            if ($buffer->read(1, true) === "\x00") {
+                $buffer->read();
                 break;
             } 
         }
         
         // Start all over again to read team information
-        $response->readInt8();
+        $buffer->readInt8();
         
         // Variable names
         $varnames = array();
-        while ($response->buffer()) {
-            $varnames[] = $response->readString();
+        while (!$buffer->is_empty()) {
+            $varnames[] = $buffer->readString();
 
             // Look ahead
-            if ($response->read(1, true) === "\x00") {
-                $response->read();
+            if ($buffer->read(1, true) === "\x00") {
+                $buffer->read();
                 break;
             }
         }
 
         // Loop through sets
         $i = 0;
-        while ($response->buffer()) {
+        while (!$buffer->is_empty()) {
             foreach ($varnames as $varname) {
-                $team[$i][$varname] = $response->readString();
+                $team[$i][$varname] = $buffer->readString();
             }
             ++$i;
             
             // Look ahead
-            if ($response->read(1, true) === "\x00") {
-                $response->read();
+            if ($buffer->read(1, true) === "\x00") {
+                $buffer->read();
                 break;
             } 
         }
