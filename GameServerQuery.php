@@ -37,11 +37,18 @@ require_once 'GameServerQuery\Process.php';
 class Net_GameServerQuery
 {
     /**
-     * Hold the counter
+     * Hold the counter per server
      *
-     * @var            int
+     * @var         int
      */
     private $_counter;
+
+    /**
+     * Hold the counter per socket
+     *
+     * @var         int
+     */
+    private $_socketcount;
 
     /**
      * An instance of the Net_GameServerQuery_Config class
@@ -93,6 +100,7 @@ class Net_GameServerQuery
     {
         // Initialise counter
         $this->_counter = -1;
+        $this->_socketcount = -1;
 
         // Load the config class
         $this->_config = new Net_GameServerQuery_Config;
@@ -130,22 +138,23 @@ class Net_GameServerQuery
 
         // Map arrays
         foreach ($querylist as $query) {
+            ++$this->_socketcount;
             
             // Master list
-            $this->_serverlist[] = array(
+            $this->_serverlist[$this->_socketcount] = array(
                 'servid'    => $this->_counter,
                 'query'     => $query
             );
 
             // Data sent to communications class
-            $this->_commlist[] = array(
+            $this->_commlist[$this->_socketcount] = array(
                 'ip'        => $ip,
                 'port'      => $port,
                 'packet'    => $this->_config->packet($game, $query)
             );
 
             // Data sent the processing class
-            $this->_processlist[] = array(
+            $this->_processlist[$this->_socketcount] = array(
                 'game'      => $game,
                 'query'     => $query
             );
