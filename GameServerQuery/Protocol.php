@@ -98,7 +98,6 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      */
     public function processResponse($packetname, $response)
     {
-        //echo $packetname . ' => ' . $response . "<br/>\n";
         // Clear previous output
         $this->_output = array();
         
@@ -152,7 +151,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         $this->_result = array();
         
         // Format regular expression
-        $expr = sprintf("/^%s/", $expr);
+        $expr = sprintf("/^%s/s", $expr);
 
         // Match pattern
         if (preg_match($expr, $this->_response, $this->_result) == false) {
