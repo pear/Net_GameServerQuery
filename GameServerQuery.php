@@ -25,7 +25,7 @@ require_once NET_GAMESERVERQUERY_BASE . 'GameData.php';
 require_once NET_GAMESERVERQUERY_BASE . 'Communicate.php';
 require_once NET_GAMESERVERQUERY_BASE . 'Process.php';
 require_once NET_GAMESERVERQUERY_BASE . 'Error.php';
-
+require_once NET_GAMESERVERQUERY_BASE . 'Config.php';
 
 /**
  * Query and retrieve information from game servers
@@ -88,7 +88,7 @@ class Net_GameServerQuery
      *
      * @var         array
      */
-    private $_options;
+    private $_config;
 
 
     /**
@@ -99,63 +99,43 @@ class Net_GameServerQuery
     public function __construct()
     {
         // Set default option values
-        $this->_options = array(
-            'normalise' => true,
-            'showmeta'  => true,
-            'timeout'   => 100,
-            );
+        $config = new Net_GameServerQuery_Config;
+        $config->setOption('normalise', true);
+        $config->setOption('showmeta',  true);
+        $config->setOption('timeout',   100);
 
         // Load classes
+        $this->_config      = $config;
         $this->_gamedata    = new Net_GameServerQuery_GameData;
         $this->_communicate = new Net_GameServerQuery_Communicate;
-        $this->_process     = new Net_GameServerQuery_Process($this->_gamedata, $this->_options);
+        $this->_process     = new Net_GameServerQuery_Process($this->_gamedata, $config);
     }
 
 
     /**
      * Set an option
      *
-     * Can be one of:
-     * - normalise      Reduces the information returned in status to a standard subset
-     * - showmeta       Shows information not directly returned by protocol (__count etc)
-     * - timeout        Sets length of time to wait for server replies
+     * Wraps around the method in Net_GameServerQuery_Config
      *
      * @param    string     $option       The option to set
      * @param    string     $value        The value
      */
     public function setOption($option, $value)
     {
-        switch ($option) {
-            case 'normalise':
-            case 'showmeta':
-            case 'timeout':
-                $this->_options[$option] = $value;
-                break;
-            
-            default:
-                throw new InvalidOptionException($option);
-        }
+        $this->_config->setOption($option, $value);
     }
 
 
     /**
      * Get an option
      *
+     * Wraps around the method in Net_GameServerQuery_Config
+     *
      * @param    string     $option       The option to get
      */
     public function getOption($option)
     {
-        switch ($option) {
-            case 'normalise':
-            case 'showmeta':
-            case 'timeout':
-                return $this->_options[$option];
-                break;
-            
-            default:
-                return false;
-
-        }
+        $this->_config->getOption($option);
     }
 
         

@@ -43,7 +43,7 @@ abstract class Net_GameServerQuery_Protocol
      * @param      bool             $showmeta     If additional meta info should be included
      * @return     array            Array containing formatted server response
      */
-    public function parse($packetname, $response, $showmeta = false)
+    public function parse($packetname, $response, $config)
     {
         // Init
         $callback = array($this, $packetname);
@@ -59,8 +59,11 @@ abstract class Net_GameServerQuery_Protocol
             $response = $this->multipacketjoin($response);
         }
            
-        // Response class
+        // Create buffer
         $response = new Net_GameServerQuery_Process_Buffer($response);
+        
+        // Configure result enviroment
+        $showmeta = $config->getOption('showmeta');
         $result   = new Net_GameServerQuery_Process_Result($showmeta);
 
         // Parse packet

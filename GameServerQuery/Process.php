@@ -46,7 +46,7 @@ class Net_GameServerQuery_Process
      *
      * @var         object
      */
-    private $_options;
+    private $_config;
     
     /**
      * Array holding all the loaded protocol objects
@@ -59,10 +59,10 @@ class Net_GameServerQuery_Process
     /**
      * Constructor
      */
-    public function __construct($gamedata, $options)
+    public function __construct($gamedata, $config)
     {
         $this->_gamedata  = $gamedata;
-        $this->_options   = $options;
+        $this->_config    = $config;
     }
  
     
@@ -122,10 +122,10 @@ class Net_GameServerQuery_Process
         // Parse the response
         $protocol =& $this->_protocols[$result['protocol']];
         $response = $result['response'];
-        $data     = $protocol->parse($result['packetname'], $response, $this->_options['showmeta']);
+        $data     = $protocol->parse($result['packetname'], $response, $this->_config);
 
         // Normalise the response
-        if ($this->_options['normalise'] === true) {
+        if ($this->_config->getOption('normalise') === true) {
             $data = $this->normalise($data, $result['protocol'], $result['flag']);
         }
         
