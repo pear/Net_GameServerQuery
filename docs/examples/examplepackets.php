@@ -19,8 +19,6 @@ $packets['HalfLife2']['rules']      = base64_decode('/////0UtAG1wX3RlYW1wbGF5ADA
 
 // Quake3
 $packets['Quake3']['info']          = base64_decode('/////2luZm9SZXNwb25zZQpccHJvdG9jb2xcNlxob3N0bmFtZVxeMU9wdHVzTmV0IENPRCBIZWFkUXVhcnRlcnMgIzFcbWFwbmFtZVxtcF9kYXdudmlsbGVcY2xpZW50c1w2XHN2X21heGNsaWVudHNcMThcZ2FtZXR5cGVcaHFccHVyZVwxXG1heFBpbmdcNTAwXGtjXDFcaHdcMVxwYlwxXG1vZFwx');
-
-// Battlefield1942
-$packets['Battlefield1942']['info'] = base64_decode('');
+$packets['Quake3']['status']        = base64_decode('/////3N0YXR1c1Jlc3BvbnNlClx2ZXJzaW9uXFEzIDEuMzJiIGxpbnV4LWkzODYgTm92IDE0IDIwMDJcZG1mbGFnc1wwXGZyYWdsaW1pdFwwXHRpbWVsaW1pdFw2MFxnX2dhbWV0eXBlXDhccHJvdG9jb2xcNjhcbWFwbmFtZVxyYTNtYXAxMVxzdl9wcml2YXRlQ2xpZW50c1wwXHN2X2hvc3RuYW1lXE9wdHVzTmV0IFJBMyAjMlxzdl9tYXhjbGllbnRzXDIwXHN2X3B1bmtidXN0ZXJcMFxzdl9tYXhSYXRlXDEyMDAwXHN2X21pblBpbmdcMFxzdl9tYXhQaW5nXDBcc3ZfZmxvb2RQcm90ZWN0XDBcc3ZfYWxsb3dEb3dubG9hZFwwXGxvY2F0aW9uXDBcZ2FtZW5hbWVcYXJlbmFcZ19tYXhHYW1lQ2xpZW50c1wwXGNhcHR1cmVsaW1pdFw4XGdfbmVlZHBhc3NcMFxnX3ZlcnNpb25cUkEzIDEuNzYgQXByIDIzIDIwMDQgMTA6MTc6MTdcZ190aW1lTGVmdFw1NQo1IDMxICJpbGxpZGFuIgo2IDM5ICJeMHgyXjR8XjdMb3JlbWFuIgowIDc3ICJkdW1iZ2VlayIKMiAyOSAiXjRWdWxeN25lcmFibGUgQ2hveSIKOCAzMSAiQW5hbCBXYXJyaW9yIgowIDMwICJeMi09XjFSYW5kXjI9LSIKMSAzMSAiTXJCb2JIYXJyaXMiCg==');
 
 ?>
