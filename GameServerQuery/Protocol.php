@@ -25,6 +25,7 @@
  * @category       Net
  * @package        Net_GameServerQuery
  * @author         Tom Buskens <ortega@php.net>
+ * @author         Aidan Lister <aidan@php.net>
  * @version        $Revision$
  */
 interface Net_GameServerQuery_Protocol_Interface
@@ -39,6 +40,7 @@ interface Net_GameServerQuery_Protocol_Interface
  * @category       Net
  * @package        Net_GameServerQuery
  * @author         Tom Buskens <ortega@php.net>
+ * @author         Aidan Lister <aidan@php.net>
  * @version        $Revision$
  */
 abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Protocol_Interface
@@ -179,6 +181,72 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         // Set player var
         $this->_output['players'][$this->_player_index][$name] = $value;
     }
+
+
+    /**
+     * Conversion to float
+     *
+     * @access     public
+     * @param      string    $string   String to convert
+     * @return     float     32 bit float
+     */
+    public function toFloat($string)
+    {
+        // Check length
+        if (strlen($string) !== 4) {
+            return false;
+        }
+
+        // Convert
+        $float = unpack('ffloat', $string);
+        return $float['float'];
+    }
+
+
+    /**
+     * Conversion to integer
+     *
+     * @access     public
+     * @param      string    $string   String to convert
+     * @param      int       $bits     Number of bits
+     * @return     int       Integer according to type
+     */
+    public function toInt($string, $bits = 8)
+    {
+        // Check length
+        if (strlen($string) !== ($bits/8)) {
+            return false;
+        }
+
+        // Convert
+        switch($bits) {
+
+            // 8 bit, unsigned
+            case 8:
+                $int = ord($string);
+                break;
+
+            // 16 bit, unsigned
+            case 16:
+                $int = unpack('Sint', $string);
+                $int = $int['int'];
+                break;
+
+            // 32 bit, unsigned
+            case 32:
+                $int = unpack('Lint', $string);
+                $int = $int['int'];
+                break;
+
+            // invalid type
+            default:
+                $int = false;
+                break;
+        }
+
+        return $int;
+    }
+
 }
 
 ?>
