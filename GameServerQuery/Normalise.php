@@ -45,15 +45,13 @@ interface Net_GameServerQuery_Normalise_Interface
  */
 abstract class Net_GameServerQuery_Normalise implements Net_GameServerQuery_Normalise_Interface
 {
-
     /**
-     * Batch process all the results
+     * Process a response
      */
     public function process($packetname, $response)
     {
         return $response;
     }
-
 }
 
 ?>

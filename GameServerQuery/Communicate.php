@@ -195,6 +195,7 @@ class Net_GameServerQuery_Communicate
         return $newresults;
     }
 
+
     /**
      * Sorts a packet list by length
      * 
@@ -203,14 +204,12 @@ class Net_GameServerQuery_Communicate
      * @return      int         -1, 0 or 1
      */
     private function _sortbylength($a, $b)
-    {
-                
-                    if ($a == $b) {
-                        return 0;
-                    }
+    {    
+        if ($a == $b) {
+            return 0;
+        }
 
-                    return (strlen($a) > strlen($b)) ? -1 : 1;
-
+        return (strlen($a) > strlen($b)) ? -1 : 1;
     }
 
 }

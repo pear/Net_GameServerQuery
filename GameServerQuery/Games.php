@@ -20,14 +20,14 @@
 
 
 $games['halflife']['name']              = 'Half-Life';
-$games['halflife']['protocol']          = 'halflife';
+$games['halflife']['protocol']          = 'HalfLife';
 $games['halflife']['queryport']         = '27015';
 
 $games['painkiller']['name']            = 'Pain Killer';
-$games['painkiller']['protocol']        = 'gamespy04';
+$games['painkiller']['protocol']        = 'GameSpy04';
 $games['painkiller']['queryport']       = '3455';
 
 $games['bfvietnam']['name']             = 'BattleField: Vietnam';
-$games['bfvietnam']['protocol']         = 'gamespy04';
+$games['bfvietnam']['protocol']         = 'GameSpy04';
 $games['bfvietnam']['queryport']        = '23000';
 ?>
