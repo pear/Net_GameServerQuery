@@ -44,8 +44,8 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         }
 
         // Body regular expression
-        $body = "([^\x00+)\x00([^\x00+)\x00([^\x00+)\x00([^\x00+)\x00"
-              . "([^\x00+)\x00(.)(.)(.)(.)(.)(.)(.)";
+        $body = "((.+)\x00(.+)\x00([.+)\x00(.+)\x00"
+              . "(.+)\x00(.)(.)(.)(.)(.)(.)(.)";
 
         // Body variable names
         $vars = array('serverip', 'servername', 'mapname', 'gamedir',
@@ -65,7 +65,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
                     case  7:
                     case 10:
                     case 11:
-                        $this->_result[$i+1] = $this->_convert->toInt($this->_result[$i+1]);
+                        $this->_result[$i+1] = $this->toInt($this->_result[$i+1]);
                     default:
                         $this->_add($vars[$i], $this->_result[$i+1]);
                         break;
@@ -92,7 +92,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         }
 
         // Variable / value pairs
-        while ($this->_match("\\([^\\]*)\\([^\x00\\]*)")) {
+        while ($this->_match("\\(.*)\\(.*)")) {
             $this->_add($this->_result[1], $this->_result[2]);
         }
 
@@ -131,17 +131,17 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     {
         // Header
         if ($this->_match("\xFF\xFF\xFF\xFF\x44(.)")) {
-            $this->_add('playercount', $this->_convert->toInt($this->_result[1]));
+            $this->_add('playercount', $this->toInt($this->_result[1]));
         } else {
             return false;
         }
 
         // Players
-        while ($this->_match("(.)([^\x00]+)\x00(.{4})(.{4})")) {
-            $this->_addPlayer('id',    $this->_convert->toInt($this->_result[1]));
+        while ($this->_match("(.)(.+)\x00(.{4})(.{4})")) {
+            $this->_addPlayer('id',    $this->toInt($this->_result[1]));
             $this->_addPlayer('name',  $this->_result[2]);
-            $this->_addPlayer('score', $this->_convert->toInt($this->_result[3], 32));
-            $this->_addPlayer('time',  $this->_convert->toFloat($this->_result[4]));
+            $this->_addPlayer('score', $this->toInt($this->_result[3], 32));
+            $this->_addPlayer('time',  $this->toFloat($this->_result[4]));
         }
 
         return $this->_output;
@@ -161,13 +161,13 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 
         // Get header, rulecount
         if ($this->_match("\xFF\xFF\xFF\xFF\x45(.{2})")) {
-            $this->_add('rulecount', $this->_convert->toInt($this->_result[1], 16));
+            $this->_add('rulecount', $this->toInt($this->_result[1], 16));
         } else {
             return false;
         }
 
         // Variable / value pairs
-        while ($this->_match("([^\x00]*)\x00([^\x00]*)\x00")) {
+        while ($this->_match("(.*)\x00(.*)\x00")) {
             $this->_add($this->_result[1], $this->_result[2]);
         }
 

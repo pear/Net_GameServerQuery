@@ -43,29 +43,29 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
         }
 
         // Probably a (protocol) version number
-        if ($this->_match(".{5}(.).(.)\\x00")) {
-            $version  = $this->_convert->toInt($this->_result[1], 8) . '.';
-            $version .= $this->_convert->toInt($this->_result[2], 8);
+        if ($this->_match(".{5}(.).(.)\x00")) {
+            $version  = $this->toInt($this->_result[1], 8) . '.';
+            $version .= $this->toInt($this->_result[2], 8);
         }
         else {
             return false;
         }
 
         // Variable / value pairs
-        while ($this->_match("([^\\x00]+)\\x00([^\\x00]*)\\x00")) {
-            $this->_addVar($this->_result[1], $this->_result[2]);
+        while ($this->_match("([^\x00]+)\x00([^\x00]*)\x00")) {
+            $this->_add($this->_result[1], $this->_result[2]);
         }
 
         // End marker for variables?
-        if (!$this->_match("\\x00\\x00")) {
+        if (!$this->_match("\x00\x00")) {
             return false;
         }
 
         // Players (ping and score in here somehwere)
-        while ($this->_match("(.)(..)(.)(.)(..)([^\\x00]+)\\x00")) {
+        while ($this->_match("(.)(..)(.)(.)(..)([^\x00]+)\x00")) {
 
-            $this->_addVar('id', $this->_convert->toInt($this->_result[1], 8));
-            $this->_addVar('ping', $this->_convert->toInt($this->_result[2], 16));
+            $this->_addPlayer('id', $this->toInt($this->_result[1], 8));
+            $this->_addPlayer('ping', $this->toInt($this->_result[2], 16));
 
             // teams, either \x80\x3e or \x50\xc3
             switch ($this->_result[3]) {
@@ -81,10 +81,10 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
                     $team = 'unknown';
                     break;
             }
-            $this->_addVar('team', $team);
+            $this->_addPlayer('team', $team);
 
             // Player name
-            $this->_addVar('name', $this->_result[6]);
+            $this->_addPlayer('name', $this->_result[6]);
         }
 
         return $this->_output;

@@ -49,31 +49,31 @@ class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protoc
         while ($this->_match("(.{4})(.{4})(.)")) {
 
             // Player number & ID (never updated, bug?)
-            $this->_addVar('playernumber', $this->_convert->toInt($this->_result[1], 32));
-            $this->_addVar('playerid',     $this->_convert->toInt($this->_result[2], 32));
+            $this->_add('playernumber', $this->toInt($this->_result[1], 32));
+            $this->_add('playerid',     $this->toInt($this->_result[2], 32));
 
             // Get player name length and create expression
-            $name_length = $this->_convert->toInt($this->_result[3]) - 1;
-            $expr = sprintf("(.{%d})\\x00(.{4})(.{4})(.{4})(.)", $name_length);
+            $name_length = $this->toInt($this->_result[3]) - 1;
+            $expr = sprintf("(.{%d})\x00(.{4})(.{4})(.{4})(.)", $name_length);
 
             if (!$this->_match($expr)) {
                 return false;
             }
 
-            $this->_addVar('playername',   $this->_result[1]);
-            $this->_addVar('playerping',   $this->_convert->toInt($this->_result[2], 32));
-            $this->_addVar('playerscore',  $this->_convert->toInt($this->_result[3], 32));
-            $this->_addVar('playerstatid', $this->_convert->toInt($this->_result[4], 32));
+            $this->_addPlayer('name',   $this->_result[1]);
+            $this->_addPlayer('ping',   $this->toInt($this->_result[2], 32));
+            $this->_addPlayer('score',  $this->toInt($this->_result[3], 32));
+            $this->_addPlayer('statid', $this->toInt($this->_result[4], 32));
 
             // Get player properties
-            $properties_number = $this->_convert->toInt($this->_result[5]));
+            $properties_number = $this->toInt($this->_result[5]));
             for ($i = 0; $i != $properties_number; $i++) {
 
                 // Get property name length
                 if (!$this->_match(".")) {
                     return false;
                 }
-                $name_length = $this->_convert->toInt($this->_result[0]) - 1;
+                $name_length = $this->toInt($this->_result[0]) - 1;
 
                 // Get property name
                 $expr = sprintf("(.{%d})(.)", $name_length);
@@ -83,7 +83,7 @@ class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protoc
                 $name = $this->_result[1];
 
                 // Get property value length
-                $val_length = $this->_convert->toInt($this->_result[2]) - 1;
+                $val_length = $this->toInt($this->_result[2]) - 1;
 
                 // Get property value
                 $expr = sprintf(".{%d}", $val_length);
@@ -92,7 +92,7 @@ class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protoc
                 }
 
                 // Assign property value to a variable with property name
-                $this->_addVar($name . $player_id, $this->_match[0]);
+                $this->_add($name . $player_id, $this->_match[0]);
             }
 
             ++$player_id;

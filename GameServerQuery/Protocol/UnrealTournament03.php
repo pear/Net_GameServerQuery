@@ -47,21 +47,21 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
         while ($this->_match("(.{4})(.)")) {
 
             // Player id
-            $this->_addVar('playerid', $this->_convert->toInt($this->_result[1], 32));
+            $this->_add('playerid', $this->toInt($this->_result[1], 32));
 
             // Get player name length and create expression
-            $name_length = $this->_convert->toInt($this->_result[2]) - 1;
-            $expr = sprintf("(.{%d})\\x00(.{4})(.{4})(.{4})", $name_length);
+            $name_length = $this->toInt($this->_result[2]) - 1;
+            $expr = sprintf("(.{%d})\x00(.{4})(.{4})(.{4})", $name_length);
 
             // Match expression
             if (!$this->_match($expr)) {
                 return false;
             }
 
-            $this->_addVar('playername',  $this->_result[1]);
-            $this->_addVar('playerping',  $this->_convert->toInt($this->_result[2], 32));
-            $this->_addVar('playerscore', $this->_convert->toInt($this->_result[2], 32));
-            $this->_addVar('playerteam',  $this->_convert->toInt($this->_result[2], 32));
+            $this->_addPlayer('name',  $this->_result[1]);
+            $this->_addPlayer('ping',  $this->toInt($this->_result[2], 32));
+            $this->_addPlayer('score', $this->toInt($this->_result[2], 32));
+            $this->_addPlayer('team',  $this->toInt($this->_result[2], 32));
         }
 
         return $this->_output;
@@ -85,18 +85,18 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
         while ($this->_match(".")) {
 
             // Create expression using result of previous match to set the string length
-            $expr = sprintf("(.{%d})\\x00(.)", ($this->_convert->toInt($this->_result[0]) - 1));
+            $expr = sprintf("(.{%d})\x00(.)", ($this->toInt($this->_result[0]) - 1));
 
             // Get variable name
             if ($this->_match($expr)) {
                 $name = $this->_result[1];
 
                 // Create expression using result of previous match to set string length
-                $expr = sprintf("(.{%d})\\x00", ($this->_convert->toInt($this->_result[2]) - 1));
+                $expr = sprintf("(.{%d})\x00", ($this->toInt($this->_result[2]) - 1));
 
                 // Get variable value
                 if ($this->_match($expr)) {
-                    $this->_addVar($name, $this->_result[1]);
+                    $this->_add($name, $this->_result[1]);
                 }
                 else {
                     return false;
@@ -119,31 +119,31 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
     protected function _status()
     {
         // Get some 32 bit variables
-        if (!$this->_match("\\x00(.{4})\\x00(.{4})(.{4})([^\\x00]+)\\x00(.)")) {
+        if (!$this->_match("\x00(.{4})\x00(.{4})(.{4})([^\x00]+)\x00(.)")) {
             return false;
         }
 
-        $this->_addVar('gameport',  $this->_convert->toInt($this->_result[2], 32));
-        $this->_addVar('queryport', $this->_convert->toInt($this->_result[3], 32));
-        $this->_addVar('hostname',  $this->_result[4]);
+        $this->_add('gameport',  $this->toInt($this->_result[2], 32));
+        $this->_add('queryport', $this->toInt($this->_result[3], 32));
+        $this->_add('hostname',  $this->_result[4]);
 
         // Create expression using result of previous match to set string length
-        $expr = sprintf("(.{%d})(.)", ($this->_convert->toInt($this->_result[5]) - 1));
+        $expr = sprintf("(.{%d})(.)", ($this->toInt($this->_result[5]) - 1));
         if (!$this->_match($expr)) {
             return false;
         }
 
-        $this->_addVar('map', $this->_result[1]);
+        $this->_add('map', $this->_result[1]);
 
         // Create expression using result of previous match to set string length
-        $expr = sprintf("(.{%d})(.{4})(.{4})", ($this->_convert->toInt($this->_result[2]) - 1));
+        $expr = sprintf("(.{%d})(.{4})(.{4})", ($this->toInt($this->_result[2]) - 1));
         if (!$this->_match($expr)) {
             return false;
         }
 
-        $this->_addVar('gametype',   $this->_result[1]);
-        $this->_addVar('players',    $this->_convert->toInt($this->_result[2], 32));
-        $this->_addVar('maxplayers', $this->_convert->toInt($this->_result[3], 32));
+        $this->_add('gametype',   $this->_result[1]);
+        $this->_add('players',    $this->toInt($this->_result[2], 32));
+        $this->_add('maxplayers', $this->toInt($this->_result[3], 32));
 
         return $this->_output;
 

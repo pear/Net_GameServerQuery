@@ -38,13 +38,13 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     protected function _rules()
     {
         // Header
-        if (!$this->_match("\\x00NGSQ")) {
+        if (!$this->_getHeader()) {
             return false;
         }
 
         // Variable / value pairs
-        while ($this->_match("([^\\x00]+)\\x00([^\\x00]*)\\x00")) {
-            $this->_addVar($this->_result[1], $this->_result[2]);
+        while ($this->_match("([^\x00]+)\x00([^\x00]*)\x00")) {
+            $this->_add($this->_result[1], $this->_result[2]);
         }
 
         return $this->_output;
@@ -106,7 +106,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
      */
     private function _getHeader()
     {
-        if ($this->_match("\\x00NGSQ")) {
+        if ($this->_match("\x00NGSQ")) {
             return true;
         }
         else {
@@ -124,22 +124,22 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     private function _getValues($type)
     {
         // Get number of sets
-        if (!$this->_match("\\x00(.)")) {
+        if (!$this->_match("\x00(.)")) {
             return false;
         }
 
         // Convert byte to integer
-        $count = $this->_convert->toInt($this->_result[1], 8);
+        $count = $this->toInt($this->_result[1], 8);
 
         // Add count to output
-        $this->_addVar($type . 'count', $count);
+        $this->_add($type . 'count', $count);
 
-        // Get variable names
+        // Get variable names, always start with an underscore
         $variables = array();
 
         while (true) {
 
-            if (!$this->_match("([^\\x00]+)\\x00")) {
+            if (!$this->_match("_([^\x00]+)\x00")) {
                 return false;
             }
 
@@ -147,7 +147,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             array_push($variables, $this->_result[1]);
 
             // Variable name sequence is ended with a second \x00
-            if ($this->_match("\\x00")) {
+            if ($this->_match("\x00")) {
                 break;
             }
 
@@ -162,12 +162,12 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             // Get values for each set
             for ($j = 0; $j !== $var_count; $j++) {
 
-                if (!$this->_match("([^\\x00]+)\\x00")) {
+                if (!$this->_match("([^\x00]+)\x00")) {
                     return false;
                 }
 
                 // Add variables to output
-                $this->_addVar($variables[$j], $this->_result[1]);
+                $this->_addPlayer($variables[$j], $this->_result[1]);
 
             }
 
