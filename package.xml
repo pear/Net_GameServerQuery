@@ -1,21 +1,36 @@
 <package version="1.0">
 	<name>Net_GameServerQuery</name>
-	<summary>An interface to query and return various information about a game server.</summary>
+	<summary>An interface to query and return information from a game server.</summary>
 
 	<description>
-		Net_GameServerQuery is an object for querying game servers.
-		Currently only supports basic &quot;status&quot; information.
-		Built in support for over 20 games.
+		Net_GameServerQuery provides an interface for querying game servers.
 	</description>
 
 	<maintainers>
 		<maintainer>
 			<user>aidan</user>
 			<name>Aidan Lister</name>
-			<email>aidan@virtualexplorer.com.au</email>
+			<email>aidan@php.net</email>
 			<role>lead</role>
 		</maintainer>
-	</maintainers>
+		<maintainer>
+			<user>ortega</user>
+			<name>Tom Buskins</name>
+			<email>ortega@php.net</email>
+			<role>lead</role>
+		</maintainer>
+    </maintainers>
+
+	<release>
+		<version>0.1</version>
+		<date>2004-04-10</date>
+		<license>PHP License</license>
+		<state>alpha</state>
+		<notes>First release! This package is alpha, everything is likely to change.</notes>
+		<deps>
+			<dep type="php" rel="ge" version="5.0.0"/>
+		</deps>
+	</release>
 
 	<release>
 		<version>0.2</version>
@@ -34,33 +49,13 @@
 			<dir name="/" baseinstalldir="Net" role="php">	 
 				<file>GameServerQuery.php</file>
 				<dir name="GameServerQuery">
-					<file>Games.xml</file>
-					<file>Protocol.php</file>
-					<file>Socket.php</file>
-					<file>Error.php</file>
+					<file>Protocols.php</file>
 					<dir name="Protocol">
-						<file>freelancer.php</file>
-						<file>gamespy.php</file>
 						<file>halflife.php</file>
-						<file>quake3.php</file>
-						<file>quakeworld.php</file>
-						<file>savage.php</file>
-						<file>ut2003.php</file>
 					</dir>
 				</dir>
 			</dir>
 		</filelist>
-	</release>
-
-	<release>
-		<version>0.1</version>
-		<date>2004-04-10</date>
-		<license>PHP License</license>
-		<state>alpha</state>
-		<notes>First release! This package is alpha, everything is likely to change.</notes>
-		<deps>
-			<dep type="php" rel="ge" version="5.0.0"/>
-		</deps>
 	</release>
 
 </package>
