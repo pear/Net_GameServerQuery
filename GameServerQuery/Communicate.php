@@ -52,6 +52,9 @@ class Net_GameServerQuery_Communicate
         // Close
         $this->close($sockets);
 
+        // Concat
+        $result = $this->concat($result);
+        
         return $result;
     }
 
@@ -164,6 +167,21 @@ class Net_GameServerQuery_Communicate
         foreach ($sockets as $socket) {
             fclose($socket);
         }
+    }
+
+
+    /**
+     * Concatonate multiple packets
+     */
+    public function concat($results)
+    {
+        $newresults = array();
+
+        foreach ($results as $key => $result) {
+            $newresults[$key] = implode($result);
+        }
+
+        return $newresults;
     }
 
 }
