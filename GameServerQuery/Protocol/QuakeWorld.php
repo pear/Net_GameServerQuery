@@ -32,13 +32,15 @@ class Net_GameServerQuery_Protocol_QuakeWorld extends Net_GameServerQuery_Protoc
 
     protected function _status ()
     {
+                hexdump($this->_response);
+
         // Header
         if (!$this->_match("\xFF\xFF\xFF\xFFn")) {
             return false;
         }
 
-        while ($this->_match("\\\\([^\\\\]*)\\\\([^\\\\]*)")) {
-            $this->_addVar($this->_result[1], $this->_result[2]);
+        while ($this->_match("\\([^\\]*)\\([^\\]*)")) {
+            $this->_add($this->_result[1], $this->_result[2]);
         }
 
         return $this->_output;

@@ -98,4 +98,5 @@ class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protoc
             ++$player_id;
         }
 }
+
 ?>
