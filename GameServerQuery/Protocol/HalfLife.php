@@ -134,7 +134,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     {
         // Header
         if ($this->_match("\xFF\xFF\xFF\xFF\x44(.)")) {
-            $this->_add('playercount', $this->toInt($this->_result[1]));
+            //$this->_add('playercount', $this->toInt($this->_result[1]));
         } else {
             throw new Exception('Parsing error');
         }
