@@ -19,8 +19,8 @@
 // $Id$
 
 
-require_once NET_GAMESERVERQUERY_BASE . 'Response.php';
-require_once NET_GAMESERVERQUERY_BASE . 'Result.php';
+require_once NET_GAMESERVERQUERY_BASE . 'Process/Buffer.php';
+require_once NET_GAMESERVERQUERY_BASE . 'Process/Result.php';
 
 
 /**
@@ -38,8 +38,9 @@ abstract class Net_GameServerQuery_Protocol
      * Parse server response according to packet type
      *
      * @access     public
-     * @param      array     $packet   Array containing the packet and its type
-     * @return     array     Array containing formatted server response
+     * @param      string           $packetname   The name of the packet
+     * @param      string|array     $response     The packet
+     * @return     array            Array containing formatted server response
      */
     public function parse($packetname, $response)
     {
@@ -50,10 +51,16 @@ abstract class Net_GameServerQuery_Protocol
         if (!is_callable($callback)) {
             throw new InvalidPacketException;
         }
-        
+                
+        // If the response is an array then multiple packets were recieved
+        // Ask the protocol to join them together as a single response
+        if (is_array($response)) {
+            $response = $this->multipacketjoin($response);
+        }
+           
         // Response class
-        $response = new Net_GameServerQuery_Response($response);
-        $result   = new Net_GameServerQuery_Result();
+        $response = new Net_GameServerQuery_Process_Buffer($response);
+        $result   = new Net_GameServerQuery_Process_Result();
 
         // Parse packet
         $result = call_user_func(array($this, $packetname), $response, $result);
@@ -66,6 +73,20 @@ abstract class Net_GameServerQuery_Protocol
         return $result;
     }
 
+    
+    /**
+     * Join multiple packet responses into a single response
+     *
+     * This is usually overrided by the protocol specific method
+     *
+     * @access     public
+     * @param      array        $packets   Array containing the packets
+     * @return     string       Joined server response
+     */
+    protected function multipacketjoin($packets)
+    {
+        return implode('', $packets);
+    }
 }
 
 ?>
