@@ -67,10 +67,25 @@ class Net_GameServerQuery_Config
      * @return  string  The game used
      * @param   string  $game   The game
      */
+    public function validgame($game)
+    {
+        if (isset($this->_games[$game])) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Return protocol used by a certain game
+     *
+     * @return  string  The game used
+     * @param   string  $game   The game
+     */
     public function protocol($game)
     {
         return $this->_games[$game]['protocol'];
-
     }
 
 
