@@ -19,6 +19,10 @@
 // $Id$
 
 
+require_once 'Config.php';
+require_once 'Socket.php';
+
+
 /**
  * A class to query and retrieve information from game servers
  *
@@ -57,6 +61,8 @@ class Net_GameServerQuery
 	 */
 	private $_game;
 
+    private $_config;
+
 
     /**
      * Constructor
@@ -65,14 +71,9 @@ class Net_GameServerQuery
     {
 		// Initialise counter
         $this->_counter = -1;
-		
-		// Load the protocol config
-		require 'Protocols.php';
-		$this->_protocol = $protocol;
 
-		// Load the game config
-		require 'Games.php';
-		$this->_game = $game;
+        // Load the config class
+        $this->_config = new Net_GameServerQuery_Config;
 	}
 
     
@@ -93,7 +94,7 @@ class Net_GameServerQuery
 		// Build the list of packets to be sent
 		$querylist = explode('|', $query);
 		foreach ($querylist as $query) {
-			$querypackets[$query] = $this->_getpacket($game, $query);
+			$querypackets[$query] = $this->_config->getpacket($game, $query);
 		}
 
 		// Default port
@@ -125,33 +126,11 @@ class Net_GameServerQuery
 		// Timeout in millseconds
 		$timeout = $timeout * 1000;
 		
-        require_once 'Socket.php';
 		$socket = new Net_GameServerQuery_Socket;
         $result = $socket->go($this->_servers, $timeout);
 
         return $result;
     }
-
-
-	/**
-	 * Get the packet to be sent to server
-	 *
-	 * This should probably be moved somewhere else, I don't know where.
-	 *
-	 * @return	string	The packet
-	 * @param	string	$game	The game
-	 * @param	string	$query	The type of query
-	 */
-	private function _getpacket ($game, $query)
-	{
-		$protocol = $this->_game[$game];
-		$packetformat = $this->_protocol[$protocol]['packet'];
-		$querystring = $this->_protocol[$protocol]['send'][$query];
-
-		$packet = sprintf($packetformat, $querystring);
-
-		return $packet;
-	}
 
 }
 
