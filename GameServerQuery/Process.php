@@ -20,7 +20,6 @@
 
 
 require_once 'GameServerQuery\Protocol.php';
-require_once 'GameServerQuery\Normalise.php';
 
 
 /**
@@ -51,7 +50,7 @@ class Net_GameServerQuery_Process
      */
     public function __construct()
     {
-        $this->_normalise = new Net_GameServerQuery_Normalise;
+        return;
     }
 
 
@@ -100,9 +99,18 @@ class Net_GameServerQuery_Process
         $parsed = $this->_protocols[$result['protocol']]->process($result['packetname'], $result['packet']);
 
         // Normalise the response
-        $result = $parsed;
+        $result = $this->normalise($result['packetname'], $parsed);
 
         return $result;
+    }
+
+    
+    /**
+     * Normalise
+     */
+    public function normalise($packetname, $array)
+    {
+        return $array;
     }
 
 }
