@@ -77,7 +77,7 @@ class Net_GameServerQuery
      * A master list of socket data
      *
      * Contains a mass of information about each socket opened
-     * serverid|flag|addr|port|packet|packetname|protocol|game
+     * serverid,flag,addr,port,packet,packetname,protocol,game
      *
      * @var         array
      */
@@ -224,12 +224,32 @@ class Net_GameServerQuery
 
         // Put the data back together
         foreach ($this->_socketlist as $key => $server) {
-            $servid                     = $server['serverid'];
-            $flag                       = $server['flag'];
-            $newresults[$servid][$flag] = $results[$key];
+            $servid                             = $server['serverid'];
+            $flag                               = $server['flag'];
+            $newresults[$servid][$flag]         = $results[$key];
+            $newresults[$servid]['__addr']      = $server['addr'];
+            $newresults[$servid]['__game']      = $server['game'];
+            $newresults[$servid]['__port']      = $server['port'];
+            $newresults[$servid]['__gametitle'] = $this->_gamedata->getGameTitle($server['game']);
         }
-
+        
+        // Reset all the data arrays for further use
+        $this->_reset();
+        
         return $newresults;
+    }
+    
+    
+    /**
+     * Reset everything
+     *
+     * @return      void
+     */
+    private function _reset()
+    {
+        $this->_servercount = -1;
+        $this->_socketcount = -1;
+        $this->_socketlist  = array();   
     }
 
 
