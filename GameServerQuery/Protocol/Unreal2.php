@@ -23,22 +23,23 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 
 
 /**
- * Unreal 2 Engine protocol
+ * Unreal2 protocol
  *
- * @category       Net
- * @package        Net_GameServerQuery
- * @author         Tom Buskens <ortega@php.net>
- * @version        $Revision$
+ * @category        Net
+ * @package         Net_GameServerQuery
+ * @author          Aidan Lister <aidan@php.net>
+ * @author          Tom Buskens <ortega@php.net>
+ * @version         $Revision$
  */
 class Net_GameServerQuery_Protocol_Unreal2 extends Net_GameServerQuery_Protocol
 {
-    /**
+    /*
      * Players packet
      */
     protected function players(&$buffer, &$result)
     {
         // Header
-        $buffer->read(4);
+        $buffer->skip(4);
 
         // Packet type
         if ($buffer->read() !== "\x02") {
@@ -50,20 +51,22 @@ class Net_GameServerQuery_Protocol_Unreal2 extends Net_GameServerQuery_Protocol
             $result->addPlayer('name',    $buffer->readPascalString(1));
             $result->addPlayer('ping',    $buffer->readInt32());
             $result->addPlayer('score',   $buffer->readInt32());
-            $buffer->read(4);   // stats and team info in ut2004
+
+            // Stats and team info in UT2004
+            $buffer->skip(4);
         }
         
         return $result->fetch();
     }
 
     
-    /**
+    /*
      * Rules packet
      */
     protected function rules(&$buffer, &$result)
     {
         // Header
-        $buffer->read(4);
+        $buffer->skip(4);
 
         // Packet type
         if ($buffer->read() !== "\x01") {
@@ -73,7 +76,6 @@ class Net_GameServerQuery_Protocol_Unreal2 extends Net_GameServerQuery_Protocol
         // Var / value strings
         $i = -1;
         while ($buffer->getLength() !== 0) {
-            
             $varname = $buffer->readPascalString(1);
 
             // Make sure mutators don't overwrite each other
@@ -91,13 +93,13 @@ class Net_GameServerQuery_Protocol_Unreal2 extends Net_GameServerQuery_Protocol
     }
 
     
-    /**
+    /*
      * Status packet
      */
     protected function status(&$buffer, &$result)
     {
         // Header
-        $buffer->read(4);
+        $buffer->skip(4);
 
         // Packet type
         if ($buffer->read() !== "\x00") {
@@ -125,3 +127,5 @@ class Net_GameServerQuery_Protocol_Unreal2 extends Net_GameServerQuery_Protocol
     }
      
 }
+
+?>
