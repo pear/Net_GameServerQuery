@@ -32,8 +32,6 @@ require_once 'GameServerQuery\Convert.php';
  * @package         Net_GameServerQuery
  * @author          Aidan Lister <aidan@php.net>
  * @version         $Revision$
- * @todo            Validate the game added
- * @todo            Validate each part of the query type
  */
 class Net_GameServerQuery
 {
@@ -96,6 +94,8 @@ class Net_GameServerQuery
 
     /**
      * Constructor
+     *
+     * Load the classes needed throughout the script
      */
     public function __construct()
     {
@@ -133,19 +133,24 @@ class Net_GameServerQuery
             $port = $this->_config->queryport($game);
         }
 
-        // What is the protocol?
+        // Find the protocol
         $protocol = $this->_config->protocol($game);
 
         // Load the protocol class
         require_once "GameServerQuery/Protocol/{$protocol}.php";
         $protocolclass = "Net_GameServerQuery_Protocol_{$protocol}";
+        $protocol = new $protocolclass;
+
+        // Load the normalise class
         require_once "GameServerQuery/Normalise/{$protocol}.php";
         $normaliserclass = "Net_GameServerQuery_Normalise_{$protocol}";
-        $protocol = new $protocolclass;
         $normaliser = new $normaliserclass;
 
         // Get list of queries to be sent
         $querylist = explode('|', $query);
+
+        // Validate each query
+        // FIXME
 
         // Map arrays
         foreach ($querylist as $query) {
@@ -196,6 +201,7 @@ class Net_GameServerQuery
         $timeout = $timeout * 1000;
 
         // Communicate with the servers
+        // We now have an array of unprocessed server data
         $results = $this->_communicate->query($this->_commlist, $timeout);
 
         // Finish the array for the process class
