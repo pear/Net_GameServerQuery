@@ -16,7 +16,7 @@ $bm->start();
 $gsq->addServer('quakeworld', '194.109.69.76', null, 'rules|status|players');
 
 // fire up
-$result = $gsq->execute(300);
+$result = $gsq->execute(600);
 
 // results
 $bm->stop();

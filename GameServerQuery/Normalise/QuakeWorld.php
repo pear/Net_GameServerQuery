@@ -23,8 +23,7 @@ class Net_GameServerQuery_Normalise_QuakeWorld extends Net_GameServerQuery_Norma
 {
     public function process($query_type, $data)
     {
-
-    
+        return $data;
     }
 
 }
