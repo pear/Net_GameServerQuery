@@ -1,142 +1,93 @@
 <games>
 	<game key="aarmy">
 		<name>America's Army: Operations</name>
-		<ports>
-			<query>1717</query>
-		</port>
+		<queryport>1717</queryport>
 		<protocol>gamespy</protocol>
 	</game>
 	<game key="avp2">
 		<name>Alien vs Predator 2</name>
-		<ports>
-			<query>27888</query>
-		</ports>
+		<queryport>27888</queryport>
 		<protocol>gamespy</protocol>
 	</game>
 	<game key="bf1942">
 		<name>Battlefield 1942</name>
-		<ports>
-			<query>23000</query>
-		</ports>
+		<queryport>23000</queryport>
 		<protocol>gamespy</protocol>
 	</game>
 	<game key="callofduty">
 		<name>Call of Duty</name>
-		<ports>
-			<query>28960</query>
-		</ports>
+		<queryport>28960</queryport>
 		<protocol>quake3</protocol>
 	</game>
 	<game key="freelancer">
 		<name>Freelancer</name>
-		<ports>
-			<query>2302</query>
-		</ports>
+		<queryport>2302</queryport>
 		<protocol>freelancer</protocol>
-	</game>
-	<game key="ghostrecon">
-		<name>Ghost Recon</name>
-		<ports>
-			<query></query>
-		</ports>
-		<protocol>ghostrecon</protocol>
 	</game>
 	<game key="halflife">
 		<name>HalfLife</name>
-		<ports>
-			<query>27015</query>
-		</ports>
+		<queryport>27015</queryport>
+		<gameport>27015</gameport>
 		<protocol>halflife</protocol>
 	</game>
 	<game key="moh">
 		<name>Medal of Honor</name>
-		<ports>
-			<query>12300</query>
-		</ports>
+		<queryport>12300</queryport>
 		<protocol>gamespy</protocol>
 	</game>
 	<game key="nwn">
 		<name>Neverwinter Nights</name>
-		<ports>
-			<query>5121</query>
-		</ports>
+		<queryport>5121</queryport>
 		<protocol>gamespy</protocol>
 	</game>
 	<game key="quakeworld">
 		<name>QuakeWorld</name>
-		<ports>
-			<query>27500</query>
-		</ports>
+		<queryport>27500</queryport>
 		<protocol>quakeworld</protocol>
 	</game>
 	<game key="quake2">
 		<name>Quake 2</name>
-		<ports>
-			<query>27910</query>
-		</ports>
+		<queryport>27910</queryport>
 		<protocol>quakeworld</protocol>
 	</game>
 	<game key="quake3">
 		<name>Quake 3 Arena</name>
-		<ports>
-			<query>27960</query>
-		</ports>
+		<queryport>27960</queryport>
 		<protocol>quake3</protocol>
-	</game>
-	<game key="ravenshield">
-		<name>Raven Shield</name>
-		<ports>
-			<query></query>
-		</ports>
-		<protocol>ravenshield</protocol>
 	</game>
 	<game key="rtcw">
 		<name>Return to Castle Wolfenstein</name>
-		<ports>
-			<query>27960</query>
-		</ports>
+		<queryport>27960</queryport>
 		<protocol>quake3</protocol>
 	</game>
 	<game key="savage">
 		<name>Savage: The Battle For Newerth</name>
-		<ports>
-			<query>11235</query>
-		</ports>
+		<queryport>11235</queryport>
 		<protocol>savage</protocol>
 	</game>
 	<game key="sof">
 		<name>Soldier of Fortune</name>
-		<ports>
-			<query>28910</query>
-		</ports>
+		<queryport>28910</queryport>
 		<protocol>quake3</protocol>
 	</game>
 	<game key="sof2">
 		<name>Soldier of Fortune 2: Double Helix</name>
-		<ports>
-			<query>20100</query>
-		</ports>
+		<queryport>20100</queryport>
 		<protocol>quake3</protocol>
 	</game>
 	<game key="ut2003">
 		<name>Unreal Tournament 2003</name>
-		<ports>
-			<query>7778</query>
-		</ports>
+		<queryport>7778</queryport>
 		<protocol>ut2003</protocol>
 	</game>
 	<game key="ut2004">
 		<name>Unreal Tournament 2004</name>
-		<ports>
-			<query>7778</query>
-		</ports>
+		<queryport>7778</queryport>
 		<protocol>ut2003</protocol>
 	</game>
 	<game key="vietcong">
 		<name>Vietcong</name>
-		<ports>
-			<query>15425</query>
-		</ports>
+		<queryport>15425</queryport>
 		<protocol>gamespy</protocol>
 	</game>
 </games>
