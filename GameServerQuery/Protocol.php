@@ -49,47 +49,44 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * Server response
      *
      * @var        string
-     * @access     private
+     * @access     protected
      */
-    private $_response;
+    protected $_response;
     
     
     /**
      * Results from last regular expression match
      *
      * @var        array
-     * @access     private
+     * @access     protected
      */
-    private $_result;
+    protected $_result;
     
     
     /**
      * Formatted server response
      *
      * @var        array
-     * @access     private
+     * @access     protected
      */
-    private $_output;    
+    protected $_output;    
  
     /**
      * Packets to send to server
      *
      * @var        array
-     * @access     private
+     * @access     protected
      */
-    private $_packets;
+    protected $_packets;
 
 
     /**
      * Used to map abstract packets to those used by the specific protocol
      *
      * @var        array
-     * @access     private
+     * @access     protected
      */
-    private $_map;
-
-
-
+    protected $_map;
     
     
     /**
@@ -101,6 +98,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      */
     public function processResponse($packetname, $response)
     {
+        //echo $packetname . ' => ' . $response . "<br/>\n";
         // Clear previous output
         $this->_output = array();
         
@@ -109,9 +107,33 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         
         // Check if packet type exists, process packet
         if (isset($this->_packets[$packetname])) {
-            return $this->_{$packetname}();
+            $function = '_' . $packetname;
+            return $this->{$function}();
         }
         else {
+            return false;
+        }
+    }
+
+
+    /**
+     * Translate abstract packet to one or more actual packets
+     *
+     * @access     public
+     * @param      string    $packet   Abstract packet
+     * @return     array     Packet and packet name
+     */
+    public function getPacket($packet)
+    {
+        // Map packets to those used by the protocol
+        if (isset($this->_map[$packet])) {
+            
+            $name = $this->_map[$packet];
+            $result['packetname'] = $name;
+            $result['packet']     = $this->_packets[$name];
+            return $result;
+
+        } else {
             return false;
         }
     }
@@ -124,7 +146,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * @param      string    $expr       Regular expression
      * @return     bool      True if expression was matched, false otherwise
      */
-    private function _match($expr)
+    protected function _match($expr)
     {
         // Clear any previous matches
         $this->_result = array();
@@ -133,15 +155,17 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
         $expr = sprintf("/^%s/", $expr);
 
         // Match pattern
-        if (preg_match($expr, $this->_response, $this->_result) !== false) {
-
-            // Remove pattern from response
-            $this->_response = substr($this->_response, strlen($this->_result[0]));
-
-            return true;
+        if (preg_match($expr, $this->_response, $this->_result) == false) {
+            return false;
         }
         else {
-            return false;
+
+            // Remove pattern from response
+            if (!empty($this->_result[0])) {
+                $this->_response = substr($this->_response, strlen($this->_result[0]));
+            }
+
+            return true;
         }
     }
     
@@ -153,7 +177,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * @param      string    $name     Variable name
      * @param      string    $value    Variable value
      */
-    private function _setVar($name, $value)
+    protected function _addVar($name, $value)
     {
         // Existing variable
         if (isset($this->_output[$name])) {
