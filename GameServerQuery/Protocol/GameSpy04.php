@@ -100,44 +100,13 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     protected function _players()
     {
         // Header
-        if (!$this->_match("\\x00NGSQ")) {
+        if (!$this->_getHeader()) {
             return false;
-        }
-        // Number of players
-        if (!$this->_match("\\x00(.)")) {
-            return false;
-        }
-        $player_count = $this->_convert->toInt($this->_result[1], 8);
-        $this->_addVar('playercount', $player_count);
-     
-        // Get variable names
-        $variables = array();
-        
-        while (true) {
-            if (!$this->_match("([^\\x00]+)\\x00")) {
-                return false;
-            }
-            
-            // Save variable name
-            array_push($variables, $this->_result[1]);
-
-            // Check for second \x00
-            if ($this->_match("\\x00")) {
-                break;
-            }
-            
         }
 
         // Get values
-        $var_count = count($variables);
-        
-        for ($i = 0; $i !== $player_count; $i++) {
-            for ($j = 0; $j !== $var_count; $j++) {
-                if (!$this->_match("([^\\x00]+)\\x00")) {
-                    return false;
-                }
-                $this->_addVar($variables[$j], $this->_result[1]);
-            }
+        if (!$this->_getValues('player')) {
+            return false;
         }
 
         // Get team info (same packet)
@@ -157,21 +126,58 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
     protected function _team($from_players = false)
     {
         // Header
-        if (!$from_players && !$this->_match("\\x00NGSQ")) {
+        if (!$from_players && !$this->_getHeader()) {
             return false;
         }
 
-        // Number of teams
+        // Get values
+        if (!$this->_getValues('team')) {
+            return false;
+        }
+        
+    }
+
+    /**
+     * Checks header
+     *
+     * @access     private
+     * @return     bool      True if matched, false if not
+     */
+    private function _getHeader()
+    {
+        if ($this->_match("\\x00NGSQ")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    /**
+     * Gets variables according to a specific pattern
+     *
+     * @access     private
+     * @param      string    $type     Variable type
+     * @return     bool      True on success, false on pattern match failure
+     */
+    private function _getValues($type)
+    {
+        // Get number of sets
         if (!$this->_match("\\x00(.)")) {
             return false;
         }
-        $team_count = $this->_convert->toInt($this->_result[1], 8);
-        $this->_addVar('teamcount', $team_count);
-     
+        
+        // Convert byte to integer
+        $count = $this->_convert->toInt($this->_result[1], 8);
+        
+        // Add count to output
+        $this->_addVar($type . 'count', $team_count);
+        
         // Get variable names
         $variables = array();
         
         while (true) {
+
             if (!$this->_match("([^\\x00]+)\\x00")) {
                 return false;
             }
@@ -179,26 +185,34 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             // Save variable name
             array_push($variables, $this->_result[1]);
 
-            // Check for second \x00
+            // Variable name sequence is ended with a second \x00
             if ($this->_match("\\x00")) {
                 break;
             }
             
         }
 
-        // Get values
+        // Get variable values
         $var_count = count($variables);
         
-        for ($i = 0; $i !== $team_count; $i++) {
+        // Loop through sets
+        for ($i = 0; $i !== $count; $i++) {
+            
+            // Get values for each set
             for ($j = 0; $j !== $var_count; $j++) {
+                
                 if (!$this->_match("([^\\x00]+)\\x00")) {
                     return false;
                 }
-                $this->_addVar($variables[$j], $this->_result[1]);
-            }
-        }
 
-        return $this->_output;
+                // Add variables to output
+                $this->_addVar($variables[$j], $this->_result[1]);
+
+            }
+
+        }
+        
+        return true;
         
     }
 
