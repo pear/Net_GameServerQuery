@@ -19,35 +19,37 @@
 // $Id$
 
 
-// Packet settings
+/**
+ * Define packets for each protocol
+ */
+$packets['Doom3']['players']        = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['rules']          = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['status']         = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
 
-$packets['Doom3']['players']        = array('getInfo', "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
-$packets['Doom3']['rules']          = array('getInfo', "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
-$packets['Doom3']['status']         = array('getInfo', "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['FarCry']['players']       = array('players',      "\x7f\xff\xff\xffplayers");
+$packets['FarCry']['rules']         = array('rules',        "\x7f\xff\xff\xffrules");
+$packets['FarCry']['status']        = array('status',       "\x7f\xff\xff\xffstatus");
 
-$packets['FarCry']['players']       = array('players', "\x7f\xff\xff\xffplayers");
-$packets['FarCry']['rules']         = array('rules',   "\x7f\xff\xff\xffrules");
-$packets['FarCry']['status']        = array('status',  "\x7f\xff\xff\xffstatus");
+$packets['GameSpy']['players']      = array('players',      "\\players\\");
+$packets['GameSpy']['rules']        = array('status',       "\\status\\");
+$packets['GameSpy']['status']       = array('status',       "\\status\\");
 
-$packets['GameSpy']['players']      = array('players', "\\players\\");
-$packets['GameSpy']['rules']        = array('status',  "\\status\\");
-$packets['GameSpy']['status']       = array('status',  "\\status\\");
+$packets['GameSpy04']['players']    = array('players',      "\xFE\xFD\x00NGSQ\x00\xFF\xFF");
+$packets['GameSpy04']['rules']      = array('status',       "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+$packets['GameSpy04']['status']     = array('status',       "\xFE\xFD\x00NGSQ\xFF\x00\x00");
 
-$packets['GameSpy04']['players']    = array('players', "\xFE\xFD\x00NGSQ\x00\xFF\xFF");
-$packets['GameSpy04']['rules']      = array('status',  "\xFE\xFD\x00NGSQ\xFF\x00\x00");
-$packets['GameSpy04']['status']     = array('status',  "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+$packets['HalfLife']['players']     = array('players',      "\xFF\xFF\xFF\xFFplayers");
+$packets['HalfLife']['rules']       = array('rules',        "\xFF\xFF\xFF\xFFrules");
+$packets['HalfLife']['status']      = array('infostring',   "\xFF\xFF\xFF\xFFinfostring");
 
-$packets['HalfLife']['players']     = array('players',    "\xFF\xFF\xFF\xFFplayers");
-$packets['HalfLife']['rules']       = array('rules',      "\xFF\xFF\xFF\xFFrules");
-$packets['HalfLife']['status']      = array('infostring', "\xFF\xFF\xFF\xFFinfostring");
-
-$packets['Unreal2']['players']      = array('players', "\x78\x00\x00\x00\x02");
-$packets['Unreal2']['rules']        = array('rules',   "\x78\x00\x00\x00\x01");
-$packets['Unreal2']['status']       = array('status',  "\x78\x00\x00\x00\x00");
+$packets['Unreal2']['players']      = array('players',      "\x78\x00\x00\x00\x02");
+$packets['Unreal2']['rules']        = array('rules',        "\x78\x00\x00\x00\x01");
+$packets['Unreal2']['status']       = array('status',       "\x78\x00\x00\x00\x00");
 
 
-// Game settings
-
+/**
+ * Define games and associated protocols
+ */
 $games['aa']['name']                = 'America\'s Army: Operations';
 $games['aa']['protocol']            = 'GameSpy';
 $games['aa']['queryport']           = '1717';
