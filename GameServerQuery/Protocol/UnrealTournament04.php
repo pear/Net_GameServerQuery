@@ -31,149 +31,120 @@ class Net_GameServerQuery_Protocol_UnrealTournament04 extends Net_GameServerQuer
 {
 
     /**
-     * Details packet
-     *
-     * @access    private
-     * @return    array      Array containing formatted server response
-     */
-    private function _details()
-    {
-        // Header
-        if (!$this->_match("\xFF\xFF\xFF\xFF\x6d")) {
-            return false;
-        }
-        
-        // Body regular expression
-        $body = "([^\\x00]+)\\x00([^\\x00]+)\\x00([^\\x00]+)\\x00([^\\x00]+)\\x00"
-              . "([^\\x00]+)\\x00(.)(.)(.)(.)(.)(.)(.)";
-
-        // Body variable names
-        $vars = array('serverip', 'servername', 'mapname', 'gamedir',
-                      'gamename', 'playercount', 'playermax', 
-                      'protocolversion', 'servertype', 'serveros',
-                      'serverpassword', 'gamemod'
-        );
-
-        // Match body
-        if ($this->_match($body)) {
-            
-            // Process and save variables
-            for ($i = 0, $x = count($vars); $i != $x; $i++) {
-                switch ($i) {
-                    case  5:
-                    case  6:
-                    case  7:
-                    case 10:
-                    case 11:
-                        $this->_result[$i+1] = $this->_convert->toInt($this->_result[$i+1]);
-                    default:
-                        $this->_addVar($vars[$i], $this->_result[$i+1]);
-                        break;
-                }
-            }
-            
-        }
-        
-
-    }
-    
-
-    /**
-     * Infostring packet
-     *
-     * @access     protected
-     * @return     array     Array containing formatted server response
-     */
-    protected function _infostring()
-    {
-        // Header
-        if (!$this->_match("\xFF\xFF\xFF\xFFinfostringresponse\\x00")) {
-            return false;
-        }
-
-        // Variable / value pairs
-        while ($this->_match("\\\\([^\\\\]*)\\\\([^\\x00\\\\]*)")) {
-            $this->_addVar($this->_result[1], $this->_result[2]);
-        }
-
-        // Terminating character
-        if (!$this->_match("\\x00")) {
-            return false;
-        }
-
-        return $this->_output;
-    }
-    
-
-    /**
-     * Ping packet
-     *
-     * @access     protected
-     * @return     array     Array containing formatted server response
-     */
-    protected function _ping()
-    {
-        if ($this->_match("\xFF\xFF\xFF\xFF\x6a")) {
-            return $this->_output;
-        } else {
-            return false;
-        }
-    }
-
-
-    /**
      * Players packet
      *
-     * @access     protected
-     * @return     array     Array containing formatted server response
+     * @access  protected
+     * @return  array      Array containing formatted server response
      */
     protected function _players()
     {
-        // Header
-        if ($this->_match("\xFF\xFF\xFF\xFF\x44(.)")) {
-            $this->_addVar('playercount', $this->_convert->toInt($this->_result[1]));
-        } else {
+        // Packet id
+        if (!$this->_match("\x02")) {
             return false;
         }
 
         // Players
-        while ($this->_match("(.)([^\\x00]+)\\x00(.{4})(.{4})")) {
-            $this->_addVar('playerid',    $this->_convert->toInt($this->_result[1]));
-            $this->_addVar('playername',  $this->_result[2]);
-            $this->_addVar('playerscore', $this->_convert->toInt($this->_result[3], 32));
-            $this->_addVar('playertime',  $this->_convert->toFloat($this->_result[4]));
+        while ($this->_match("(.{4})(.)")) {
+
+            // Player id
+            $this->_addVar('playerid', $this->_convert->toInt($this->_result[1], 32));
+            
+            // Get player name length and create expression
+            $name_length = $this->_convert->toInt($this->_result[2]) - 1;
+            $expr = sprintf("(.{%d})\\x00(.{4})(.{4})(.{4})", $name_length);
+            
+            // Match expression
+            if (!$this->_match($expr)) {
+                return false;
+            }
+
+            $this->_addVar('playername',  $this->_result[1]);
+            $this->_addVar('playerping',  $this->_convert->toInt($this->_result[2], 32));
+            $this->_addVar('playerscore', $this->_convert->toInt($this->_result[2], 32));
+            $this->_addVar('playerteam',  $this->_convert->toInt($this->_result[2], 32));            
         }
 
         return $this->_output;
-        
     }
 
 
     /**
      * Rules packet
      *
-     * @access     protected
-     * @return     array     Array containing formatted server response
+     * @access  protected
+     * @return  array      Array containing formatted server response
      */
     protected function _rules()
     {
-        // Remove the header of the possible second packet
-        $this->_response = preg_replace("/\xfe\xFF\xFF\xFF.{5}/", '', $this->_response);
-
-        // Get header, rulecount
-        if ($this->_match("\xFF\xFF\xFF\xFF\x45(.{2})")) {
-            $this->_addVar('rulecount', $this->_convert->toInt($this->_result[1], 16));
-        } else {
+        // Packet id
+        if (!$this->_match("\x01")) {
             return false;
         }
 
-        // Variable / value pairs
-        while ($this->_match("([^\\x00]*)\\x00([^\\x00]*)\\x00")) {
-            $this->_addVar($this->_result[1], $this->_result[2]);
+        while ($this->_match(".")) {
+
+            $expr = sprintf("(.{%d})\\x00(.)", ($this->_convert->toInt($this->_result[0]) - 1));
+            
+            if ($this->_match($expr)) {
+                $name = $this->_result[1];
+                $expr = sprintf("(.{%d})\\x00", ($this->_convert->toInt($this->_result[2]) - 1));
+                if ($this->_match($expr)) {
+                    $this->_addVar($name, $this->_result[1]);
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+            
+        }
+    }
+    
+
+    /**
+     * Status packet
+     *
+     * @access  protected
+     * @return  array      Array containing formatted server response
+     */
+    protected function _status()
+    {
+        if (!$this->_match("\\x00(.{4})\\x00(.{4})(.{4})([^\\x00]+)\\x00(.)")) {
+            return false;
         }
 
+        $this->_addVar('gameport',  $this->_convert->toInt($this->_result[2], 32));
+        $this->_addVar('queryport', $this->_convert->toInt($this->_result[3], 32));
+        $this->_addVar('hostname',  $this->_result[4]);
+
+        $expr = sprintf("(.{%d})(.)", ($this->_convert->toInt($this->_result[5]) - 1));
+        if (!$this->_match($expr)) {
+            return false;
+        }
+
+        $this->_addVar('map', $this->_result[1]);
+
+        $expr = sprintf("(.{%d})(.{4})(.{4})", ($this->_convert->toInt($this->_result[2]) - 1));
+        if (!$this->_match($expr)) {
+            return false;
+        }
+
+        $this->_addVar('gametype',   $this->_result[1]);
+        $this->_addVar('players',    $this->_convert->toInt($this->_result[2], 32));
+        $this->_addVar('maxplayers', $this->_convert->toInt($this->_result[3], 32));
+
         return $this->_output;
+
     }
+
+
+    /**
+     * Rules packet
+     */ 
+    
+
      
 }
 
