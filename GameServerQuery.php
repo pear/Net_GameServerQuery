@@ -24,6 +24,7 @@ define('NET_GAMESERVERQUERY_BASE', dirname(__FILE__) . '/GameServerQuery/');
 require_once NET_GAMESERVERQUERY_BASE . 'Config.php';
 require_once NET_GAMESERVERQUERY_BASE . 'Communicate.php';
 require_once NET_GAMESERVERQUERY_BASE . 'Process.php';
+require_once NET_GAMESERVERQUERY_BASE . 'Error.php';
 
 
 /**
@@ -214,7 +215,7 @@ class Net_GameServerQuery
         $timeout = $this->getOption('timeout') * 1000;
 
         // Communicate with the servers
-        // We now have an array of unprocessed server data
+        // Contains an array of unprocessed server data
         $results = $this->_communicate->query($this->_socketlist, $timeout);
 
         // Finish the array for the process class
@@ -258,7 +259,7 @@ class Net_GameServerQuery
                 $flag !== 'players' &&
                 $flag !== 'rules') {
 
-                throw new Exception ('Invalid Query Flag');
+                throw new InvalidFlagException;
             }
         }
 
