@@ -14,13 +14,11 @@ class Net_GameServerQuery_Socket
     /**
      * Do the whole lot
      */
-    public function go ($servers, $timeout)
+    public function batchquery($servers, $timeout)
     {
-        $this->_servers = $servers;
-
-		$this->open($this->_servers);
-		$result = $this->listen($timeout);
-		$this->close();
+		list($sockets, $sockets_list) = $this->open($servers);
+		$result = $this->listen($sockets, $sockets_list, $timeout);
+		$this->close($sockets);
 
         return $result;
     }
@@ -29,15 +27,15 @@ class Net_GameServerQuery_Socket
 	/**
      * Open
      */
-	public function open ($servers)
+	public function open($servers)
 	{
-        $sockets = array ();
-        $sockets_list = array ();
+        $sockets = array();
+        $sockets_list = array();
 
         foreach ($servers as $key => $server)
         {
             // Open each socket
-            $ip = "udp://" . $server['ip']; 
+            $ip = "udp://" . $server['ip'];
 			$socket = @fsockopen($ip, $server['port'], $errno, $errstr, 1);
 			if ($socket !== false)
 			{
@@ -53,45 +51,42 @@ class Net_GameServerQuery_Socket
 			}
         }
 
-		$this->_sockets = $sockets;
-		$this->_sockets_list = $sockets_list;
-
-		return true;
+        return array($sockets, $sockets_list);
 	}
 
 
 	/**
 	 * Write
 	 */
-	public function write ($socket, $packet)
+	public function write($socket, $packet)
 	{
-		fwrite($socket, $packet);
+		return fwrite($socket, $packet);
 	}
 
 
 	/**
 	 * Listen
 	 */
-	public function listen ($timeout)
+	public function listen($sockets, $sockets_list, $timeout)
 	{
-		// Listen to sockets
-		$result = array ();
+		$result = array();
 		$starttime = microtime(true);
-		$r = $this->_sockets;
-    
+		$r = $sockets;
+
         // If we have no sockets don't bother
-        if (empty($this->_sockets)) {
-            return array ();
+        if (empty($sockets)) {
+            return array();
         }
 
-		while (stream_select($r, $w = null,	$e = null, 0, $timeout - ((microtime(true) - $starttime) * 1000000)) !== 0)  
+		// Listen to sockets
+		while (stream_select($r, $w = null,	$e = null, 0, $timeout - ((microtime(true) - $starttime) * 1000000)) !== 0)
 		{
 			foreach ($r as $socket) {
 				$response = fread($socket, 2048);
-				$result[$this->_sockets_list[$socket]][] = $response;
+				$result[$sockets_list[$socket]][] = $response;
 			}
 			
-			$r = $this->_sockets;
+			$r = $sockets;
 		}
 
 		return $result;
@@ -101,9 +96,9 @@ class Net_GameServerQuery_Socket
     /**
      * Close
      */
-	public function close ()
+	public function close($sockets)
 	{
-		foreach ($this->_sockets as $socket) {
+		foreach ($sockets as $socket) {
 			fclose($socket);
 		}
 	}

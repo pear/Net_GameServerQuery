@@ -1,24 +1,36 @@
 <?php
-
 /**
  * Get protocol config options
+ *
+ * This needs a more relevant name
+ *
+ * @category        Net
+ * @package         Net_GameServerQuery_Config
+ * @author			Aidan Lister <aidan@php.net>
+ * @version			$Revision$
  */
 class Net_GameServerQuery_Config
 {
 	/**
-	 * A list of all protocol information
+	 * An array of all protocol information
 	 *
 	 * @var			array
 	 */
 	private static $_protocol;
 
 	/**
-	 * A list of all game information
+	 * An array of all game information
 	 *
 	 * @var			array
 	 */
-	private static $_game;    
-    
+	private static $_game;
+
+
+    /**
+     * Constructor
+     *
+     * Load the protocol and games information file
+     */
     public function __construct()
     {
 		// Load the protocol config
@@ -51,13 +63,27 @@ class Net_GameServerQuery_Config
 		return $packet;
 	}
 
+
+    /**
+     * Return protocol used by a certain game
+     *
+     * @return  string  The game used
+     * @param   string  $game   The game
+     */
     public function getprotocol($game)
     {
         return $this->_game[$game];
 
     }
 
-    public function getdefaultport($protocol)
+
+    /**
+     * Return default query port used by a certain game
+     *
+     * @return  string  The default query port used
+     * @param   string  $game   The game
+     */
+    public function getdefaultqueryport($game)
     {
         return $this->_protocol[$protocol]['queryport'];
 
