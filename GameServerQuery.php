@@ -99,17 +99,26 @@ class Net_GameServerQuery
     public function __construct()
     {
         // Set default option values
-        $this->_options = array('normalise' => true, 'showmeta' => true);
+        $this->_options = array(
+            'normalise' => true,
+            'showmeta'  => true,
+            'timeout'   => 100,
+            );
 
         // Load classes
         $this->_gamedata    = new Net_GameServerQuery_GameData;
         $this->_communicate = new Net_GameServerQuery_Communicate;
-        $this->_process     = new Net_GameServerQuery_Process($this->_gamedata);
+        $this->_process     = new Net_GameServerQuery_Process($this->_gamedata, $this->_options);
     }
 
 
     /**
      * Set an option
+     *
+     * Can be one of:
+     * - normalise      Reduces the information returned in status to a standard subset
+     * - showmeta       Shows information not directly returned by protocol (__count etc)
+     * - timeout        Sets length of time to wait for server replies
      *
      * @param    string     $option       The option to set
      * @param    string     $value        The value
@@ -119,6 +128,7 @@ class Net_GameServerQuery
         switch ($option) {
             case 'normalise':
             case 'showmeta':
+            case 'timeout':
                 $this->_options[$option] = $value;
                 break;
             
@@ -138,6 +148,7 @@ class Net_GameServerQuery
         switch ($option) {
             case 'normalise':
             case 'showmeta':
+            case 'timeout':
                 return $this->_options[$option];
                 break;
             
@@ -196,7 +207,7 @@ class Net_GameServerQuery
      * @param     int        $timeout        The timeout in milliseconds
      * @return    array      An array of server information
      */
-    public function execute($timeout = 100)
+    public function execute($timeout = null)
     {
         // Ensure there are servers
         if ($this->_servercount === -1) {
@@ -205,6 +216,7 @@ class Net_GameServerQuery
 
         // Communicate with the servers
         // Contains an array of unprocessed server data
+        $timeout = ($timeout === null) ? $this->getOption('timeout') : $timeout;
         $results = $this->_communicate->query($this->_socketlist, $timeout);
 
         // Finish the array for the process class
@@ -224,15 +236,19 @@ class Net_GameServerQuery
 
         // Put the data back together
         foreach ($this->_socketlist as $key => $server) {
-            $servid                             = $server['serverid'];
-            $flag                               = $server['flag'];
-            $newresults[$servid][$flag]         = $results[$key];
-            $newresults[$servid]['__addr']      = $server['addr'];
-            $newresults[$servid]['__game']      = $server['game'];
-            $newresults[$servid]['__port']      = $server['port'];
-            $newresults[$servid]['__gametitle'] = $this->_gamedata->getGameTitle($server['game']);
+            $serverid = $server['serverid'];
+            $flag     = $server['flag'];
+            if (!isset($newresults[$serverid]['meta'])) {
+                $newresults[$serverid]['meta'] = array(
+                    'game'      => $server['game'],
+                    'addr'      => $server['addr'],
+                    'port'      => $server['port'],
+                    'gametitle' => $this->_gamedata->getGameTitle($server['game'])
+                    );
+            }
+            $newresults[$serverid][$flag] = $results[$key];
         }
-        
+                    
         // Reset all the data arrays for further use
         $this->_reset();
         
