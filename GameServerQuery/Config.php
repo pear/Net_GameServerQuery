@@ -123,10 +123,8 @@ class Net_GameServerQuery_Config
 
     /**
      * Return normal keys
-     *
-     * FIXME
      */
-    public function normal($protocol)
+    public function normal($protocol = 0)
     {
         return $this->_normals[$protocol];
     }

@@ -250,8 +250,8 @@ class Net_GameServerQuery
         // Put the data back together
         foreach ($this->_serverlist as $key => $server) {
             $servid = $server['servid'];
-            $querytype = $server['query'];
-            $newresult[$servid][$querytype] = $results[$key];
+            $flag   = $server['flag'];
+            $newresult[$servid][$flag] = $results[$key];
         }
 
         // Return
@@ -264,12 +264,12 @@ class Net_GameServerQuery
      *
      * @param   string      $query        A pipe delimited list of query flags
      */
-    private function _getQueryFlags($query)
+    private function _getQueryFlags($flags)
     {
-        $queryflags = explode('|', $query);
+        $flags = explode('|', $flags);
 
         // Validate each query
-        foreach ($queryflags as $flag) {
+        foreach ($flags as $flag) {
             if ($flag != 'status' &&
                 $flag != 'players' &&
                 $flag != 'rules') {
@@ -278,30 +278,30 @@ class Net_GameServerQuery
             }
         }
 
-        return $queryflags;
+        return $flags;
     }
 
     
     /**
      * Map data to the master, communication and processing arrays
      *
-     * @param   string      $queryflags   Query flags  
+     * @param   string      $flags   Query flags  
      * @param   string      $protocol     Protocol
      * @param   string      $game         The game
      * @param   string      $addr         The address
      * @param   string      $port         The port
      */
-    private function _mapArray ($queryflags, $protocol, $game, $addr, $port)
+    private function _mapArray ($flags, $protocol, $game, $addr, $port)
     {
         // We loop through each of the query flags
         //   because each flag gets its own socket
-        foreach ($queryflags as $flag) {
+        foreach ($flags as $flag) {
             ++$this->_socketcount;
 
             // Master list
             $this->_serverlist[$this->_socketcount] = array(
                 'servid'    => $this->_counter,
-                'query'     => $flag
+                'flag'      => $flag
             );
 
             // Get packet info
@@ -318,7 +318,7 @@ class Net_GameServerQuery
             $this->_processlist[$this->_socketcount] = array(
                 'protocol'      => $protocol,
                 'game'          => $game,
-                'query'         => $flag,
+                'flag'          => $flag,
                 'packetname'    => $packet_name,
             );
         }

@@ -99,7 +99,7 @@ class Net_GameServerQuery_Process
         $parsed = $this->_protocols[$result['protocol']]->process($result['packetname'], $result['packet']);
 
         // Normalise the response
-        $result = $this->normalise($result['protocol'], $result['packetname'], $parsed);
+        $result = $this->normalise($result['protocol'], $result['flag'], $parsed);
 
         return $result;
     }
@@ -108,12 +108,26 @@ class Net_GameServerQuery_Process
     /**
      * Normalise
      */
-    public function normalise($protocol, $packetname, $data)
-    {    
-        //print_r($this->_config->normal($protocol));
-        return $data;
+    public function normalise($protocol, $flag, $data)
+    {
+        if ($flag != 'status') {
+            return $data;
+        }
+
+        $keys = $this->_config->normal();
+        $normals = $this->_config->normal($protocol);
+
+        for ($i = 0, $ii = count($keys); $i < $ii; $i++) {
+            $ndata[$keys[$i]] = ($normals[$i] === false) ? $normals[$i] : $data[$normals[$i]];
+        }
+
+        return $ndata;
     }
 
 }
+
+//$normals[0]                     = array('hostname', 'numplayers', 'maxplayers', 'password', 'mod', 'ip', 'port');
+//$normals['HalfLife']            = array('hostname', 'players', 'max', 'password', 0, 'address', 'address');
+
 
 ?>
