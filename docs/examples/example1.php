@@ -12,23 +12,18 @@ $bm->start();
 // add servers
 $serv1 = $gsq->addServer('halflife', '202.173.159.7', null, 'players');
 $serv2 = $gsq->addServer('halflife', '202.173.159.8', null, 'status');
-$serv3 = $gsq->addServer('halflife', '203.26.94.152', null, 'rules|status|players');
+$serv3 = $gsq->addServer('halflife', '203.26.94.152', null, 'rules');
 
 // fire up
-$result = $gsq->execute();
+$result = $gsq->execute(45);
 
 // results
 $bm->stop();
-ksort($result);
-foreach ($result as $server => $reply) {
-    echo "Server $server\n";
-    $i = 0;
-    foreach ($reply as $packet) {
-        ++$i;
-        echo "Packet #$i (" . strlen($packet) . " bytes)\n";
-    }
-    echo "\n";
-}
+echo $result[$serv1]['players'];
+echo "\n\n";
+echo $result[$serv2]['status'];
+echo "\n\n";
+echo $result[$serv3]['rules'];
 
 // benchmark
 echo 'Took ... ' . $bm->timems() . 'ms';

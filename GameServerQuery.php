@@ -31,6 +31,8 @@ require_once 'GameServerQuery\Process.php';
  * @package         Net_GameServerQuery
  * @author          Aidan Lister <aidan@php.net>
  * @version         $Revision$
+ * @todo            Validate the game added
+ * @todo            Validate each part of the query type
  */
 class Net_GameServerQuery
 {
@@ -96,11 +98,16 @@ class Net_GameServerQuery
         // Incriment the counter
         ++$this->_counter;
 
+        /*
         // Build the list of packets to be sent
         $querylist = explode('|', $query);
         foreach ($querylist as $query) {
             $querypackets[$query] = $this->_config->packet($game, $query);
         }
+        */
+
+        // Only doing single packets now
+        $packet = $this->_config->packet($game, $query);
 
         // Default port
         if (is_null($port)) {
@@ -113,7 +120,8 @@ class Net_GameServerQuery
                     'game'     => $game,
                     'ip'       => $ip,
                     'port'     => $port,
-                    'query'    => $querypackets,
+                    'query'    => $query,
+                    'packet'   => $packet,
                 );
 
         // Return the counter for identifying the server later
@@ -127,7 +135,7 @@ class Net_GameServerQuery
      * @param     int        $timeout        The timeout in milliseconds
      * @return    array      An array of server information
      */
-    public function execute($timeout = 60)
+    public function execute($timeout = 100)
     {
         // Timeout in millseconds
         $timeout = $timeout * 1000;
