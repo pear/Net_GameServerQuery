@@ -39,12 +39,21 @@ class Net_GameServerQuery_Process_Buffer
     private $_data;
 
     /**
-     * The buffered data
+     * The original data
      *
      * @var        string
      * @access     public
      */
-    private $_buffer;
+    private $_length;
+    
+    
+    /**
+     * Position of pointer
+     *
+     * @var        string
+     * @access     public
+     */
+    private $_index = 0;
 
 
     /**
@@ -54,51 +63,41 @@ class Net_GameServerQuery_Process_Buffer
      */
     public function __construct($data)
     {
-        $this->_data = $this->_buffer = $data;
+        $this->_data   = $data;
+        $this->_length = strlen($data);
     }
 
 
     /**
-     * Retrieve the full data
+     * Return all the data
      *
-     * @return  string|array    The response
+     * @return  string|array    The data
      */
     public function getData()
+    {
+        return $this->_data;
+    }
+    
+
+    /**
+     * Return data currently in the buffer
+     *
+     * @return  string|array    The data currently in the buffer
+     */
+    public function getBuffer()
     {
         return $this->_data;
     }
 
 
     /**
-     * Set the full data
-     *
-     * @param  string|array    The data
-     */
-    public function setData($data)
-    {
-        $this->_data = $data;
-    }
-    
-
-    /**
-     * Retrieve all information from the buffer
-     *
-     * @return  string|array    The response
-     */
-    public function getBuffer()
-    {
-        return $this->_buffer;
-    }
-
-
-    /**
-     * Check if the buffer has data
+     * Check if buffer is empty
      *
      * @return  bool    TRUE if the buffer has data in it, FALSE if not
      */
     public function is_empty()
     {
-        if (strlen($this->_buffer) === 0) {
+        if ($this->_length - $this->_index <= 0) {
             return true;
         }
         
@@ -112,47 +111,11 @@ class Net_GameServerQuery_Process_Buffer
      * @param   int             $length     Length of data to read
      * @return  string          The data read
      */
-    public function read($length = 1, $lookahead = false)
+    public function read($length = 1)
     {
-        // Return whole buffer
-        if ($length === true) {
-            $length = strlen($this->_buffer);
-        }
-
-        // Sanity check
-        if ($length > strlen($this->_buffer)) {
-            return false;
-        }
-
-        // Get the string
-        $string = substr($this->_buffer, 0, $length);
-
-        // Remove from buffer
-        if ($lookahead === false) {
-            $this->_buffer = substr($this->_buffer, $length);
-        }
-
-        return $string;
-    }
-
-
-    /**
-     * Read from buffer until delimiter is reached
-     *
-     * If not found, return everything
-     *
-     * @param   int             $length     Length of data to read
-     * @return  string          The data read
-     */
-    public function readString($delim = "\x0")
-    {
-        $p = strpos($this->_buffer, $delim);
-        if ($p === false) {
-            return $this->read(true);
-        }
-
-        $string = $this->read($p);
-        $this->read();
+        $string = substr($this->_data, $this->_index, $length);
+        $this->_index += $length;
+        
         return $string;
     }
 
@@ -160,17 +123,70 @@ class Net_GameServerQuery_Process_Buffer
     /**
      * Read the last character from the buffer
      *
-     * @param   int             $length     Length of data to read
+     * Unlike the other read functions, this function actually removes
+     * the character from the buffer.
+     *
      * @return  string          The data read
      */
     public function readLast()
     {
-        // Get the last char
-        $string = substr($this->_buffer, -1, 1);
+        $len            = strlen($this->_data);
+        $string         = $this->_data{strlen($this->_data) - 1};
+        $this->_data    = substr($this->_data, 0, $len - 1);
+        $this->_length -= 1;
+        
+        return $string;
+    }
+    
 
-        // Remove from buffer
-        $this->_buffer = substr($this->_buffer, 0, -1);
+    /**
+     * Read from the buffer
+     *
+     * @param   int             $length     Length of data to read
+     * @return  string          The data read
+     */
+    public function readAhead($length = 1)
+    {
+        $string = substr($this->_data, $this->_index, $length);
+        
+        return $string;
+    }
+    
+    
+    /**
+     * Skip forward in the buffer
+     *
+     * @param   int             $length     Length of data to skip
+     * @return  void
+     */
+    public function skip($length = 1)
+    {
+        $this->_index += $length;
+    }
+    
+    
+    /**
+     * Read from buffer until delimiter is reached
+     *
+     * If not found, return everything
+     *
+     * @param   string          $delim      Read until this character is reached
+     * @return  string          The data read
+     */
+    public function readString($delim = "\x00")
+    {
+        // Get position of delimiter
+        $len = strpos($this->_data, $delim, $this->_index);
+        
+        // If it is not found then return whole buffer
+        if ($len === false) {
+            return $this->read(strlen($this->_data) - $this->_index);
+        }
 
+        // Read the string and remove the delimiter
+        $string = $this->read($len - $this->_index);
+        ++$this->_index;
+       
         return $string;
     }
     
@@ -181,8 +197,9 @@ class Net_GameServerQuery_Process_Buffer
      * @return  int             The data read
      */
     public function readInt32()
-    {
-        return $this->toInt($this->read(4), 32);
+    {     
+        $int = unpack('Lint', $this->read(4));
+        return $int['int'];
     }
 
 
@@ -193,7 +210,8 @@ class Net_GameServerQuery_Process_Buffer
      */
     public function readInt16()
     {
-        return $this->toInt($this->read(2), 16);
+        $int = unpack('Sint', $this->read(2));
+        return $int['int'];
     }
 
 
@@ -204,7 +222,7 @@ class Net_GameServerQuery_Process_Buffer
      */
     public function readInt8()
     {
-        return $this->toInt($this->read(1), 8);
+        return ord($this->read(1));
     }
 
 
@@ -215,7 +233,8 @@ class Net_GameServerQuery_Process_Buffer
      */
     public function readFloat32()
     {
-        return $this->toFloat($this->read(4));
+        $float = unpack('ffloat', $this->read(4));
+        return $float['float'];
     }
 
 
