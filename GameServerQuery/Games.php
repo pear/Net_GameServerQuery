@@ -198,49 +198,49 @@ $games['painkiller']['name']        = 'Pain Killer';
 $games['painkiller']['protocol']    = 'GameSpy04';
 $games['painkiller']['queryport']   = '3455';
 
-$games['qw']['name']                = 'QuakeWorld';
-$games['qw']['protocol']            = 'qw';
-$games['qw']['queryport']           = '27500';
+$games['quakeworld']['name']        = 'QuakeWorld';
+$games['quakeworld']['protocol']    = 'qw';
+$games['quakeworld']['queryport'    = '27500';
 
-$games['q2']['name']                = 'Quake 2';
-$games['q2']['protocol']            = 'q3';
-$games['q2']['queryport']           = '27910';
+$games['quake2']['name']            = 'Quake 2';
+$games['quake2']['protocol']        = 'q3';
+$games['quake2']['queryport']       = '27910';
 
-$games['q3']['name']                = 'Quake 3 Arena';
-$games['q3']['protocol']            = 'q3';
-$games['q3']['queryport']           = '27960';
+$games['quake3']['name']            = 'Quake 3 Arena';
+$games['quake3']['protocol']        = 'q3';
+$games['quake3']['queryport']       = '27960';
 
-$games['rf']['name']                = 'Red Faction';
-$games['rf']['protocol']            = 'rf';
-$games['rf']['queryport']           = '7755';
+$games['redfaction']['name']        = 'Red Faction';
+$games['redfaction']['protocol']    = 'rf';
+$games['redfaction']['queryport']   = '7755';
 
-$games['ron']['name']               = 'Rise of nations';
-$games['ron']['protocol']           = 'GameSpy';
-$games['ron']['queryport']          = '6501';
+$games['riseofn']['name']           = 'Rise of nations';
+$games['riseofn']['protocol']       = 'GameSpy';
+$games['riseofn']['queryport']      = '6501';
 
-$games['r6']['name']                = 'Rainbow Six';
-$games['r6']['protocol']            = 'GameSpy';
-$games['r6']['queryport']           = '2346';
+$games['rainbow6']['name']          = 'Rainbow Six';
+$games['rainbow6']['protocol']      = 'GameSpy';
+$games['rainbow6']['queryport']     = '2346';
 
 $games['rtcw']['name']              = 'Return to Castle Wolfenstein';
 $games['rtcw']['protocol']          = 'q3';
 $games['rtcw']['queryport']         = '27960';
 
-$games['rs']['name']                = 'Rogue Spear';
-$games['rs']['protocol']            = 'spy1';
-$games['rs']['queryport']           = '2346';
+$games['roguespear']['name']        = 'Rogue Spear';
+$games['roguespear']['protocol']    = 'spy1';
+$games['roguespear']['queryport']   = '2346';
 
 $games['rune']['name']              = 'Rune';
 $games['rune']['protocol']          = 'GameSpy';
 $games['rune']['queryport']         = '7778';
 
-$games['rvs']['name']               = 'RavenShield';
-$games['rvs']['protocol']           = 'rvs';
-$games['rvs']['queryport']          = '8777';
+$games['ravenshield']['name']       = 'RavenShield';
+$games['ravenshield']['protocol']   = 'rvs';
+$games['ravenshield']['queryport']  = '8777';
 
-$games['sav']['name']               = 'Savage: The Battle For Newerth';
-$games['sav']['protocol']           = 'sav';
-$games['sav']['queryport']          = '11235';
+$games['savage']['name']            = 'Savage: The Battle For Newerth';
+$games['savage']['protocol']        = 'sav';
+$games['savage']['queryport']       = '11235';
 
 $games['shogo']['name']             = 'Shogo: Armored Division';
 $games['shogo']['protocol']         = 'GameSpy';
@@ -254,53 +254,45 @@ $games['sof']['name']               = 'Soldier of Fortune';
 $games['sof']['protocol']           = 'q3';
 $games['sof']['queryport']          = '28910';
 
-$games['GameSpy']['name']           = 'Soldier of Fortune 2: Double Helix';
-$games['GameSpy']['protocol']       = 'q3';
-$games['GameSpy']['queryport']      = '20100';
+$games['sof2']['name']              = 'Soldier of Fortune 2: Double Helix';
+$games['sof2']['protocol']          = 'q3';
+$games['sof2']['queryport']         = '20100';
 
-$games['GameSpy']['name']           = 'Generic Gamespy Server';
-$games['GameSpy']['protocol']       = 'GameSpy';
-$games['GameSpy']['queryport']      = '99999';
+$games['serioussam']['name']        = 'Serious Sam';
+$games['serioussam']['protocol']    = 'GameSpy';
+$games['serioussam']['queryport']   = '25601';
 
-$games['ss']['name']                = 'Serious Sam';
-$games['ss']['protocol']            = 'GameSpy';
-$games['ss']['queryport']           = '25601';
-
-$games['ss2']['name']               = 'Serious Sam: The Second Encounter';
-$games['ss2']['protocol']           = 'GameSpy';
-$games['ss2']['queryport']          = '25601';
+$games['serioussam2']['name']       = 'Serious Sam: The Second Encounter';
+$games['serioussam2']['protocol']   = 'GameSpy';
+$games['serioussam2']['queryport']  = '25601';
 
 $games['starsiege']['name']         = 'Starsiege';
 $games['starsiege']['protocol']     = 'starsiege';
 $games['starsiege']['queryport']    = '29001';
 
-$games['mstarsiege']['name']        = 'Starsiege Master';
-$games['mstarsiege']['protocol']    = 'mstarsiege';
-$games['mstarsiege']['queryport']   = '29000';
+$games['startrekv']['name']         = 'Star Trek Voyager: Elite Force';
+$games['startrekv']['protocol']     = 'q3';
+$games['startrekv']['queryport']    = '27960';
 
-$games['stvef']['name']             = 'Star Trek Voyager: Elite Force';
-$games['stvef']['protocol']         = 'q3';
-$games['stvef']['queryport']        = '27960';
-
-$games['stvef2']['name']            = 'Star Trek Voyager: Elite Force 2';
-$games['stvef2']['protocol']        = 'q3';
-$games['stvef2']['queryport']       = '29253';
+$games['startrekv2']['name']        = 'Star Trek Voyager: Elite Force 2';
+$games['startrekv2']['protocol']    = 'q3';
+$games['startrekv2']['queryport']   = '29253';
 
 $games['tribes']['name']            = 'Starsiege: Tribes';
 $games['tribes']['protocol']        = 'tribes';
 $games['tribes']['queryport']       = '28001';
 
-$games['tops']['name']              = 'Tactical Operations';
-$games['tops']['protocol']          = 'GameSpy';
-$games['tops']['queryport']         = '7778';
+$games['tactops']['name']           = 'Tactical Operations';
+$games['tactops']['protocol']       = 'GameSpy';
+$games['tactops']['queryport']      = '7778';
 
-$games['tf']['name']                = 'Team Factor';
-$games['tf']['protocol']            = 'GameSpy';
-$games['tf']['queryport']           = '57778';
+$games['teamfactor']['name']        = 'Team Factor';
+$games['teamfactor']['protocol']    = 'GameSpy';
+$games['teamfactor']['queryport']   = '57778';
 
-$games['thps']['name']              = 'Tony Hawk\'s Pro Skater 3/4';
-$games['thps']['protocol']          = 'GameSpy';
-$games['thps']['queryport']         = '6500';
+$games['tonyhawkps']['name']        = 'Tony Hawk\'s Pro Skater 3/4';
+$games['tonyhawkps']['protocol']    = 'GameSpy';
+$games['tonyhawkps']['queryport']   = '6500';
 
 $games['tribes2']['name']           = 'Tribes 2';
 $games['tribes2']['protocol']       = 'GameSpy';
@@ -334,8 +326,8 @@ $games['v8']['name']                = 'V8 Supercar Challenge';
 $games['v8']['protocol']            = 'GameSpy';
 $games['v8']['queryport']           = '16700';
 
-$games['vc']['name']                = 'Vietcong';
-$games['vc']['protocol']            = 'GameSpy';
-$games['vc']['queryport']           = '15425';
+$games['vietcong']['name']          = 'Vietcong';
+$games['vietcong']['protocol']      = 'GameSpy';
+$games['vietcong']['queryport']     = '15425';
 
 ?>
