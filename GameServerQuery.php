@@ -152,20 +152,18 @@ class Net_GameServerQuery
             );
 
             // Data sent to communications class
-            list ($packetname, $packet) = $object->getpacket($query);
-            echo $packetname, $packet;
-            var_dump($object->getpacket($query));
+            $packet_info = $object->getpacket($query);
             $this->_commlist[$this->_socketcount] = array(
                 'ip'            => $ip,
                 'port'          => $port,
-                'packet'        => $packet
+                'packet'        => $packet_info['packet']
             );
 
             // Data sent the processing class
             $this->_processlist[$this->_socketcount] = array(
                 'game'          => $game,
                 'query'         => $query,
-                'packetname'    => $packetname,
+                'packetname'    => $packet_info['packetname'],
                 'object'        => $object
             );
         }

@@ -85,9 +85,9 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         // Map packets to those used by the protocol
         if (isset($this->_map[$packet])) {
             $name = $this->_map[$packet];
-            $packet['packetname'] = $name;
-            $packet['packet']     = $this->_packets[$name];
-            return $packet;
+            $rpacket['packetname'] = $name;
+            $rpacket['packet']     = $this->_packets[$name];
+            return $rpacket;
         } else {
             return false;
         }
