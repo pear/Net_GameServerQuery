@@ -36,7 +36,7 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
      * @return    array      Array containing formatted server response
      */
     protected function _getinfo()
-    {    
+    {
         // Header
         if (!$this->_match("\xff\xffinfoResponse")) {
             return false;
@@ -45,7 +45,7 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
         // Probably a (protocol) version number
         if ($this->_match(".{5}(.).(.)\\x00")) {
             $version  = $this->_convert->toInt($this->_result[1], 8) . '.';
-            $version .= $this->_convert->toInt($this->_result[2], 8);           
+            $version .= $this->_convert->toInt($this->_result[2], 8);
         }
         else {
             return false;
@@ -63,10 +63,10 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
 
         // Players (ping and score in here somehwere)
         while ($this->_match("(.)(..)(.)(.)(..)([^\\x00]+)\\x00")) {
-            
+
             $this->_addVar('id', $this->_convert->toInt($this->_result[1], 8));
             $this->_addVar('ping', $this->_convert->toInt($this->_result[2], 16));
-            
+
             // teams, either \x80\x3e or \x50\xc3
             switch ($this->_result[3]) {
                 case "\x80":
@@ -83,7 +83,7 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
             }
             $this->_addVar('team', $team);
 
-            // Player name            
+            // Player name
             $this->_addVar('name', $this->_result[6]);
         }
 

@@ -48,7 +48,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         }
 
         return $this->_output;
-        
+
     }
 
 
@@ -72,9 +72,9 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
 
         // Get team info (same packet)
         $this->_team(true);
-        
+
         return $this->_output;
-        
+
     }
 
     /**
@@ -95,7 +95,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         if (!$this->_getValues('team')) {
             return false;
         }
-        
+
     }
 
     /**
@@ -113,7 +113,7 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             return false;
         }
     }
-    
+
     /**
      * Gets variables according to a specific pattern
      *
@@ -127,22 +127,22 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
         if (!$this->_match("\\x00(.)")) {
             return false;
         }
-        
+
         // Convert byte to integer
         $count = $this->_convert->toInt($this->_result[1], 8);
-        
+
         // Add count to output
         $this->_addVar($type . 'count', $count);
-        
+
         // Get variable names
         $variables = array();
-        
+
         while (true) {
 
             if (!$this->_match("([^\\x00]+)\\x00")) {
                 return false;
             }
-            
+
             // Save variable name
             array_push($variables, $this->_result[1]);
 
@@ -150,18 +150,18 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             if ($this->_match("\\x00")) {
                 break;
             }
-            
+
         }
 
         // Get variable values
         $var_count = count($variables);
-        
+
         // Loop through sets
         for ($i = 0; $i !== $count; $i++) {
-            
+
             // Get values for each set
             for ($j = 0; $j !== $var_count; $j++) {
-                
+
                 if (!$this->_match("([^\\x00]+)\\x00")) {
                     return false;
                 }
@@ -172,9 +172,9 @@ class Net_GameServerQuery_Protocol_GameSpy04 extends Net_GameServerQuery_Protoco
             }
 
         }
-        
+
         return true;
-        
+
     }
 
 }

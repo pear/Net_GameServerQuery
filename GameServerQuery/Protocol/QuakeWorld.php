@@ -44,16 +44,16 @@ class Net_GameServerQuery_Protocol_QuakeWorld extends Net_GameServerQuery_Protoc
         return $this->_output;
 
     }
-    
+
     protected function _players ()
     {
-       
+
 
     }
 
     protected function _rules ()
     {
-       
+
 
     }
 }

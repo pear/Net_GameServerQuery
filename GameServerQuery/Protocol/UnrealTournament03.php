@@ -48,11 +48,11 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
 
             // Player id
             $this->_addVar('playerid', $this->_convert->toInt($this->_result[1], 32));
-            
+
             // Get player name length and create expression
             $name_length = $this->_convert->toInt($this->_result[2]) - 1;
             $expr = sprintf("(.{%d})\\x00(.{4})(.{4})(.{4})", $name_length);
-            
+
             // Match expression
             if (!$this->_match($expr)) {
                 return false;
@@ -61,7 +61,7 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
             $this->_addVar('playername',  $this->_result[1]);
             $this->_addVar('playerping',  $this->_convert->toInt($this->_result[2], 32));
             $this->_addVar('playerscore', $this->_convert->toInt($this->_result[2], 32));
-            $this->_addVar('playerteam',  $this->_convert->toInt($this->_result[2], 32));            
+            $this->_addVar('playerteam',  $this->_convert->toInt($this->_result[2], 32));
         }
 
         return $this->_output;
@@ -86,7 +86,7 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
 
             // Create expression using result of previous match to set the string length
             $expr = sprintf("(.{%d})\\x00(.)", ($this->_convert->toInt($this->_result[0]) - 1));
-            
+
             // Get variable name
             if ($this->_match($expr)) {
                 $name = $this->_result[1];
@@ -105,10 +105,10 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
             else {
                 return false;
             }
-            
+
         }
     }
-    
+
 
     /**
      * Status packet
@@ -147,6 +147,6 @@ class Net_GameServerQuery_Protocol_UnrealTournament03 extends Net_GameServerQuer
 
         return $this->_output;
 
-    }    
+    }
 }
 ?>

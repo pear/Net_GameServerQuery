@@ -35,7 +35,7 @@ class Net_GameServerQuery_Communicate
      * This runs open, write, listen and close sequentially
      *
      * @param       array   $servers    An array of server data
-     * @param       int     $timeout    A timeout in milliseconds  
+     * @param       int     $timeout    A timeout in milliseconds
      * @return      array   An array of results
      */
     public function query($servers, $timeout)
@@ -54,7 +54,7 @@ class Net_GameServerQuery_Communicate
 
         // Concat
         $result = $this->concat($result);
-        
+
         return $result;
     }
 
@@ -62,7 +62,7 @@ class Net_GameServerQuery_Communicate
     /**
      * Open the sockets
      *
-     * @param       array       $servers     An array of server data  
+     * @param       array       $servers     An array of server data
      * @return      array       An array of sockets and an array of corresponding keys
      */
     public function open($servers)
@@ -139,7 +139,7 @@ class Net_GameServerQuery_Communicate
 
         // Listen to sockets for any activity
         while (stream_select($r, $w = null, $e = null, 0,
-            $timeout - ((microtime(true) - $starttime) * 1000000)) !== 0) 
+            $timeout - ((microtime(true) - $starttime) * 1000000)) !== 0)
         {
             // Make sure we don't repeat too many times
             if (++$loops > $maxloops) {
@@ -152,7 +152,7 @@ class Net_GameServerQuery_Communicate
                 $key = $sockets_list[(int) $socket];
                 $result[$key][] = $response;
             }
-            
+
             // Reset the listening array
             $r = $sockets;
         }
@@ -189,7 +189,7 @@ class Net_GameServerQuery_Communicate
         {
             // Check if we got multiple packets back from the server
             if (count($packet) > 1) {
-                
+
                 // We need to sort the array with the biggest packet first
                 usort($packet, array($this, '_sortbylength'));
             }
@@ -203,13 +203,13 @@ class Net_GameServerQuery_Communicate
 
     /**
      * Sorts a packet list by length
-     * 
+     *
      * @param       string      $a        Compare 1
      * @param       string      $b        Compare 2
      * @return      int         -1, 0 or 1
      */
     private function _sortbylength($a, $b)
-    {    
+    {
         if ($a == $b) {
             return 0;
         }

@@ -168,7 +168,7 @@ class Net_GameServerQuery
         // Validate each query
         foreach ($querylist as $query) {
             if ($query != 'status' &&
-                $query != 'players' && 
+                $query != 'players' &&
                 $query != 'rules') {
 
                 throw new Exception ('Invalid Query');
@@ -178,7 +178,7 @@ class Net_GameServerQuery
         // Map arrays
         foreach ($querylist as $query) {
             ++$this->_socketcount;
-            
+
             // Master list
             $this->_serverlist[$this->_socketcount] = array(
                 'servid'    => $this->_counter,

@@ -42,21 +42,21 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
         if (!$this->_match("\xFF\xFF\xFF\xFF\x6d")) {
             return false;
         }
-        
+
         // Body regular expression
         $body = "([^\\x00+)\\x00([^\\x00+)\\x00([^\\x00+)\\x00([^\\x00+)\\x00"
               . "([^\\x00+)\\x00(.)(.)(.)(.)(.)(.)(.)";
 
         // Body variable names
         $vars = array('serverip', 'servername', 'mapname', 'gamedir',
-                      'gamename', 'playercount', 'playermax', 
+                      'gamename', 'playercount', 'playermax',
                       'protocolversion', 'servertype', 'serveros',
                       'serverpassword', 'gamemod'
         );
 
         // Match body
         if ($this->_match($body)) {
-            
+
             // Process and save variables
             for ($i = 0, $x = count($vars); $i != $x; $i++) {
                 switch ($i) {
@@ -71,12 +71,12 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
                         break;
                 }
             }
-            
+
         }
-        
+
 
     }
-    
+
 
     /**
      * Infostring packet
@@ -103,7 +103,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 
         return $this->_output;
     }
-    
+
 
     /**
      * Ping packet
@@ -144,7 +144,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
             $this->_addVar('playertime',  $this->_convert->toFloat($this->_result[4]));
         }
 
-        return $this->_output;   
+        return $this->_output;
     }
 
 
@@ -173,7 +173,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
 
         return $this->_output;
     }
-     
+
 }
 
 ?>

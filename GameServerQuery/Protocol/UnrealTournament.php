@@ -30,7 +30,7 @@
 class Net_GameServerQuery_Protocol_FIXME extends Net_GameServerQuery_Protocol
 {
 
-     
+
 }
 
 ?>

@@ -58,8 +58,8 @@ class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protoc
 
             if (!$this->_match($expr)) {
                 return false;
-            }  
-            
+            }
+
             $this->_addVar('playername',   $this->_result[1]);
             $this->_addVar('playerping',   $this->_convert->toInt($this->_result[2], 32));
             $this->_addVar('playerscore',  $this->_convert->toInt($this->_result[3], 32));
@@ -68,7 +68,7 @@ class Net_GameServerQuery_Protocol_Unreal2XMP extends Net_GameServerQuery_Protoc
             // Get player properties
             $properties_number = $this->_convert->toInt($this->_result[5]));
             for ($i = 0; $i != $properties_number; $i++) {
-                
+
                 // Get property name length
                 if (!$this->_match(".")) {
                     return false;

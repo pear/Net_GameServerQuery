@@ -26,19 +26,19 @@ class Net_GameServerQuery_Normalise_Doom3 extends Net_GameServerQuery_Normalise
         // Players
         $vars = array('id', 'name', 'team', 'ping');
         $players = array();
-        
+
         foreach($vars as $var) {
 
             if (isset($data[$var])) {
-            
+
                 $value = $data[$var];
                 unset($data[$var]);
-            
+
                 if (is_array($value)) {
                     for ($i = 0, $x = count($value); $i !== $x; $i++) {
                         $players[$i][$var] = $value[$i];
                     }
-                
+
                 }
                 else {
                     $players[0][$var] = $value;

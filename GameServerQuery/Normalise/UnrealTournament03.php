@@ -36,7 +36,7 @@ class Net_GameServerQuery_Normalise_UnrealTournament03 extends Net_GameServerQue
                 if (empty($data['playerid'])) {
                     return false;
                 }
-                
+
                 $normal = array();
                 foreach ($data['playerid'] as $key => $value) {
                     $normal[] = array (
@@ -46,7 +46,7 @@ class Net_GameServerQuery_Normalise_UnrealTournament03 extends Net_GameServerQue
                     );
                 }
                 break;
-          
+
             case 'rules':
                 unset($data['rowcount']);
                 ksort($data);

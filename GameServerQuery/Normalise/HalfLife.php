@@ -36,7 +36,7 @@ class Net_GameServerQuery_Normalise_HalfLife extends Net_GameServerQuery_Normali
                 if (empty($data['playerid'])) {
                     return false;
                 }
-                
+
                 $normal = array();
                 foreach ($data['playerid'] as $key => $value) {
                     $normal[] = array (
@@ -47,7 +47,7 @@ class Net_GameServerQuery_Normalise_HalfLife extends Net_GameServerQuery_Normali
                 }
 
                 break;
-          
+
             case 'rules':
                 unset($data['rowcount']);
                 ksort($data);

@@ -50,8 +50,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * @access     protected
      */
     protected $_response;
-    
-    
+
     /**
      * Results from last regular expression match
      *
@@ -59,17 +58,15 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
      * @access     protected
      */
     protected $_result;
-    
-    
+
     /**
      * Formatted server response
      *
      * @var        array
      * @access     protected
      */
-    protected $_output;   
-    
-    
+    protected $_output;
+
     /**
      * Hold an instance of the conversion class
      *
@@ -79,12 +76,16 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     protected $_convert;
 
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         // Initialize conversion class
         $this->_convert = new Net_GameServerQuery_Convert;
     }
-    
+
+
     /**
      * Process server response according to packet type
      *
@@ -96,10 +97,10 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     {
         // Clear previous output
         $this->_output = array();
-        
+
         // Get packet data
         $this->_response = $response;
-        
+
         // Process packet
         $function = '_' . $packetname;
         return $this->{$function}();
@@ -117,7 +118,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     {
         // Clear any previous matches
         $this->_result = array();
-        
+
         // Format regular expression
         $expr = sprintf("/^%s/s", $expr);
 
@@ -135,7 +136,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
 
         return $status;
     }
-    
+
 
     /**
      * Adds variable to output
@@ -148,7 +149,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
     {
         // Existing variable
         if (isset($this->_output[$name])) {
-            
+
             // Variable has one value, put it into an array
             if (!is_array($this->_output[$name])) {
                 $this->_output[$name] = array($this->_output[$name]);
@@ -156,7 +157,7 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
 
             // Add current match to array
             array_push($this->_output[$name], $value);
-            
+
         } else {
             // New variable
             $this->_output[$name] = $value;

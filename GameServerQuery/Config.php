@@ -42,7 +42,7 @@ class Net_GameServerQuery_Config
     /**
      * An array of all packet information
      *
-     * @var        array 
+     * @var        array
      */
      private static $_packets;
 
