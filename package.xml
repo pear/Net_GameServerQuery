@@ -19,7 +19,7 @@
 			<email>ortega@php.net</email>
 			<role>lead</role>
 		</maintainer>
-    </maintainers>
+ </maintainers>
 
 	<release>
 		<version>0.1</version>
@@ -52,6 +52,32 @@ The class now fetches all data from game servers, including rules, status, playe
 Many protocols have been implemented, but still alpha quality.
 ]]>
 		</notes>
+		<deps>
+			<dep type="php" rel="ge" version="5.0.0"/>
+		</deps>
+	</release>
+
+	<release>
+		<version>0.3.0</version>
+		<date>2005-01-25</date>
+		<license>PHP License</license>
+		<state>beta</state>
+		<notes>
+<![CDATA[
+Complete rework of the protocol parsing classes and associated methods.
+Significant useability improvements in the API.
+Massive speed improvements in parsing.
+Added support for protocols:
+- Doom3
+- QuakeWorld
+- Quake3
+- HalfLife
+- HalfLife2
+- GameSpy
+- GameSpy04
+- UnrealEngine2
+]]>
+		</notes>
 
 		<deps>
 			<dep type="php" rel="ge" version="5.0.0"/>
@@ -62,36 +88,37 @@ Many protocols have been implemented, but still alpha quality.
     <file>GameServerQuery.php</file>
 				<dir name="GameServerQuery">
      <file>Communicate.php</file>
-     <file>Config.php</file>
+     <file>Error.php</file>
+     <file>GameData.php</file>
      <file>Games.php</file>
      <file>Process.php</file>
      <file>Protocol.php</file>
-					<dir name="Protocol">
-      <file>Breed.php</file>
+					<dir name="Process">
+      <file>Result.php</file>
+      <file>Buffer.php</file>
+					</dir>
+     <dir name="Protocol">
       <file>Doom3.php</file>
-      <file>FarCry.php</file>
-      <file>Freelancer.php</file>
+      <file>GameSpy.php</file>
       <file>GameSpy04.php</file>
-      <file>GhostRecon.php</file>
       <file>HalfLife.php</file>
-      <file>Hexen2.php</file>
-      <file>HomeWorld2.php</file>
-      <file>JediKnight.php</file>
-      <file>JediKnight2.php</file>
-      <file>MultiTheftAuto.php</file>
-      <file>Quake2.php</file>
+      <file>HalfLife2.php</file>
+      <file>Quake3.php</file>
       <file>QuakeWorld.php</file>
-      <file>RavenShield.php</file>
-      <file>RedFaction.php</file>
-      <file>Savage.php</file>
-      <file>Starsiege.php</file>
-      <file>Tribes.php</file>
-      <file>Unreal2XMP.php</file>
-      <file>UnrealTournament.php</file>
-      <file>UnrealTournament03.php</file>
+      <file>UnrealEngine2.php</file>
 					</dir>
 				</dir>
 			</dir>
+   <dir name="docs/examples" role="doc">
+    <file>example1.php</file>
+    <file>example2.php</file>
+    <file>example3.php</file>
+    <file>example4.php</file>
+    <file>example4.tpl.php</file>
+    <file>example5.php</file>
+    <file>example5.tpl.php</file>
+    <file>examplepackets.php</file>
+   </dir>
 		</filelist>
 	</release>
 
