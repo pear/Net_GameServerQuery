@@ -163,7 +163,67 @@ class Net_GameServerQuery
         endswitch;
     }
 
+    
+    /**
+     * document me
+     *
+     *
+     */
+    private function _getQueryList($query)
+    {
+        $querylist = explode('|', $query);
 
+        // Validate each query
+        foreach ($querylist as $query) {
+            if ($query != 'status' &&
+                $query != 'players' &&
+                $query != 'rules') {
+
+                throw new Exception ('Invalid Query');
+            }
+        }
+
+        return $querylist;
+    }
+
+    
+    /**
+     *
+     *
+     *
+     */
+    private function _mapArray ($querylist, $protocol, $game, $addr, $port)
+    {
+        foreach ($querylist as $query) {
+            ++$this->_socketcount;
+
+            // Master list
+            $this->_serverlist[$this->_socketcount] = array(
+                'servid'    => $this->_counter,
+                'query'     => $query
+            );
+
+            // Get packet info
+            list($packet_name, $packet) = $this->_config->getPacket($protocol, $query);
+
+            // Data sent to communications class
+            $this->_commlist[$this->_socketcount] = array(
+                'addr'          => $addr,
+                'port'          => $port,
+                'packet'        => $packet
+            );
+
+            // Data sent the processing class
+            $this->_processlist[$this->_socketcount] = array(
+                'protocol'      => $protocol,
+                'game'          => $game,
+                'query'         => $query,
+                'packetname'    => $packet_name,
+            );
+        }
+    }
+
+    
     /**
      * Add a server
      *
@@ -193,46 +253,10 @@ class Net_GameServerQuery
         $protocol = $this->_config->protocol($game);
 
         // Get list of queries to be sent
-        $querylist = explode('|', $query);
-
-        // Validate each query
-        foreach ($querylist as $query) {
-            if ($query != 'status' &&
-                $query != 'players' &&
-                $query != 'rules') {
-
-                throw new Exception ('Invalid Query');
-            }
-        }
+        $querylist = $this->_getQueryList($query);
 
         // Map arrays
-        foreach ($querylist as $query) {
-            ++$this->_socketcount;
-
-            // Master list
-            $this->_serverlist[$this->_socketcount] = array(
-                'servid'    => $this->_counter,
-                'query'     => $query
-            );
-
-            // Get packet info
-            list($packet_name, $packet) = $this->_config->getPacket($protocol, $query);
-
-            // Data sent to communications class
-            $this->_commlist[$this->_socketcount] = array(
-                'addr'          => $addr,
-                'port'          => $port,
-                'packet'        => $packet
-            );
-
-            // Data sent the processing class
-            $this->_processlist[$this->_socketcount] = array(
-                'protocol'      => $protocol,
-                'game'          => $game,
-                'query'         => $query,
-                'packetname'    => $packet_name,
-            );
-        }
+        $this->_mapArray($querylist, $protocol, $game, $addr, $port);
 
         // Return the counter for identifying the server later
         return $this->_counter;
