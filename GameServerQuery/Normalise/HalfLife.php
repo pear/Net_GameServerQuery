@@ -45,6 +45,7 @@ class Net_GameServerQuery_Normalise_HalfLife extends Net_GameServerQuery_Normali
                         'time' => (int) $data['playertime'][$key]
                     );
                 }
+
                 break;
           
             case 'rules':

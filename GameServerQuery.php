@@ -120,12 +120,12 @@ class Net_GameServerQuery
      * Add a server
      *
      * @param    string     $game         The type of game
-     * @param    string     $ip           The IP to query
+     * @param    string     $addr         The address to query
      * @param    int        $port         The port to query
      * @param    string     $status       A pipe delimited string of query types
      * @return   int        The number used to identify the server just added
      */
-    public function addServer($game, $ip, $port = null, $query = 'status')
+    public function addServer($game, $addr, $port = null, $query = 'status')
     {
         // Incriment the counter
         ++$this->_counter;
@@ -167,7 +167,7 @@ class Net_GameServerQuery
             // Data sent to communications class
             $packet_info = $protocol_obj->getpacket($query);
             $this->_commlist[$this->_socketcount] = array(
-                'ip'            => $ip,
+                'addr'          => $addr,
                 'port'          => $port,
                 'packet'        => $packet_info['packet']
             );

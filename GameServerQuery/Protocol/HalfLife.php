@@ -170,8 +170,7 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
             $this->_addVar('playertime',  $this->_convert->toFloat($this->_result[4]));
         }
 
-        return $this->_output;
-        
+        return $this->_output;   
     }
 
 
