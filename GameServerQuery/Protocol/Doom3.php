@@ -23,19 +23,20 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 
 
 /**
- * Doom 3 Protocol
+ * Doom3 Protocol
  *
  * @category       Net
  * @package        Net_GameServerQuery
+ * @author         Aidan Lister <aidan@php.net>
  * @author         Tom Buskens <ortega@php.net>
  * @version        $Revision$
  */
 class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
 {
-    /**
-     * GetInfo packet
+    /*
+     * Players
      */
-    protected function status(&$buffer, &$result)
+    protected function players(&$buffer, &$result)
     {
         // Header
         if ($buffer->readInt16() !== 65535) {
@@ -48,39 +49,74 @@ class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
             return false;
         }
 
-        // ?
+        // Unknown
         $buffer->read(4);
 
-        // Var / value pairs, delimited by an empty pair
-        while (true) {
-            
-            $varname = $buffer->readString();
-            if (empty($varname)) {
-                break;
-            }
-            
-            $result->add(
-                $varname,
-                $buffer->readString()
-            );
+        // Skip rules
+        while ($buffer->readString() !== '') {      
+            $buffer->readString();
         }
         
         if ($buffer->read() !== "\x00") {
             return false;
         }
-
-        // Players, delimited by player id 32
+        
+        // Players
         while (($id = $buffer->readInt8()) !== 32) {
             $result->addPlayer('id',   $id);
             $result->addPlayer('ping', $buffer->readInt16());
             $result->addPlayer('rate', $buffer->readInt16());
             $buffer->read(2);
             $result->addPlayer('name', $buffer->readString());
-            
         }
 
         return $result->fetch();
     }
+
+    
+    /*
+     * Status
+     * Rules
+     */
+    protected function getinfo(&$buffer, &$result)
+    {
+        // Header
+        if ($buffer->readInt16() !== 65535) {
+            return false;
+        }
+        if ($buffer->readString() !== 'infoResponse') {
+            return false;
+        }
+        if ($buffer->readInt32() !== 0) {
+            return false;
+        }
+
+        // Unknown
+        $buffer->read(4);
+
+        // Var / value pairs, delimited by an empty pair
+        while (($varname = $buffer->readString()) !== '') {      
+            $result->add($varname, $buffer->readString());
+        }
+        
+        if ($buffer->read() !== "\x00") {
+            return false;
+        }
+        
+        // Get player count
+        $count = 0;
+        while ($buffer->readInt8() !== 32) {
+            ++$count;
+            $buffer->readInt16();
+            $buffer->readInt16();
+            $buffer->read(2);
+            $buffer->readString();
+        }
+        $result->add('si_numplayers', $count);
+
+        return $result->fetch();
+    }
+    
 }
 
 ?>
