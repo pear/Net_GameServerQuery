@@ -159,7 +159,7 @@ $games['bf1942']['title']           = 'Battlefield 1942';
 $games['bf1942']['protocol']        = 'GameSpy';
 $games['bf1942']['queryport']       = '23000';
 
-$games['bfvietnam']['title']        = 'BattleField: Vietnam';
+$games['bfvietnam']['title']        = 'Battlefield: Vietnam';
 $games['bfvietnam']['protocol']     = 'GameSpy04';
 $games['bfvietnam']['queryport']    = '23000';
 
