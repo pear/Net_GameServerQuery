@@ -23,7 +23,7 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 
 
 /**
- * GameSpy04 Protocol
+ * GameSpy Protocol
  *
  * @category       Net
  * @package        Net_GameServerQuery
@@ -33,12 +33,67 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
  */
 class Net_GameServerQuery_Protocol_GameSpy extends Net_GameServerQuery_Protocol
 {
-    /**
+    /*
      * Status packet
+     */
+    protected function info(&$buffer, &$result)
+    {   echo $buffer->getData();
+        if ($buffer->read() !== '\\') {
+            return false;
+        }
+        
+        while (!$buffer->is_empty()) {
+            $key = $buffer->readString('\\');
+            if ($key == 'final') {
+                break;
+            }
+            $result->add($key, $buffer->readString('\\'));
+        }
+        
+        return $result->fetch();
+    }
+    
+    
+    /*
+     * Rules packet
      */
     protected function status(&$buffer, &$result)
     {        
-        return $buffer->getData();
+        if ($buffer->read() !== '\\') {
+            return false;
+        }
+        
+        while (!$buffer->is_empty()) {
+            $key = $buffer->readString('\\');
+            if ($key == 'player_0') {
+                break;
+            }
+            $result->add($key, $buffer->readString('\\'));
+        }
+        
+        return $result->fetch();
+    }
+    
+    
+    /*
+     * Players packet
+     */
+    protected function players(&$buffer, &$result)
+    {        
+        if ($buffer->read() !== '\\') {
+            return false;
+        }
+
+        while (!$buffer->is_empty()) {
+            $key = $buffer->readString('\\');
+            if ($key == 'final') {
+                break;
+            }            
+            list ($key, $id) = explode('_', $key);
+            $result->addPlayer($key, $buffer->readString('\\'));
+        }
+
+        return $result->fetch();
     }
 }
 

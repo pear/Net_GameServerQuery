@@ -32,37 +32,79 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
  */
 class Net_GameServerQuery_Protocol_QuakeWorld extends Net_GameServerQuery_Protocol
 {
-
-    protected function _status ()
+    /*
+     * Rules
+     * Status
+     */
+    protected function status(&$buffer, &$result)
     {
-        // Header
-        if (!$this->_match("\xFF\xFF\xFF\xFFn")) {
-            throw new Exception('Parsing error');
+        if ($buffer->readInt32() !== -1) {
+            return false;
         }
 
-        // Normal variables
-        while ($this->_match('\\([^\\]+)\\([^\\]+)')) {
-            $this->_add($this->_result[1], $this->_result[2]);
-        }
-
-        // Seperator
-        if (!$this->_match("\n")) {
-            throw new Exceptions('Parsing error');
-        }
-
-        // Define player variables
-        $vars = array('id', 'score', 'time', 'ping', 'name', 'skin', 'color_top', 'color_bottom');
+        if ($buffer->read() !== 'n') {
+            return false;
+        }        
         
-        // Parse players
-        while ($this->_match('(-?\d+) (-?\d+) (-?\d+) (-?\d+) \"(.*)\" \"(.*)\" (-?\d+) (-?\d+)')) {
-
-            for ($i = 0; $i !== 8; $i++) {
-                $this->_addPlayer($vars[$i], $this->_result[$i-1]);
+        if ($buffer->read() !== '\\') {
+            return false;
+        }
+        
+        while (!$buffer->is_empty()) {
+            $result->add(
+                $buffer->readString('\\'),
+                $buffer->readStringMulti(array('\\', "\x0a"), $delimfound)
+                );
+                
+            if ($delimfound === "\x0a") {
+                break;
             }
         }
+ 
+        return $result->fetch();
+    }
+    
+    
+    /*
+     * Players
+     */
+    protected function players(&$buffer, &$result)
+    {
+        if ($buffer->readInt32() !== -1) {
+            return false;
+        }
 
-        return $this->_output;
-
+        if ($buffer->read() !== 'n') {
+            return false;
+        }   
+        
+        // Ignore all the rules information
+        $buffer->readString("\x0a");
+        
+        if ($buffer->readLast() !== "\x00") {
+            return false;
+        }
+          
+        while (!$buffer->is_empty()) {
+            $result->addPlayer('id', $buffer->readString("\x20"));
+            $result->addPlayer('score', $buffer->readString("\x20"));
+            $result->addPlayer('time', $buffer->readString("\x20"));
+            $result->addPlayer('ping', $buffer->readString("\x20"));
+            
+            if ($buffer->read() !== '"') { return false; }
+            $result->addPlayer('nick', $buffer->readString('"'));
+            if ($buffer->read() !== "\x20") { return false; }
+            
+            if ($buffer->read() !== '"') { return false; }
+            $result->addPlayer('ipaddr', $buffer->readString('"'));
+            if ($buffer->read() !== "\x20") { return false; }
+            
+            $result->addPlayer('color_top', $buffer->readString("\x20"));
+            $result->addPlayer('color_bottom', $buffer->readString("\x0a"));
+        }
+        
+        return $result->fetch();
     }
 }
+
 ?>
