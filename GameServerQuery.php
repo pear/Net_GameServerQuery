@@ -273,11 +273,16 @@ class Net_GameServerQuery
      * @param     int        $timeout        The timeout in milliseconds
      * @return    array      An array of server information
      */
-    public function execute()
+    public function execute($timeout = null)
     {
         // Check we have something to do
         if ($this->_counter === -1) {
             return false;
+        }
+
+        // Set the timeout
+        if ($timeout !== null) {
+            $this->setOption('timeout', $timeout);
         }
 
         // Timeout in millseconds

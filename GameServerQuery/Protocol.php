@@ -123,7 +123,6 @@ abstract class Net_GameServerQuery_Protocol implements Net_GameServerQuery_Proto
 
         // Replace "\" with "\\"
         $expr = str_replace('\\', '\\\\', $expr);
-
         // Format regular expression
         $expr = sprintf('#^%s#s', $expr);
 
