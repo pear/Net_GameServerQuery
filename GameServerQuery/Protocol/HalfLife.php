@@ -36,26 +36,26 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     /**
      * Status
      */
-    protected function infostring(&$response, &$result)
+    protected function infostring(&$buffer, &$result)
     {
-        if ($response->readInt32() !== -1) {
+        if ($buffer->readInt32() !== -1) {
             return false;
         }
         
-        if ($response->readString() !== 'infostringresponse') {
+        if ($buffer->readString() !== 'infostringresponse') {
             return false;
         }
 
-        if ($response->read() !== '\\') {
+        if ($buffer->read() !== '\\') {
             return false;
         }
 
-        if ($response->readLast() !== "\x0") {
+        if ($buffer->readLast() !== "\x0") {
             return false;
         }
 
-        while ($response->buffer()) {
-            $result->add($response->readString('\\'), $response->readString('\\'));
+        while (!$buffer->is_empty()) {
+            $result->add($buffer->readString('\\'), $buffer->readString('\\'));
         }
 
         return $result->fetch();
@@ -65,23 +65,23 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     /**
      * Players
      */
-    protected function players(&$response, &$result)
+    protected function players(&$buffer, &$result)
     {
-        if ($response->readInt32() !== -1) {
+        if ($buffer->readInt32() !== -1) {
             return false;
         }
 
-        if ($response->read() !== 'D') {
+        if ($buffer->read() !== 'D') {
             return false;
         }
 
-        $result->addMeta('count', $response->readInt8());
+        $result->addMeta('count', $buffer->readInt8());
 
-        while ($response->buffer()) {
-            $result->addPlayer('id',      $response->readInt8());
-            $result->addPlayer('name',    $response->readString());
-            $result->addPlayer('score',   $response->readInt32());
-            $result->addPlayer('time',    $response->readFloat32());
+        while (!$buffer->is_empty()) {
+            $result->addPlayer('id',      $buffer->readInt8());
+            $result->addPlayer('name',    $buffer->readString());
+            $result->addPlayer('score',   $buffer->readInt32());
+            $result->addPlayer('time',    $buffer->readFloat32());
         }
 
         return $result->fetch();
@@ -91,39 +91,44 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     /**
      * Rules
      */
-    protected function rules(&$response, &$result)
+    protected function rules(&$buffer, &$result)
     {
-        // Convert multiple packets into a single response
-        // Extract the packet order from each packet and order by that
-        if (is_array($response->getResponse())) {
-            $r = $response->getResponse();
-            $packets = array();
-            foreach ($r as $packet) {
-                $key = substr(bin2hex($packet{8}), 0, 1);
-                $packet = substr($packet, 9);
-                $packets[$key] = $packet;
-            }
-
-            $r = implode('', $packets);
-            $response->setResponse($r);
-        }
-
-        // Standard parsing
-        if ($response->readInt32() !== -1) {
+        if ($buffer->readInt32() !== -1) {
             return false;
         }
 
-        if ($response->read() !== 'E') {
+        if ($buffer->read() !== 'E') {
             return false;
         }
 
-        $result->addMeta('count', $response->readInt16());
+        $result->addMeta('count', $buffer->readInt16());
 
-        while ($response->buffer()) {
-            $result->add($response->readString(), $response->readString());
+        while (!$buffer->is_empty()) {
+            $result->add($buffer->readString(), $buffer->readString());
         }
 
         return $result->fetch();
+    }
+    
+    
+    /**
+     * Join multiple packets
+     */
+    protected function multipacketjoin($packets)
+    {
+        $result = array();
+        foreach ($packets as $packet) {
+            // Get the low nibble of the 9th bit
+            $key = substr(bin2hex($packet{8}), 0, 1);
+            
+            // Strip whole header
+            $packet = substr($packet, 9);
+            
+            // Order by low nibble
+            $result[$key] = $packet;
+        }
+
+        return implode('', $result);
     }
 
 }
