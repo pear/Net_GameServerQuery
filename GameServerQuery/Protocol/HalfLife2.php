@@ -51,7 +51,7 @@ class Net_GameServerQuery_Protocol_HalfLife2 extends Net_GameServerQuery_Protoco
         $result->add('map',         $buffer->readString());
         $result->add('gamedir',     $buffer->readString());
         $result->add('gamedescrip', $buffer->readString());
-        $result->add('steamappid',  $buffer->readInt32());
+        $result->add('steamappid',  $buffer->readInt16());
         $result->add('numplayers',  $buffer->readInt8());
         $result->add('maxplayers',  $buffer->readInt8());
         $result->add('botcount',    $buffer->readInt8());
