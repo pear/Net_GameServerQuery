@@ -33,64 +33,53 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 class Net_GameServerQuery_Protocol_Doom3 extends Net_GameServerQuery_Protocol
 {
     /**
-     * Details packet
-     *
-     * @access    private
-     * @return    array      Array containing formatted server response
+     * GetInfo packet
      */
-    protected function _getinfo()
+    protected function status(&$buffer, &$result)
     {
         // Header
-        if (!$this->_match("\xff\xffinfoResponse")) {
-            throw new Exception('Parsing error');
+        if ($buffer->readInt16() !== 65535) {
+            return false;
+        }
+        if ($buffer->readString() !== 'infoResponse') {
+            return false;
+        }
+        if ($buffer->readInt32() !== 0) {
+            return false;
         }
 
-        // Probably a (protocol) version number
-        if ($this->_match(".{5}(.).(.)\x00")) {
-            $version  = $this->toInt($this->_result[1], 8) . '.';
-            $version .= $this->toInt($this->_result[2], 8);
-        }
-        else {
-            throw new Exception('Parsing error');
-        }
+        // ?
+        $buffer->read(4);
 
-        // Variable / value pairs
-        while ($this->_match("([^\x00]+)\x00([^\x00]*)\x00")) {
-            $this->_add($this->_result[1], $this->_result[2]);
-        }
-
-        // End marker for variables?
-        if (!$this->_match("\x00\x00")) {
-            throw new Exception('Parsing error');
-        }
-
-        // Players (ping and score in here somehwere)
-        while ($this->_match("(.)(..)(.)(.)(..)([^\x00]+)\x00")) {
-
-            $this->_addPlayer('id', $this->toInt($this->_result[1], 8));
-            $this->_addPlayer('ping', $this->toInt($this->_result[2], 16));
-
-            // teams, either \x80\x3e or \x50\xc3
-            switch ($this->_result[3]) {
-                case "\x80":
-                    $team = 1;
-                    break;
-
-                case "\x50":
-                    $team = 2;
-                    break;
-
-                default:
-                    $team = 'unknown';
-                    break;
+        // Var / value pairs, delimited by an empty pair
+        while (true) {
+            
+            $varname = $buffer->readString();
+            if (empty($varname)) {
+                break;
             }
-            $this->_addPlayer('team', $team);
-
-            // Player name
-            $this->_addPlayer('name', $this->_result[6]);
+            
+            $result->add(
+                $varname,
+                $buffer->readString()
+            );
+        }
+        
+        if ($buffer->read() !== "\x00") {
+            return false;
         }
 
-        return $this->_output;
+        // Players, delimited by player id 32
+        while (($id = $buffer->readInt8()) !== 32) {
+            $result->addPlayer('id',   $id);
+            $result->addPlayer('ping', $buffer->readInt16());
+            $result->addPlayer('rate', $buffer->readInt16());
+            $buffer->read(2);
+            $result->addPlayer('name', $buffer->readString());
+            
+        }
+
+        return $result->fetch();
     }
 }
 
