@@ -21,7 +21,41 @@
 
 class Net_GameServerQuery_Normalise_HalfLife extends Net_GameServerQuery_Normalise
 {
+    public function process($query, $data)
+    {
+        switch ($query) :
+            case 'status':
+                $normal['password'] = $data['password'];
+                $normal['players'] = $data['players'];
+                $normal['maxplayers'] = $data['max'];
+                $normal['hostname'] = $data['hostname'];
+                $normal['map'] = $data['map'];
+                break;
 
+            case 'players':
+                foreach ($data['playerid'] as $key => $value) {
+                    $normal[] = array (
+                        'name' => $data['playername'][$key],
+                        'score' => $data['playerscore'][$key],
+                        'time' => (int) $data['playertime'][$key]
+                    );
+                }
+                break;
+          
+            case 'rules':
+                unset($data['rowcount']);
+                ksort($data);
+                $normal = $data;
+                break;
+
+            case 'ping':
+                $normal = $data;
+                break;
+
+        endswitch;
+
+        return $normal;
+    }
 }
 
 ?>

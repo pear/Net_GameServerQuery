@@ -57,7 +57,7 @@ class Net_GameServerQuery_Process
         $parsed = $result['protocol']->process($result['packetname'], $result['packet']);
 
         // Normalise the response
-        $result = $result['normaliser']->process($result['packetname'], $parsed);
+        $result = $result['normaliser']->process($result['query'], $parsed);
 
         return $result;
     }
