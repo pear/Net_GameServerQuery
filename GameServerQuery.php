@@ -164,19 +164,21 @@ class Net_GameServerQuery
                 'query'     => $query
             );
 
+            // Get packet info
+            list($packet_name, $packet) = $this->_config->getPacket($protocol, $query);
+
             // Data sent to communications class
-            $packet_info = $protocol_obj->getpacket($query);
             $this->_commlist[$this->_socketcount] = array(
                 'addr'          => $addr,
                 'port'          => $port,
-                'packet'        => $packet_info['packet']
+                'packet'        => $packet
             );
 
             // Data sent the processing class
             $this->_processlist[$this->_socketcount] = array(
                 'game'          => $game,
                 'query'         => $query,
-                'packetname'    => $packet_info['packetname'],
+                'packetname'    => $packet_name,
                 'protocol'      => $protocol_obj,
                 'normaliser'    => $normaliser_obj
             );
