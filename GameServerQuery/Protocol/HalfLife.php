@@ -50,10 +50,10 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
             return false;
         }
 
-        if ($buffer->readLast() !== "\x0") {
+        if ($buffer->readLast() !== "\x00") {
             return false;
         }
-
+        
         while (!$buffer->is_empty()) {
             $result->add($buffer->readString('\\'), $buffer->readString('\\'));
         }
@@ -118,6 +118,11 @@ class Net_GameServerQuery_Protocol_HalfLife extends Net_GameServerQuery_Protocol
     {
         $result = array();
         foreach ($packets as $packet) {
+            // Make sure it's a valid packet
+            if (strlen($packet) < 9) {
+                continue;
+            }
+            
             // Get the low nibble of the 9th bit
             $key = substr(bin2hex($packet{8}), 0, 1);
             
