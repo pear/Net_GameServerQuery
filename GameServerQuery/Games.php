@@ -20,69 +20,145 @@
 
 
 /**
- * Define a limited subset of "normalised" data
+ * Define a limited subset of normalised data
  */
-$normals[0]                 = array('hostname', 'numplayers', 'maxplayers', 'password', 'mod', 'ip', 'port');
-$normals['Doom3']           = array();
-$normals['FarCry']          = array();
-$normals['GameSpy']         = array();
-$normals['GameSpy04']       = array();
-$normals['HalfLife']        = array('hostname', 'players', 'max', 'password', 0, 'address', 'address');
-$normals['Unreal2']         = array();
-$normals['QuakeWorld']      = array();
+$normals[0]                     = array('hostname', 'numplayers', 'maxplayers', 'password', 'mod', 'ip', 'port');
+$normals['Breed']               = array();
+$normals['Doom3']               = array();
+$normals['FarCry']              = array();
+$normals['Freelancer']          = array();
+$normals['GameSpy']             = array();
+$normals['GhostRecon']          = array();
+$normals['HalfLife']            = array('hostname', 'players', 'max', 'password', 0, 'address', 'address');
+$normals['Hexen2']              = array();
+$normals['HomeWorld2']          = array();
+$normals['JediKnight']          = array();
+$normals['JediKnight2']         = array();
+$normals['MultiTheftAuto']      = array();
+$normals['QuakeWorld']          = array();
+$normals['Quake2']              = array();
+$normals['Quake3']              = array();
+$normals['RedFaction']          = array();
+$normals['RavenShield']         = array();
+$normals['Savage']              = array();
+$normals['Starsiege']           = array();
+$normals['Tribes']              = array();
+$normals['UnrealTournament03']  = array();
+$normals['Unreal2XMP']          = array();
+
 
 
 /**
  * Define packets for each protocol
  */
-$packets['Doom3']['players']        = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
-$packets['Doom3']['rules']          = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
-$packets['Doom3']['status']         = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Breed']['players']                = array();
+$packets['Breed']['rules']                  = array();
+$packets['Breed']['status']                 = array();
 
-$packets['FarCry']['players']       = array('players',      "\x7F\xFF\xFF\xFFplayers");
-$packets['FarCry']['rules']         = array('rules',        "\x7F\xFF\xFF\xFFrules");
-$packets['FarCry']['status']        = array('status',       "\x7F\xFF\xFF\xFFstatus");
+$packets['Doom3']['players']                = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['rules']                  = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
+$packets['Doom3']['status']                 = array('getInfo',      "\xFF\xFFgetInfo\x00\x00\x00\x00\x00");
 
-$packets['GameSpy']['players']      = array('players',      "\\players\\");
-$packets['GameSpy']['rules']        = array('status',       "\\status\\");
-$packets['GameSpy']['status']       = array('status',       "\\status\\");
+$packets['FarCry']['players']               = array('players',      "\x7F\xFF\xFF\xFFplayers");
+$packets['FarCry']['rules']                 = array('rules',        "\x7F\xFF\xFF\xFFrules");
+$packets['FarCry']['status']                = array('status',       "\x7F\xFF\xFF\xFFstatus");
 
-$packets['GameSpy04']['players']    = array('players',      "\xFE\xFD\x00NGSQ\x00\xFF\xFF");
-$packets['GameSpy04']['rules']      = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
-$packets['GameSpy04']['status']     = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+$packets['Freelancer']['players']           = array();
+$packets['Freelancer']['rules']             = array();
+$packets['Freelancer']['status']            = array();
 
-$packets['HalfLife']['players']     = array('players',      "\xFF\xFF\xFF\xFFplayers");
-$packets['HalfLife']['rules']       = array('rules',        "\xFF\xFF\xFF\xFFrules");
-$packets['HalfLife']['status']      = array('infostring',   "\xFF\xFF\xFF\xFFinfostring");
+$packets['GameSpy']['players']              = array('players',      "\\players\\");
+$packets['GameSpy']['rules']                = array('status',       "\\status\\");
+$packets['GameSpy']['status']               = array('status',       "\\status\\");
 
-$packets['QuakeWorld']['players']   = array('status',       "\xFF\xFF\xFF\xFFstatus");
-$packets['QuakeWorld']['rules']     = array('status',       "\xFF\xFF\xFF\xFFstatus");
-$packets['QuakeWorld']['status']    = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['GameSpy04']['players']            = array('players',      "\xFE\xFD\x00NGSQ\x00\xFF\xFF");
+$packets['GameSpy04']['rules']              = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
+$packets['GameSpy04']['status']             = array('rules',        "\xFE\xFD\x00NGSQ\xFF\x00\x00");
 
-$packets['Quake2']['players']       = array('status',       "\xFF\xFF\xFF\xFFstatus");
-$packets['Quake2']['rules']         = array('status',       "\xFF\xFF\xFF\xFFstatus");
-$packets['Quake2']['status']        = array('info',         "\xFF\xFF\xFF\xFFinfo");
+$packets['GhostRecon']['players']           = array();
+$packets['GhostRecon']['rules']             = array();
+$packets['GhostRecon']['status']            = array();
 
-$packets['Quake3']['players']       = array('status',       "\xFF\xFF\xFF\xFFgetstatus");
-$packets['Quake3']['rules']         = array('status',       "\xFF\xFF\xFF\xFFgetstatus");
-$packets['Quake3']['status']        = array('info',         "\xFF\xFF\xFF\xFFgetinfo");
+$packets['HalfLife']['players']             = array('players',      "\xFF\xFF\xFF\xFFplayers");
+$packets['HalfLife']['rules']               = array('rules',        "\xFF\xFF\xFF\xFFrules");
+$packets['HalfLife']['status']              = array('infostring',   "\xFF\xFF\xFF\xFFinfostring");
 
-$packets['Source']['players']       = array('players',      "\xFF\xFF\xFF\xFFU");
-$packets['Source']['rules']         = array('rules',        "\xFF\xFF\xFF\xFFV");
-$packets['Source']['status']        = array('status',       "\xFF\xFF\xFF\xFFT");
+$packets['Hexen2']['players']               = array();
+$packets['Hexen2']['rules']                 = array();
+$packets['Hexen2']['status']                = array();
 
-$packets['Unreal2']['players']      = array('players',      "\x78\x00\x00\x00\x02");
-$packets['Unreal2']['rules']        = array('rules',        "\x78\x00\x00\x00\x01");
-$packets['Unreal2']['status']       = array('status',       "\x78\x00\x00\x00\x00");
+$packets['HomeWorld2']['players']           = array();
+$packets['HomeWorld2']['rules']             = array();
+$packets['HomeWorld2']['status']            = array();
+
+$packets['JediKnight']['players']           = array();
+$packets['JediKnight']['rules']             = array();
+$packets['JediKnight']['status']            = array();
+
+$packets['JediKnight2']['players']          = array();
+$packets['JediKnight2']['rules']            = array();
+$packets['JediKnight2']['status']           = array();
+
+$packets['MultiTheftAuto']['players']       = array();
+$packets['MultiTheftAuto']['rules']         = array();
+$packets['MultiTheftAuto']['status']        = array();
+
+$packets['QuakeWorld']['players']           = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['QuakeWorld']['rules']             = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['QuakeWorld']['status']            = array('status',       "\xFF\xFF\xFF\xFFstatus");
+
+$packets['Quake2']['players']               = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['Quake2']['rules']                 = array('status',       "\xFF\xFF\xFF\xFFstatus");
+$packets['Quake2']['status']                = array('info',         "\xFF\xFF\xFF\xFFinfo");
+
+$packets['Quake3']['players']               = array('status',       "\xFF\xFF\xFF\xFFgetstatus");
+$packets['Quake3']['rules']                 = array('status',       "\xFF\xFF\xFF\xFFgetstatus");
+$packets['Quake3']['status']                = array('info',         "\xFF\xFF\xFF\xFFgetinfo");
+
+$packets['RedFaction']['players']           = array();
+$packets['RedFaction']['rules']             = array();
+$packets['RedFaction']['status']            = array();
+
+$packets['RavenShield']['players']          = array();
+$packets['RavenShield']['rules']            = array();
+$packets['RavenShield']['status']           = array();
+
+$packets['Savage']['players']               = array();
+$packets['Savage']['rules']                 = array();
+$packets['Savage']['status']                = array();
+
+$packets['Starsiege']['players']            = array();
+$packets['Starsiege']['rules']              = array();
+$packets['Starsiege']['status']             = array();
+
+$packets['Source']['players']               = array('players',      "\xFF\xFF\xFF\xFFU");
+$packets['Source']['rules']                 = array('rules',        "\xFF\xFF\xFF\xFFV");
+$packets['Source']['status']                = array('status',       "\xFF\xFF\xFF\xFFT");
+
+$packets['Tribes']['players']               = array();
+$packets['Tribes']['rules']                 = array();
+$packets['Tribes']['status']                = array();
+
+$packets['UnrealTournament03']['players']   = array();
+$packets['UnrealTournament03']['rules']     = array();
+$packets['UnrealTournament03']['status']    = array();
+
+$packets['Unreal2']['players']              = array('players',      "\x78\x00\x00\x00\x02");
+$packets['Unreal2']['rules']                = array('rules',        "\x78\x00\x00\x00\x01");
+$packets['Unreal2']['status']               = array('status',       "\x78\x00\x00\x00\x00");
+
+$packets['Unreal2XMP']['players']           = array();
+$packets['Unreal2XMP']['rules']             = array();
+$packets['Unreal2XMP']['status']            = array();
 
 
 
 /**
  * Define games and associated protocols
  */
-$games['aa']['name']                = 'America\'s Army: Operations';
-$games['aa']['protocol']            = 'GameSpy';
-$games['aa']['queryport']           = '1717';
+$games['aarmy']['name']             = 'America\'s Army: Operations';
+$games['aarmy']['protocol']         = 'GameSpy';
+$games['aarmy']['queryport']        = '1717';
 
 $games['avp2']['name']              = 'Alien vs Predator 2';
 $games['avp2']['protocol']          = 'GameSpy';
@@ -101,28 +177,28 @@ $games['breed']['protocol']         = 'Breed';
 $games['breed']['queryport']        = '7649';
 
 $games['cod']['name']               = 'Call of Duty';
-$games['cod']['protocol']           = 'mohq3';
+$games['cod']['protocol']           = 'Quake3';
 $games['cod']['queryport']          = '28960';
 
-$games['ccren']['name']             = 'Command & Conquer: Renegade';
-$games['ccren']['protocol']         = 'GameSpy';
-$games['ccren']['queryport']        = '25300';
+$games['ccrene']['name']            = 'Command & Conquer: Renegade';
+$games['ccrene']['protocol']        = 'GameSpy';
+$games['ccrene']['queryport']       = '25300';
 
-$games['cjack']['name']             = 'Contract J.A.C.K.';
-$games['cjack']['protocol']         = 'GameSpy';
-$games['cjack']['queryport']        = '27888';
+$games['contjack']['name']          = 'Contract J.A.C.K.';
+$games['contjack']['protocol']      = 'GameSpy';
+$games['contjack']['queryport']     = '27888';
 
-$games['dai']['name']               = 'Daikatana';
-$games['dai']['protocol']           = 'GameSpy';
-$games['dai']['queryport']          = '27992';
+$games['daikatana']['name']         = 'Daikatana';
+$games['daikatana']['protocol']     = 'GameSpy';
+$games['daikatana']['queryport']    = '27992';
 
-$games['dx']['name']                = 'Deus Ex';
-$games['dx']['protocol']            = 'GameSpy';
-$games['dx']['queryport']           = '7791';
+$games['deusex']['name']            = 'Deus Ex';
+$games['deusex']['protocol']        = 'GameSpy';
+$games['deusex']['queryport']       = '7791';
 
-$games['dev']['name']               = 'Devastation';
-$games['dev']['protocol']           = 'UnrealTournament03';
-$games['dev']['queryport']          = '7778';
+$games['devastat']['name']          = 'Devastation';
+$games['devastat']['protocol']      = 'UnrealTournament03';
+$games['devastat']['queryport']     = '7778';
 
 $games['doom3']['name']             = 'Doom 3';
 $games['doom3']['protocol']         = 'Doom3';
@@ -132,13 +208,13 @@ $games['drakan']['name']            = 'Drakan: Order of the Flame';
 $games['drakan']['protocol']        = 'GameSpy';
 $games['drakan']['queryport']       = '27046';
 
-$games['fc']['name']                = 'FarCry';
-$games['fc']['protocol']            = 'fc';
-$games['fc']['queryport']           = '49001';
+$games['farcry']['name']            = 'FarCry';
+$games['farcry']['protocol']        = 'FarCry';
+$games['farcry']['queryport']       = '49001';
 
-$games['fl']['name']                = 'Freelancer';
-$games['fl']['protocol']            = 'fl';
-$games['fl']['queryport']           = '2302';
+$games['freelanc']['name']          = 'Freelancer';
+$games['freelanc']['protocol']      = 'Freelancer';
+$games['freelanc']['queryport']     = '2302';
 
 $games['giants']['name']            = 'Giants: Citizen Kabuto';
 $games['giants']['protocol']        = 'GameSpy';
@@ -152,9 +228,9 @@ $games['gore']['name']              = 'Gore';
 $games['gore']['protocol']          = 'GameSpy';
 $games['gore']['queryport']         = '27778';
 
-$games['gr']['name']                = 'Ghost Recon';
-$games['gr']['protocol']            = 'gr';
-$games['gr']['queryport']           = '2348';
+$games['ghostrec']['name']          = 'Ghost Recon';
+$games['ghostrec']['protocol']      = 'GhostRecon';
+$games['ghostrec']['queryport']     = '2348';
 
 $games['halo']['name']              = 'Halo: Combat Evolved';
 $games['halo']['protocol']          = 'GameSpy';
@@ -164,36 +240,36 @@ $games['halflife']['name']          = 'Half-Life';
 $games['halflife']['protocol']      = 'HalfLife';
 $games['halflife']['queryport']     = '27015';
 
-$games['hw2']['name']               = 'Homeworld 2';
-$games['hw2']['protocol']           = 'hw2';
-$games['hw2']['queryport']          = '6500';
+$games['homeworld2']['name']        = 'Homeworld 2';
+$games['homeworld2']['protocol']    = 'HomeWorld2';
+$games['homeworld2']['queryport']   = '6500';
 
-$games['hx2']['name']               = 'Hexen 2';
-$games['hx2']['protocol']           = 'hx2';
-$games['hx2']['queryport']          = '26900';
+$games['hexen2']['name']            = 'Hexen 2';
+$games['hexen2']['protocol']        = 'Hexen2';
+$games['hexen2']['queryport']       = '26900';
 
 $games['igi2']['name']              = 'IGI 2';
 $games['igi2']['protocol']          = 'GameSpy';
 $games['igi2']['queryport']         = '26001';
 
-$games['jk2']['name']               = 'Jedi Knight 2: Jedi Outcast';
-$games['jk2']['protocol']           = '';
-$games['jk2']['queryport']          = '28070';
+$games['jediknight2']['name']       = 'Jedi Knight 2: Jedi Outcast';
+$games['jediknight2']['protocol']   = 'JediKnight2';
+$games['jediknight2']['queryport']  = '28070';
 
-$games['jkja']['name']              = 'Jedi Knight: Jedi Academy';
-$games['jkja']['protocol']          = 'q3';
-$games['jkja']['queryport']         = '29070';
+$games['jediknight']['name']        = 'Jedi Knight: Jedi Academy';
+$games['jediknight']['protocol']    = 'JediKnight';
+$games['jediknight']['queryport']   = '29070';
 
-$games['kp']['name']                = 'Kingpin: Life of Crime';
-$games['kp']['protocol']            = 'q3';
-$games['kp']['queryport']           = '31510';
+$games['kingpin']['name']           = 'Kingpin: Life of Crime';
+$games['kingpin']['protocol']       = 'Quake3';
+$games['kingpin']['queryport']      = '31510';
 
 $games['mohaa']['name']             = 'Medal of Honor';
-$games['mohaa']['protocol']         = 'q3';
+$games['mohaa']['protocol']         = 'Quake3';
 $games['mohaa']['queryport']        = '12300';
 
 $games['mta']['name']               = 'Multi Theft Auto: Vice City';
-$games['mta']['protocol']           = 'mta';
+$games['mta']['protocol']           = 'MultiTheftAuto';
 $games['mta']['queryport']          = '2126';
 
 $games['nightfire']['name']         = 'James Bond: Nightfire';
@@ -216,13 +292,13 @@ $games['nolf2']['name']             = 'No One Lives Forever 2';
 $games['nolf2']['protocol']         = 'GameSpy';
 $games['nolf2']['queryport']        = '27890';
 
-$games['of']['name']                = 'Operation Flashpoint';
-$games['of']['protocol']            = 'GameSpy';
-$games['of']['queryport']           = '6073';
+$games['opflash']['name']           = 'Operation Flashpoint';
+$games['opflash']['protocol']       = 'GameSpy';
+$games['opflash']['queryport']      = '6073';
 
-$games['p2']['name']                = 'Postal 2';
-$games['p2']['protocol']            = 'GameSpy';
-$games['p2']['queryport']           = '7778';
+$games['postal2']['name']           = 'Postal 2';
+$games['postal2']['protocol']       = 'GameSpy';
+$games['postal2']['queryport']      = '7778';
 
 $games['painkiller']['name']        = 'Pain Killer';
 $games['painkiller']['protocol']    = 'GameSpy04';
@@ -233,31 +309,31 @@ $games['quakeworld']['protocol']    = 'QuakeWorld';
 $games['quakeworld']['queryport']   = '27500';
 
 $games['quake2']['name']            = 'Quake 2';
-$games['quake2']['protocol']        = 'q3';
+$games['quake2']['protocol']        = 'Quake2';
 $games['quake2']['queryport']       = '27910';
 
 $games['quake3']['name']            = 'Quake 3 Arena';
-$games['quake3']['protocol']        = 'q3';
+$games['quake3']['protocol']        = 'Quake3';
 $games['quake3']['queryport']       = '27960';
 
 $games['redfaction']['name']        = 'Red Faction';
-$games['redfaction']['protocol']    = 'rf';
+$games['redfaction']['protocol']    = 'RedFaction';
 $games['redfaction']['queryport']   = '7755';
 
-$games['riseofn']['name']           = 'Rise of nations';
-$games['riseofn']['protocol']       = 'GameSpy';
-$games['riseofn']['queryport']      = '6501';
+$games['riseofnat']['name']         = 'Rise of nations';
+$games['riseofnat']['protocol']     = 'GameSpy';
+$games['riseofnat']['queryport']    = '6501';
 
 $games['rainbow6']['name']          = 'Rainbow Six';
 $games['rainbow6']['protocol']      = 'GameSpy';
 $games['rainbow6']['queryport']     = '2346';
 
 $games['rtcw']['name']              = 'Return to Castle Wolfenstein';
-$games['rtcw']['protocol']          = 'q3';
+$games['rtcw']['protocol']          = 'Quake3';
 $games['rtcw']['queryport']         = '27960';
 
 $games['roguespear']['name']        = 'Rogue Spear';
-$games['roguespear']['protocol']    = 'spy1';
+$games['roguespear']['protocol']    = 'GameSpy';
 $games['roguespear']['queryport']   = '2346';
 
 $games['rune']['name']              = 'Rune';
@@ -265,11 +341,11 @@ $games['rune']['protocol']          = 'GameSpy';
 $games['rune']['queryport']         = '7778';
 
 $games['ravenshield']['name']       = 'RavenShield';
-$games['ravenshield']['protocol']   = 'rvs';
+$games['ravenshield']['protocol']   = 'RavenShield';
 $games['ravenshield']['queryport']  = '8777';
 
 $games['savage']['name']            = 'Savage: The Battle For Newerth';
-$games['savage']['protocol']        = 'sav';
+$games['savage']['protocol']        = 'Savage';
 $games['savage']['queryport']       = '11235';
 
 $games['shogo']['name']             = 'Shogo: Armored Division';
@@ -277,15 +353,15 @@ $games['shogo']['protocol']         = 'GameSpy';
 $games['shogo']['queryport']        = '27888';
 
 $games['sin']['name']               = 'SIN';
-$games['sin']['protocol']           = 'q3';
+$games['sin']['protocol']           = 'Quake3';
 $games['sin']['queryport']          = '22450';
 
 $games['sof']['name']               = 'Soldier of Fortune';
-$games['sof']['protocol']           = 'q3';
+$games['sof']['protocol']           = 'Quake3';
 $games['sof']['queryport']          = '28910';
 
 $games['sof2']['name']              = 'Soldier of Fortune 2: Double Helix';
-$games['sof2']['protocol']          = 'q3';
+$games['sof2']['protocol']          = 'Quake3';
 $games['sof2']['queryport']         = '20100';
 
 $games['serioussam']['name']        = 'Serious Sam';
@@ -297,19 +373,19 @@ $games['serioussam2']['protocol']   = 'GameSpy';
 $games['serioussam2']['queryport']  = '25601';
 
 $games['starsiege']['name']         = 'Starsiege';
-$games['starsiege']['protocol']     = 'starsiege';
+$games['starsiege']['protocol']     = 'Starsiege';
 $games['starsiege']['queryport']    = '29001';
 
 $games['startrekv']['name']         = 'Star Trek Voyager: Elite Force';
-$games['startrekv']['protocol']     = 'q3';
+$games['startrekv']['protocol']     = 'Quake3';
 $games['startrekv']['queryport']    = '27960';
 
 $games['startrekv2']['name']        = 'Star Trek Voyager: Elite Force 2';
-$games['startrekv2']['protocol']    = 'q3';
+$games['startrekv2']['protocol']    = 'Quake3';
 $games['startrekv2']['queryport']   = '29253';
 
 $games['tribes']['name']            = 'Starsiege: Tribes';
-$games['tribes']['protocol']        = 'tribes';
+$games['tribes']['protocol']        = 'Tribes';
 $games['tribes']['queryport']       = '28001';
 
 $games['tactops']['name']           = 'Tactical Operations';
@@ -320,9 +396,9 @@ $games['teamfactor']['name']        = 'Team Factor';
 $games['teamfactor']['protocol']    = 'GameSpy';
 $games['teamfactor']['queryport']   = '57778';
 
-$games['tonyhawkps']['name']        = 'Tony Hawk\'s Pro Skater 3/4';
-$games['tonyhawkps']['protocol']    = 'GameSpy';
-$games['tonyhawkps']['queryport']   = '6500';
+$games['tonyhawk']['name']          = 'Tony Hawk\'s Pro Skater 3/4';
+$games['tonyhawk']['protocol']      = 'GameSpy';
+$games['tonyhawk']['queryport']     = '6500';
 
 $games['tribes2']['name']           = 'Tribes 2';
 $games['tribes2']['protocol']       = 'GameSpy';
