@@ -39,7 +39,7 @@ class Net_GameServerQuery
      *
      * @var         int
      */
-    private $_counter;
+    private $_servercount;
 
     /**
      * Hold the counter per socket
@@ -70,25 +70,13 @@ class Net_GameServerQuery
     private $_process;
 
     /**
-     * A list of the servers added
+     * A list of the socket data,
+     * there can be multiple sockets per server
      *
      * @var         object
      */
-    private $_serverlist;
+    private $_socketlist;
 
-    /**
-     * The data sent to the communication class
-     *
-     * @var         object
-     */
-    private $_commlist;
-
-    /**
-     * The data sent to the processing class
-     *
-     * @var         object
-     */
-    private $_processlist;
 
     /**
      * Hold an array of runtime options
@@ -105,19 +93,17 @@ class Net_GameServerQuery
      */
     public function __construct()
     {
-        // Initialise counter
-        $this->_counter = -1;
+        // Initialise counters
+        $this->_servercount = -1;
         $this->_socketcount = -1;
+
+        // Set default option values
         $this->_options = array('timeout' => 300);
 
-        // Load the config class
-        $this->_config = new Net_GameServerQuery_Config;
-
-        // Load the communicate class
+        // Load classes
+        $this->_config      = new Net_GameServerQuery_Config;
         $this->_communicate = new Net_GameServerQuery_Communicate;
-
-        // Load the processing class
-        $this->_process = new Net_GameServerQuery_Process ($this->_config);
+        $this->_process     = new Net_GameServerQuery_Process ($this->_config);
     }
 
 
@@ -176,30 +162,30 @@ class Net_GameServerQuery
     public function addServer($game, $addr, $port = null, $query = 'status')
     {
         // Check if it's a valid game
-        if (false === $this->_config->validgame($game)) {
+        if ($this->_config->validgame($game) === false) {
             throw new Exception ('Invalid Game');
             return false;
         }
 
-        // Incriment the counter
-        ++$this->_counter;
+        // Increment the counter
+        ++$this->_servercount;
 
         // Find default port
-        if ($port === null) {
-            $port = $this->_config->queryport($game);
+        if (is_null($port)) {
+            $port = $this->_config->getPort($game);
         }
 
         // Find the protocol
-        $protocol = $this->_config->protocol($game);
+        $protocol = $this->_config->getProtocol($game);
 
         // Get list of queries to be sent
         $querylist = $this->_getQueryFlags($query);
 
-        // Map arrays
-        $this->_mapArray($querylist, $protocol, $game, $addr, $port);
+        // Create a list of socket data
+        $this->_buildSocketList($querylist, $protocol, $game, $addr, $port);
 
         // Return the counter for identifying the server later
-        return $this->_counter;
+        return $this->_servercount;
     }
 
 
@@ -216,12 +202,12 @@ class Net_GameServerQuery
     public function execute($timeout = null)
     {
         // Check we have something to do
-        if ($this->_counter === -1) {
+        if ($this->_servercount === -1) {
             return false;
         }
 
         // Set the timeout
-        if ($timeout !== null) {
+        if (!is_null($timeout)) {
             $this->setOption('timeout', $timeout);
         }
 
@@ -230,32 +216,32 @@ class Net_GameServerQuery
 
         // Communicate with the servers
         // We now have an array of unprocessed server data
-        $results = $this->_communicate->query($this->_commlist, $timeout);
+        $results = $this->_communicate->query($this->_socketlist, $timeout);
 
         // Finish the array for the process class
         // Add the packets we just recieved into the array
-        foreach ($this->_serverlist as $key => $server) {
+        foreach ($this->_socketlist as $key => $server) {
 
             // Check if we missed out on any packets
             if (!isset($results[$key])) {
                 throw new Exception ('Server did not reply to request');
             }
 
-            $this->_processlist[$key]['packet'] = $results[$key];
+            $this->_socketlist[$key]['response'] = $results[$key];
         }
 
         // Process the results
-        $results = $this->_process->process($this->_processlist);
+        $results = $this->_process->process($this->_socketlist);
 
         // Put the data back together
-        foreach ($this->_serverlist as $key => $server) {
-            $servid = $server['servid'];
-            $flag   = $server['flag'];
-            $newresult[$servid][$flag] = $results[$key];
+        foreach ($this->_socketlist as $key => $server) {
+            $servid                     = $this->_servercount;
+            $flag                       = $server['flag'];
+            $newresults[$servid][$flag] = $results[$key];
         }
 
         // Return
-        return $newresult;
+        return $newresults;
     }
 
 
@@ -270,9 +256,9 @@ class Net_GameServerQuery
 
         // Validate each query
         foreach ($flags as $flag) {
-            if ($flag != 'status' &&
-                $flag != 'players' &&
-                $flag != 'rules') {
+            if ($flag !== 'status' &&
+                $flag !== 'players' &&
+                $flag !== 'rules') {
 
                 throw new Exception ('Invalid Query Flag');
             }
@@ -283,47 +269,39 @@ class Net_GameServerQuery
 
     
     /**
-     * Map data to the master, communication and processing arrays
+     * Create an array containing all socket data
      *
-     * @param   string      $flags   Query flags  
+     * @param   string      $flags        Query flags  
      * @param   string      $protocol     Protocol
      * @param   string      $game         The game
      * @param   string      $addr         The address
      * @param   string      $port         The port
      */
-    private function _mapArray ($flags, $protocol, $game, $addr, $port)
+    private function _buildSocketList($flags, $protocol, $game, $addr, $port)
     {
         // We loop through each of the query flags
         //   because each flag gets its own socket
         foreach ($flags as $flag) {
+
             ++$this->_socketcount;
 
+            list($packetname, $packet) =
+                $this->_config->getPacket($protocol, $flag);
+
             // Master list
-            $this->_serverlist[$this->_socketcount] = array(
-                'servid'    => $this->_counter,
-                'flag'      => $flag
-            );
-
-            // Get packet info
-            list($packet_name, $packet) = $this->_config->packet($protocol, $flag);
-
-            // Data sent to communications class
-            $this->_commlist[$this->_socketcount] = array(
-                'addr'          => $addr,
-                'port'          => $port,
-                'packet'        => $packet
-            );
-
-            // Data sent the processing class
-            $this->_processlist[$this->_socketcount] = array(
-                'protocol'      => $protocol,
-                'game'          => $game,
-                'flag'          => $flag,
-                'packetname'    => $packet_name,
-            );
-        }
+            $this->_socketlist[$this->_socketcount] = array(
+                'serverid'   => $this->_servercount,
+                'flag'       => $flag,
+                'addr'       => $addr,
+                'port'       => $port,
+                'packet'     => $packet,
+                'packetname' => $packetname,
+                'protocol'   => $protocol,
+                'game'       => $game
+                );
+            
+        };
     }
 
 }
-
 ?>
