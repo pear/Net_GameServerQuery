@@ -59,8 +59,8 @@ $packets['Unreal2']['players']      = array('players',      "\x78\x00\x00\x00\x0
 $packets['Unreal2']['rules']        = array('rules',        "\x78\x00\x00\x00\x01");
 $packets['Unreal2']['status']       = array('status',       "\x78\x00\x00\x00\x00");
 
-$packets['QuakeWorld']['players']   = array('players',      "\xFF\xFF\xFF\xFFplayers\x00");
-$packets['QuakeWorld']['rules']     = array('rules',        "\xFF\xFF\xFF\xFFrules\x00");
+$packets['QuakeWorld']['players']   = array('players',      "\xFF\xFF\xFF\xFFstatus\x00");
+$packets['QuakeWorld']['rules']     = array('rules',        "\xFF\xFF\xFF\xFFstatus\x00");
 $packets['QuakeWorld']['status']    = array('status',       "\xFF\xFF\xFF\xFFstatus\x00");
 
 
