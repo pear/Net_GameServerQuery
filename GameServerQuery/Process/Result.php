@@ -35,24 +35,40 @@ class Net_GameServerQuery_Process_Result
      * Formatted server response
      *
      * @var        array
-     * @access     public
      */
     private $_result;
-
+    
     /**
      * Highest player index
      *
      * @var        int
-     * @access     public
      */
     private $_pindex = 0;
+    
+    /**
+     * If additional meta info should be included
+     *
+     * @var        bool
+     */
+    private $_showmeta;
+    
+    
+    /**
+     * Constructor
+     *
+     * @param      bool      $showmeta  If additional meta info should be included     
+     */
+    public function __construct($showmeta)
+    {
+        $this->_showmeta = $showmeta;   
+    }
 
 
     /**
      * Adds variable to results
      *
-     * @param      string    $name     Variable name
-     * @param      string    $value    Variable value
+     * @param      string    $name      Variable name
+     * @param      string    $value     Variable value
      */
     public function add($name, $value)
     {
@@ -65,20 +81,23 @@ class Net_GameServerQuery_Process_Result
      *
      * Currently prefixes key with __
      *
-     * @param      string    $name     Variable name
-     * @param      string    $value    Variable value
+     * @param       string   $name      Variable name
+     * @param       string   $value     Variable value
+     * @return      void
      */
     public function addMeta($name, $value)
     {
-        $this->_result['__' . $name] = $value;
+        if ($this->_showmeta === true) {
+            $this->_result['__' . $name] = $value;
+        }
     }
 
 
     /**
      * Adds player variable to output
      *
-     * @param   string   $name   Variable name
-     * @param   string   $value  Variable value
+     * @param       string   $name      Variable name
+     * @param       string   $value     Variable value
      */
     public function addPlayer($name, $value)
     {
