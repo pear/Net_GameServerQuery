@@ -73,22 +73,29 @@ class Net_GameServerQuery_Communicate
         $packets = array();
         $sockets_list = array();
 
-        foreach ($servers as $key => $server)
-        {
+        foreach ($servers as $key => $server) {
             $addr = $server['addr'];
-            if (strspn($addr, '.0123456789') !== strlen($server['addr'])) {
-                $addr = gethostbyname($server['addr']);
+
+            // If it isn't a valid IP assume it is a hostname
+            $preg = '#^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}' . 
+                '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$#';
+            if (!preg_match($preg, $addr)) {
+                $addr = gethostbyname($addr);
+
+                // Not a valid host nor IP
+                if ($addr == $server['addr']) {
+                    continue;
+                }
             }
 
-            // Open each socket
-            $socket = @fsockopen('udp://' . $addr, $server['port'], $errno, $errstr, 1);
+            // Open socket
+            $socket = fsockopen('udp://' . $addr, $server['port'], $errno, $errstr, 1);
             if ($socket !== false) {
                 stream_set_blocking($socket, false);
 
                 $sockets[$key] = $socket;
                 $packets[$key] = $server['packet'];
                 $sockets_list[(int) $socket] = $key;
-
             }
         }
 
@@ -129,7 +136,7 @@ class Net_GameServerQuery_Communicate
     {
         // If we have no sockets don't bother
         if (empty($sockets)) {
-            return false;
+            return array();
         }
 
         // Initialise enviroment
@@ -164,7 +171,9 @@ class Net_GameServerQuery_Communicate
 
 
     /**
-     * Normalise
+     * Normalises packets.
+     *
+     * If a server returned multiple packets return an array, else a string.
      *
      * @param       string      $sockets        An array of sockets
      * @return      array       An array of packets
