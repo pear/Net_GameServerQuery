@@ -1,22 +1,27 @@
 <?php
-// +----------------------------------------------------------------------+
-// | PHP version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2004 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 3.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available through the world-wide-web at the following url:           |
-// | http://www.php.net/license/3_0.txt.                                  |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Aidan Lister <aidan@php.net>                                |
-// |          Tom Buskens <ortega@php.net>                                |
-// +----------------------------------------------------------------------+
-//
-// $Id$
+/**
+ * PEAR :: Net_GameServerQuery
+ *
+ * PHP version 4
+ *
+ * Copyright (c) 1997-2004 The PHP Group
+ *
+ * This source file is subject to version 3.0 of the PHP license,
+ * that is bundled with this package in the file LICENSE, and is
+ * available at through the world-wide-web at
+ * http://www.php.net/license/3_0.txt.
+ * If you did not receive a copy of the PHP license and are unable to
+ * obtain it through the world-wide-web, please send a note to
+ * license@php.net so we can mail you a copy immediately.
+ *
+ * @category Net
+ * @package  Net_GameServerQuery
+ * @author   Aidan Lister <aidan@php.net>  
+ * @author   Tom Buskens <ortega@php.net>
+ * @license  PHP 3.0 http://www.php.net/license/3_0.txt
+ * @version  CVS: $Id$
+ * @link     http://pear.php.net/package/Net_GameServerQuery
+ */
 
 
 define('NET_GAMESERVERQUERY_BASE', dirname(__FILE__) . '/GameServerQuery/');
@@ -30,11 +35,12 @@ require_once NET_GAMESERVERQUERY_BASE . 'Config.php';
 /**
  * Query and retrieve information from game servers
  *
- * @category        Net
- * @package         Net_GameServerQuery
- * @author          Aidan Lister <aidan@php.net>
- * @author          Tom Buskens <ortega@php.net>
- * @version         $Revision$
+ * @category Net
+ * @package  Net_GameServerQuery
+ * @author   Aidan Lister <aidan@php.net>
+ * @author   Tom Buskens <ortega@php.net>
+ * @license  PHP 3.0 http://www.php.net/license/3_0.txt
+ * @link     http://pear.php.net/package/Net_GameServerQuery
  */
 class Net_GameServerQuery
 {
@@ -101,8 +107,8 @@ class Net_GameServerQuery
         // Set default option values
         $config = new Net_GameServerQuery_Config;
         $config->setOption('normalise', true);
-        $config->setOption('showmeta',  true);
-        $config->setOption('timeout',   100);
+        $config->setOption('showmeta', true);
+        $config->setOption('timeout', 100);
 
         // Load classes
         $this->_config      = $config;
@@ -117,8 +123,10 @@ class Net_GameServerQuery
      *
      * Wraps around the method in Net_GameServerQuery_Config
      *
-     * @param    string     $option       The option to set
-     * @param    string     $value        The value
+     * @param string $option The option to set
+     * @param string $value  The value
+     *
+     * @return void
      */
     public function setOption($option, $value)
     {
@@ -131,7 +139,9 @@ class Net_GameServerQuery
      *
      * Wraps around the method in Net_GameServerQuery_Config
      *
-     * @param    string     $option       The option to get
+     * @param string $option The option to get
+     *
+     * @return void
      */
     public function getOption($option)
     {
@@ -142,10 +152,11 @@ class Net_GameServerQuery
     /**
      * Add a server
      *
-     * @param    string     $game         The type of game
-     * @param    string     $addr         The address to query
-     * @param    int        $port         The port to query
-     * @param    string     $status       A pipe delimited string of query types
+     * @param string $game  The type of game
+     * @param string $addr  The address to query
+     * @param int    $port  The port to query
+     * @param string $query A pipe delimited string of query types
+     *
      * @return   int        The number used to identify the server just added
      */
     public function addServer($game, $addr, $port = null, $query = 'status')
@@ -184,7 +195,8 @@ class Net_GameServerQuery
      * processing. Then, reconstruct the array so the user can access
      * the data.
      *
-     * @param     int        $timeout        The timeout in milliseconds
+     * @param int $timeout The timeout in milliseconds
+     *
      * @return    array      An array of server information
      */
     public function execute($timeout = null)
@@ -252,7 +264,9 @@ class Net_GameServerQuery
     /**
      * Validate and process the query flags
      *
-     * @param   string      $query        A pipe delimited list of query flags
+     * @param string $flags A pipe delimited list of query flags
+     *
+     * @return string
      */
     private function _getQueryFlags($flags)
     {
@@ -275,11 +289,13 @@ class Net_GameServerQuery
     /**
      * Create an array containing all socket data
      *
-     * @param   string      $flags        Query flags  
-     * @param   string      $protocol     Protocol
-     * @param   string      $game         The game
-     * @param   string      $addr         The address
-     * @param   string      $port         The port
+     * @param string $flags    Query flags  
+     * @param string $protocol Protocol
+     * @param string $game     The game
+     * @param string $addr     The address
+     * @param string $port     The port
+     *
+     * @return void
      */
     private function _buildSocketList($flags, $protocol, $game, $addr, $port)
     {

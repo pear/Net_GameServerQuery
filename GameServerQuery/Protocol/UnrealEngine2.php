@@ -1,23 +1,27 @@
 <?php
-// +----------------------------------------------------------------------+
-// | PHP version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2004 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 3.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available through the world-wide-web at the following url:           |
-// | http://www.php.net/license/3_0.txt.                                  |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Aidan Lister <aidan@php.net>                                |
-// |          Tom Buskens <ortega@php.net>                                |
-// +----------------------------------------------------------------------+
-//
-// $Id$
-
+/**
+ * PEAR :: Net_GameServerQuery
+ *
+ * PHP version 4
+ *
+ * Copyright (c) 1997-2004 The PHP Group
+ *
+ * This source file is subject to version 3.0 of the PHP license,
+ * that is bundled with this package in the file LICENSE, and is
+ * available at through the world-wide-web at
+ * http://www.php.net/license/3_0.txt.
+ * If you did not receive a copy of the PHP license and are unable to
+ * obtain it through the world-wide-web, please send a note to
+ * license@php.net so we can mail you a copy immediately.
+ *
+ * @category Net
+ * @package  Net_GameServerQuery
+ * @author   Aidan Lister <aidan@php.net>  
+ * @author   Tom Buskens <ortega@php.net>
+ * @license  PHP 3.0 http://www.php.net/license/3_0.txt
+ * @version  CVS: $Id$
+ * @link     http://pear.php.net/package/Net_GameServerQuery
+ */
 
 require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 
@@ -25,15 +29,17 @@ require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
 /**
  * Unreal2 protocol
  *
- * @category        Net
- * @package         Net_GameServerQuery
- * @author          Aidan Lister <aidan@php.net>
- * @author          Tom Buskens <ortega@php.net>
- * @version         $Revision$
+ * @category Net
+ * @package  Net_GameServerQuery
+ * @author   Aidan Lister <aidan@php.net>  
+ * @author   Tom Buskens <ortega@php.net>
+ * @license  PHP 3.0 http://www.php.net/license/3_0.txt
+ * @link     http://pear.php.net/package/Net_GameServerQuery
+
  */
 class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Protocol
 {
-    /*
+    /**
      * Players
      */
     protected function players(&$buffer, &$result)
@@ -56,8 +62,8 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
             }
             
             // Common data
-            $result->addPlayer('name',  $this->_readUnrealString($buffer));
-            $result->addPlayer('ping',  $buffer->readInt32());
+            $result->addPlayer('name', $this->_readUnrealString($buffer));
+            $result->addPlayer('ping', $buffer->readInt32());
             $result->addPlayer('score', $buffer->readInt32());
 
             // Stats ID
@@ -66,10 +72,8 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
             // Extra data for Unreal2XMP players
             if ($id === 0) {
                 for ($i = 0, $ii = $buffer->readInt8(); $i < $ii; $i++) {
-                    $result->addPlayer(
-                        $buffer->readPascalString(1),
-                        $this->_readUnrealString($buffer)
-                    );
+                    $result->addPlayer($buffer->readPascalString(1),
+                                       $this->_readUnrealString($buffer));
                 }                
             }
         }
@@ -79,7 +83,7 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
 
     
     
-    /*
+    /**
      * Rules packet
      */
     protected function rules(&$buffer, &$result)
@@ -109,7 +113,7 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
     }
 
     
-    /*
+    /**
      * Status packet
      */
     protected function status(&$buffer, &$result)
@@ -122,22 +126,22 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
             return false;
         }
 
-        $result->add('serverid',    $buffer->readInt32());          // 0
-        $result->add('serverip',    $buffer->readPascalString(1));  // empty
-        $result->add('gameport',    $buffer->readInt32());
-        $result->add('queryport',   $buffer->readInt32());          // 0
-        $result->add('servername',  $buffer->readPascalString(1));
-        $result->add('mapname',     $buffer->readPascalString(1));
-        $result->add('gametype',    $buffer->readPascalString(1));
+        $result->add('serverid', $buffer->readInt32());          // 0
+        $result->add('serverip', $buffer->readPascalString(1));  // empty
+        $result->add('gameport', $buffer->readInt32());
+        $result->add('queryport', $buffer->readInt32());          // 0
+        $result->add('servername', $buffer->readPascalString(1));
+        $result->add('mapname', $buffer->readPascalString(1));
+        $result->add('gametype', $buffer->readPascalString(1));
         $result->add('playercount', $buffer->readInt32());
-        $result->add('maxplayers',  $buffer->readInt32());
-        $result->add('ping',        $buffer->readInt32());          // 0
+        $result->add('maxplayers', $buffer->readInt32());
+        $result->add('ping', $buffer->readInt32());          // 0
 
         // UT2004 only
         // Check if the buffer contains enough bytes
         if ($buffer->getLength() > 6) {
-            $result->add('flags',   $buffer->readInt32());
-            $result->add('skill',   $buffer->readInt16());
+            $result->add('flags', $buffer->readInt32());
+            $result->add('skill', $buffer->readInt16());
         }
 
         return $result->fetch();
@@ -149,7 +153,8 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
      *
      * Check which string type it is and return "decoded" string
      *
-     * @param       object      $buffer         Buffer object
+     * @param object &$buffer Buffer object
+     *
      * @return      string      The string
      */
     private function _readUnrealString(&$buffer)
@@ -178,7 +183,7 @@ class Net_GameServerQuery_Protocol_UnrealEngine2 extends Net_GameServerQuery_Pro
     }
     
     
-    /*
+    /**
      * Join multiple packets
      *
      * The order does not matter as each packet is "finished".

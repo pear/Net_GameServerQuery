@@ -1,32 +1,38 @@
 <?php
-// +----------------------------------------------------------------------+
-// | PHP version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2004 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 3.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available through the world-wide-web at the following url:           |
-// | http://www.php.net/license/3_0.txt.                                  |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Aidan Lister <aidan@php.net>                                |
-// |          Tom Buskens <ortega@php.net>                                |
-// +----------------------------------------------------------------------+
-//
-// $Id$
+/**
+ * PEAR :: Net_GameServerQuery
+ *
+ * PHP version 4
+ *
+ * Copyright (c) 1997-2004 The PHP Group
+ *
+ * This source file is subject to version 3.0 of the PHP license,
+ * that is bundled with this package in the file LICENSE, and is
+ * available at through the world-wide-web at
+ * http://www.php.net/license/3_0.txt.
+ * If you did not receive a copy of the PHP license and are unable to
+ * obtain it through the world-wide-web, please send a note to
+ * license@php.net so we can mail you a copy immediately.
+ *
+ * @category Net
+ * @package  Net_GameServerQuery
+ * @author   Aidan Lister <aidan@php.net>  
+ * @author   Tom Buskens <ortega@php.net>
+ * @license  PHP 3.0 http://www.php.net/license/3_0.txt
+ * @version  CVS: $Id$
+ * @link     http://pear.php.net/package/Net_GameServerQuery
+ */
 
 
 /**
  * Provide an interface for easy manipulation of a server response
  *
- * @category       Net
- * @package        Net_GameServerQuery
- * @author         Aidan Lister <aidan@php.net>
- * @author         Tom Buskens <ortega@php.net>
- * @version        $Revision$
+ * @category Net
+ * @package  Net_GameServerQuery
+ * @author   Aidan Lister <aidan@php.net>  
+ * @author   Tom Buskens <ortega@php.net>
+ * @license  PHP 3.0 http://www.php.net/license/3_0.txt
+ * @link     http://pear.php.net/package/Net_GameServerQuery
  */
 class Net_GameServerQuery_Process_Buffer
 {
@@ -59,7 +65,7 @@ class Net_GameServerQuery_Process_Buffer
     /**
      * Constructor
      *
-     * @param   string|array    $response   The data
+     * @param string|array    $response   The data
      */
     public function __construct($data)
     {
@@ -104,7 +110,7 @@ class Net_GameServerQuery_Process_Buffer
     /**
      * Read from the buffer
      *
-     * @param   int             $length     Length of data to read
+     * @param int             $length     Length of data to read
      * @return  string          The data read
      */
     public function read($length = 1)
@@ -138,7 +144,7 @@ class Net_GameServerQuery_Process_Buffer
     /**
      * Read from the buffer
      *
-     * @param   int             $length     Length of data to read
+     * @param int             $length     Length of data to read
      * @return  string          The data read
      */
     public function readAhead($length = 1)
@@ -152,7 +158,7 @@ class Net_GameServerQuery_Process_Buffer
     /**
      * Skip forward in the buffer
      *
-     * @param   int             $length     Length of data to skip
+     * @param int             $length     Length of data to skip
      * @return  void
      */
     public function skip($length = 1)
@@ -166,7 +172,7 @@ class Net_GameServerQuery_Process_Buffer
      *
      * If not found, return everything
      *
-     * @param   string          $delim      Read until this character is reached
+     * @param string          $delim      Read until this character is reached
      * @return  string          The data read
      */
     public function readString($delim = "\x00")
@@ -207,7 +213,7 @@ class Net_GameServerQuery_Process_Buffer
      *
      * If not found, return everything
      *
-     * @param   array           $delims      Read until these characters are reached
+     * @param array           $delims      Read until these characters are reached
      * @return  string          The data read
      */
     public function readStringMulti($delims, &$delimfound = null)
@@ -285,7 +291,7 @@ class Net_GameServerQuery_Process_Buffer
      * Conversion to float
      *
      * @access     public
-     * @param      string    $string   String to convert
+     * @param string    $string   String to convert
      * @return     float     32 bit float
      */
     public function toFloat($string)
@@ -305,8 +311,8 @@ class Net_GameServerQuery_Process_Buffer
      * Conversion to integer
      *
      * @access     public
-     * @param      string    $string   String to convert
-     * @param      int       $bits     Number of bits
+     * @param string    $string   String to convert
+     * @param int       $bits     Number of bits
      * @return     int       Integer according to type
      */
     public function toInt($string, $bits = 8)
