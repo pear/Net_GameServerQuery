@@ -21,7 +21,7 @@
  * @license  PHP 3.0 http://www.php.net/license/3_0.txt
  * @version  CVS: $Id$
  * @link     http://pear.php.net/package/Net_GameServerQuery
- */$
+ */
 
 
 require_once NET_GAMESERVERQUERY_BASE . 'Protocol.php';
