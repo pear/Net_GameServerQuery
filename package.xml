@@ -1,69 +1,37 @@
-<package version="1.0">
-	<name>Net_GameServerQuery</name>
-	<summary>An interface to query and return information from a game server</summary>
-
-	<description>
-		Net_GameServerQuery provides an interface for querying game servers
-	</description>
-
-	<maintainers>
-		<maintainer>
-			<user>aidan</user>
-			<name>Aidan Lister</name>
-			<email>aidan@php.net</email>
-			<role>lead</role>
-		</maintainer>
-		<maintainer>
-			<user>ortega</user>
-			<name>Tom Buskins</name>
-			<email>ortega@php.net</email>
-			<role>lead</role>
-		</maintainer>
- </maintainers>
-
-	<release>
-		<version>0.1</version>
-		<date>2004-04-10</date>
-		<license>PHP License</license>
-		<state>alpha</state>
-		<notes>
-<![CDATA[
-First release! This package is alpha, everything is likely to change.
-]]>
-  </notes>
-		<deps>
-			<dep type="php" rel="ge" version="5.0.0"/>
-		</deps>
-	</release>
-
-	<release>
-		<version>0.2.0</version>
-		<date>2004-11-23</date>
-		<license>PHP License</license>
-		<state>alpha</state>
-		<notes>
-<![CDATA[
-The structure of the class has been completely changed, along with the API.
-The API is now relatively stable, though still subject to change.
-
-Supports simultaneous querying of servers, so many servers can be queried relatively quickly.
-
-The class now fetches all data from game servers, including rules, status, players and ping.
-Many protocols have been implemented, but still alpha quality.
-]]>
-		</notes>
-		<deps>
-			<dep type="php" rel="ge" version="5.0.0"/>
-		</deps>
-	</release>
-
-	<release>
-		<version>0.3.0</version>
-		<date>2005-01-25</date>
-		<license>PHP License</license>
-		<state>beta</state>
-		<notes>
-<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Net_GameServerQuery</name>
+ <channel>pear.php.net</channel>
+ <summary>An interface to query and return information from a game server</summary>
+ <description>Net_GameServerQuery provides an interface for querying game servers</description>
+ <lead>
+  <name>Aidan Lister</name>
+  <user>aidan</user>
+  <email>aidan@php.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Tom Buskins</name>
+  <user>ortega</user>
+  <email>ortega@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2010-10-05</date>
+ <time>23:39:03</time>
+ <version>
+  <release>0.3.0</release>
+  <api>0.3.0</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP License</license>
+ <notes>
+QA release
+Package 2.0
+SVN dir layout
+Bug #3296 	wrong include path in protocol.php
 Complete rework of the protocol parsing classes and associated methods.
 Significant useability improvements in the API.
 Massive speed improvements in parsing.
@@ -76,50 +44,94 @@ Added support for protocols:
 - GameSpy
 - GameSpy04
 - UnrealEngine2
-]]>
-		</notes>
-
-		<deps>
-			<dep type="php" rel="ge" version="5.0.0"/>
-		</deps>
-
-		<filelist>
-			<dir name="/" baseinstalldir="Net" role="php">	 
-    <file>GameServerQuery.php</file>
-				<dir name="GameServerQuery">
-     <file>Communicate.php</file>
-     <file>Error.php</file>
-     <file>GameData.php</file>
-     <file>Games.php</file>
-     <file>Process.php</file>
-     <file>Protocol.php</file>
-					<dir name="Process">
-      <file>Result.php</file>
-      <file>Buffer.php</file>
-					</dir>
-     <dir name="Protocol">
-      <file>Doom3.php</file>
-      <file>GameSpy.php</file>
-      <file>GameSpy04.php</file>
-      <file>HalfLife.php</file>
-      <file>HalfLife2.php</file>
-      <file>Quake3.php</file>
-      <file>QuakeWorld.php</file>
-      <file>UnrealEngine2.php</file>
-					</dir>
-				</dir>
-			</dir>
-   <dir name="docs/examples" role="doc">
-    <file>example1.php</file>
-    <file>example2.php</file>
-    <file>example3.php</file>
-    <file>example4.php</file>
-    <file>example4.tpl.php</file>
-    <file>example5.php</file>
-    <file>example5.tpl.php</file>
-    <file>examplepackets.php</file>
-   </dir>
-		</filelist>
-	</release>
-
+ </notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <file baseinstalldir="/" md5sum="4171f210680dbd12ca3cbc3b209c8748" name="docs/examples/example1.php" role="doc" />
+   <file baseinstalldir="Net" md5sum="da983a6bd3123d5b1df2ee73aa524a4d" name="docs/examples/example2.php" role="doc" />
+   <file baseinstalldir="Net" md5sum="2d24c83974383ee067479832d5094982" name="docs/examples/example3.php" role="doc" />
+   <file baseinstalldir="Net" md5sum="3e2900f1e54427a65022f31b606d597d" name="docs/examples/example4.php" role="doc" />
+   <file baseinstalldir="Net" md5sum="838f57d6fa021237f12106e7fccbecfb" name="docs/examples/example4.tpl.php" role="doc" />
+   <file baseinstalldir="Net" md5sum="7eebf1260bbaa79f7faa6938beb4348d" name="docs/examples/example5.php" role="doc" />
+   <file baseinstalldir="Net" md5sum="1e64f6d7f997a33ea7f5fe57058055d5" name="docs/examples/example5.tpl.php" role="doc" />
+   <file baseinstalldir="Net" md5sum="23ac6502a661138e52dd5950677204a4" name="docs/examples/examplepackets.php" role="doc" />
+   <file baseinstalldir="/" md5sum="48eafd060d01c950573cc252b8ffa566" name="Net/GameServerQuery.php" role="php" />
+   <file baseinstalldir="/" md5sum="d5ddd6c0f303ca231c7d86e8f44501a8" name="Net/GameServerQuery/Communicate.php" role="php" />
+   <file baseinstalldir="/" md5sum="b869d5473e4f0d046867d7a1a958b5f1" name="Net/GameServerQuery/Config.php" role="php" />
+   <file baseinstalldir="/" md5sum="ade6ac4f7269ddae34b1286104248d1b" name="Net/GameServerQuery/Error.php" role="php" />
+   <file baseinstalldir="/" md5sum="2ebf4a43190ff0df779adb15989e6a2a" name="Net/GameServerQuery/GameData.php" role="php" />
+   <file baseinstalldir="/" md5sum="6fec0f05bf84c89e37b3c953e96b171e" name="Net/GameServerQuery/Games.php" role="php" />
+   <file baseinstalldir="/" md5sum="7fc4a90314cc39bd71c1b2da03d9d977" name="Net/GameServerQuery/Process.php" role="php" />
+   <file baseinstalldir="/" md5sum="0ad76f4306d590ea27677c16e573bd0e" name="Net/GameServerQuery/Protocol.php" role="php" />
+   <file baseinstalldir="/" md5sum="d199c1b1ef73cb185476be8359a15747" name="Net/GameServerQuery/Process/Buffer.php" role="php" />
+   <file baseinstalldir="/" md5sum="f087dac6bfc2a25ab92ffdf31a310ec1" name="Net/GameServerQuery/Process/Result.php" role="php" />
+   <file baseinstalldir="/" md5sum="602197962a035834d517ae48859082d9" name="Net/GameServerQuery/Protocol/Breed.php" role="php" />
+   <file baseinstalldir="/" md5sum="aa1f02d23fb273a6025cdfb7c3443304" name="Net/GameServerQuery/Protocol/Doom3.php" role="php" />
+   <file baseinstalldir="/" md5sum="f3d5b776d5bedbbaddde57357a4e6b0f" name="Net/GameServerQuery/Protocol/FarCry.php" role="php" />
+   <file baseinstalldir="/" md5sum="5707182de3b7ec76cdef3ff39a346778" name="Net/GameServerQuery/Protocol/Freelancer.php" role="php" />
+   <file baseinstalldir="/" md5sum="059cc9d391f2edf0e4f711eaf400e370" name="Net/GameServerQuery/Protocol/GameSpy.php" role="php" />
+   <file baseinstalldir="/" md5sum="1d7a7161c26537973a52200cc1c17e66" name="Net/GameServerQuery/Protocol/GameSpy04.php" role="php" />
+   <file baseinstalldir="/" md5sum="ca1aa0c993d4c5f5370342981255f5ee" name="Net/GameServerQuery/Protocol/GhostRecon.php" role="php" />
+   <file baseinstalldir="/" md5sum="9cb4338d432070ccea1c0e801c43beb3" name="Net/GameServerQuery/Protocol/HalfLife.php" role="php" />
+   <file baseinstalldir="/" md5sum="d8f0bd01b112ce6d93b4c2e50cd1c7fa" name="Net/GameServerQuery/Protocol/HalfLife2.php" role="php" />
+   <file baseinstalldir="/" md5sum="ecb6c80e36c036a58a133bafb3c10dcb" name="Net/GameServerQuery/Protocol/Hexen2.php" role="php" />
+   <file baseinstalldir="/" md5sum="cb386e6c6939e500e3ae10a219a4a7dc" name="Net/GameServerQuery/Protocol/HomeWorld2.php" role="php" />
+   <file baseinstalldir="/" md5sum="2f1f3164ca7fed61a99b6d4c159f55b8" name="Net/GameServerQuery/Protocol/JediKnight.php" role="php" />
+   <file baseinstalldir="/" md5sum="790c81b303c247cdbbfbc0483c7f8591" name="Net/GameServerQuery/Protocol/JediKnight2.php" role="php" />
+   <file baseinstalldir="/" md5sum="db0b368bb4537fd789295113f1940a8e" name="Net/GameServerQuery/Protocol/MultiTheftAuto.php" role="php" />
+   <file baseinstalldir="/" md5sum="b10a1f46f860ca40370b8a687d72b3f4" name="Net/GameServerQuery/Protocol/Quake2.php" role="php" />
+   <file baseinstalldir="/" md5sum="8df37e45ab202df944ec497adb287c4a" name="Net/GameServerQuery/Protocol/Quake3.php" role="php" />
+   <file baseinstalldir="/" md5sum="416e73a1c8e44fb152ea8aaddae249dc" name="Net/GameServerQuery/Protocol/QuakeWorld.php" role="php" />
+   <file baseinstalldir="/" md5sum="cc859de867b9ed7e9de0c7d6c3957414" name="Net/GameServerQuery/Protocol/RavenShield.php" role="php" />
+   <file baseinstalldir="/" md5sum="8fd19fa2dc6014f34ac244bba47c7632" name="Net/GameServerQuery/Protocol/RedFaction.php" role="php" />
+   <file baseinstalldir="/" md5sum="ec5f0a5706dd6fbf2a7131787c5f88aa" name="Net/GameServerQuery/Protocol/Savage.php" role="php" />
+   <file baseinstalldir="/" md5sum="1402681f8d58c352aae3a2aba5c8b4f6" name="Net/GameServerQuery/Protocol/Starsiege.php" role="php" />
+   <file baseinstalldir="/" md5sum="8f1d354f1ab45469ab64ad42bb1500d2" name="Net/GameServerQuery/Protocol/Tribes.php" role="php" />
+   <file baseinstalldir="/" md5sum="ae5efd54239623cda9a82500cce3f415" name="Net/GameServerQuery/Protocol/UnrealEngine2.php" role="php" />
+   <file baseinstalldir="/" md5sum="aef5aed4fa98c357df8bab6e8c40b619" name="TODO" role="data" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.0.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.3.0</release>
+    <api>0.3.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2010-10-05</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+QA release
+Package 2.0
+SVN dir layout
+Bug #3296 	wrong include path in protocol.php
+Complete rework of the protocol parsing classes and associated methods.
+Significant useability improvements in the API.
+Massive speed improvements in parsing.
+Added support for protocols:
+- Doom3
+- QuakeWorld
+- Quake3
+- HalfLife
+- HalfLife2
+- GameSpy
+- GameSpy04
+- UnrealEngine2
+   </notes>
+  </release>
+ </changelog>
 </package>
