@@ -1,0 +1,36 @@
+{
+    "authors": [
+        {
+            "email": "aidan@php.net",
+            "name": "Aidan Lister",
+            "role": "Lead"
+        },
+        {
+            "email": "ortega@php.net",
+            "name": "Tom Buskins",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Net_GameServerQuery": "./"
+        }
+    },
+    "description": "More info available on: http://pear.php.net/package/Net_GameServerQuery",
+    "include-path": [
+        "./"
+    ],
+    "license": "PHP License",
+    "name": "pear/net_gameserverquery",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Net_GameServerQuery",
+        "source": "https://github.com/pear/Net_GameServerQuery"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
